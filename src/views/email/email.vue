@@ -5,7 +5,7 @@
 
 <template>
   <div>
-    <router-view/>
+    跳转邮件页面
   </div>
 
 </template>
