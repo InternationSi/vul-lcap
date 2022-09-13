@@ -26,24 +26,26 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
+    const selectedKeys = ref<string[]>(["1"])
     const Email =()=>{
       router.push({path:'/email'})
     }
     const loginOut =()=>{
       router.push({path:'/login'})
     }
+    const block =()=>{
+      router.push({path:'/editBlock'})
+    }
     return {
       selectedKeys: ref<string[]>(["1"]),
       collapsed: ref<boolean>(false),
       Email,
       loginOut,
-      
+      block,
     };
   },
 });
 </script>
-
-
 <template>
   <a-layout>
     <a-layout-sider
@@ -76,10 +78,10 @@ export default defineComponent({
           <template #title>
             <span>
               <user-outlined />
-              <span>User</span>
+              <span>编辑模块</span>
             </span>
           </template>
-          <a-menu-item key="3">Tom</a-menu-item>
+         <a-menu-item key="3" @click="block">模块管理</a-menu-item>
           <a-menu-item key="4">Bill</a-menu-item>
           <a-menu-item key="5">Alex</a-menu-item>
         </a-sub-menu>
@@ -125,10 +127,10 @@ export default defineComponent({
         </a-dropdown>
         <mail-outlined class="mail" @click="Email"/>
       </a-layout-header>
-      <a-layout-content
-        :style="{ margin: '24px 16px', padding: '24px', minHeight: '280px' }"
-      >
-        Content
+      <a-layout-content>
+       <router-view>  
+      
+        </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
