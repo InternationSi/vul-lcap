@@ -11,7 +11,7 @@ import {
   BellOutlined,
 } from "@ant-design/icons-vue";
 import { defineComponent, ref } from "vue";
-import {useRouter} from 'vue-router'
+import { useRouter } from "vue-router";
 export default defineComponent({
   components: {
     PieChartOutlined,
@@ -25,17 +25,17 @@ export default defineComponent({
     BellOutlined,
   },
   setup() {
-    const router = useRouter()
-    const selectedKeys = ref<string[]>(["1"])
-    const Email =()=>{
-      router.push({path:'/email'})
-    }
-    const loginOut =()=>{
-      router.push({path:'/login'})
-    }
-    const block =()=>{
-      router.push({path:'/editBlock'})
-    }
+    const router = useRouter();
+    const selectedKeys = ref<string[]>(["1"]);
+    const Email = () => {
+      router.push({ path: "/email" });
+    };
+    const loginOut = () => {
+      router.push({ path: "/login" });
+    };
+    const block = () => {
+      router.push({ path: "/editBlock" });
+    };
     return {
       selectedKeys: ref<string[]>(["1"]),
       collapsed: ref<boolean>(false),
@@ -81,7 +81,7 @@ export default defineComponent({
               <span>编辑模块</span>
             </span>
           </template>
-         <a-menu-item key="3" @click="block">模块管理</a-menu-item>
+          <a-menu-item key="3" @click="block">模块管理</a-menu-item>
           <a-menu-item key="4">Bill</a-menu-item>
           <a-menu-item key="5">Alex</a-menu-item>
         </a-sub-menu>
@@ -118,19 +118,17 @@ export default defineComponent({
             <bell-outlined class="bell" />
           </div>
           <template #overlay>
-             <a-menu class="dropMenu">
+            <a-menu class="dropMenu">
               <a-menu-item key="1">个人中心</a-menu-item>
               <a-menu-item key="2">设置</a-menu-item>
               <a-menu-item key="3" @click="loginOut">退出登陆</a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
-        <mail-outlined class="mail" @click="Email"/>
+        <mail-outlined class="mail" @click="Email" />
       </a-layout-header>
       <a-layout-content>
-       <router-view>  
-      
-        </router-view>
+        <router-view> </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -152,11 +150,11 @@ export default defineComponent({
 .site-layout .site-layout-background {
   background: #fff;
 }
-.header{
-    background: #fff;
-    padding: 0;
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
-    height: 50px;
+.header {
+  background: #fff;
+  padding: 0;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  height: 50px;
 }
 .bell {
   font-size: 14px;
@@ -170,10 +168,10 @@ export default defineComponent({
   float: right;
   margin-top: 20px;
 }
-.dropMenu{
-  width:200px;
-  height:auto;
-  float:right;
-  margin-top:50px;
+.dropMenu {
+  width: 200px;
+  height: auto;
+  float: right;
+  margin-top: 50px;
 }
 </style>

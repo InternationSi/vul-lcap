@@ -1,90 +1,266 @@
 <script lang="ts">
-import { defineComponent,ref,reactive } from 'vue'
-// import {useRouter} from 'vue-router'
+import { defineComponent, ref, reactive } from "vue";
+import { VXETable, VxeColumnPropTypes, VxeTablePropTypes } from "vxe-table";
+import XEUtils from "xe-utils";
 interface FormState {
   username: string;
   nickname: string;
   checkNick: boolean;
 }
+import { VxeTableInstance } from "vxe-table";
 export default defineComponent({
-    setup() {
-        const value = ref('')
-           const formState = reactive<FormState>({
-      username: '',
-      nickname: '',
+  setup() {
+    const value = ref("");
+    const formState = reactive<FormState>({
+      username: "",
+      nickname: "",
       checkNick: false,
     });
-        return{
-            value,
-            formState
-        }
-        
-    },
-})
+
+    //定义表格数据
+    const demo1 = reactive({
+      value1: "",
+      value2: "",
+      showDetails: false,
+      selectRow: null,
+      isAllChecked: false,
+      isIndeterminate: false,
+      selectRecords: [] as any[],
+      tableData: [
+        {
+          id: 10001,
+          flag1: "Y",
+          html1: '<input style="color:red">请输入名称</input>',
+          html2: '<input style="color:red">请输入标题</input>',
+
+          checkedList: [],
+          plainOptions: ["多个值", "必需的", "主键值", "主键"],
+        },
+      ],
+      tablePage: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10,
+      },
+    });
+
+    const xTable = ref<VxeTableInstance>();
+
+    const formatDate = (value: any) => {
+      return XEUtils.toDateString(value, "yyyy-MM-dd HH:mm:ss.S");
+    };
+
+    const filterSexMethod: VxeColumnPropTypes.FilterMethod = ({
+      option,
+      row,
+    }) => {
+      return row.sex === option.data;
+    };
+
+    const checkboxChangeEvent = () => {
+      const $table = xTable.value;
+      if (!$table) {
+        return;
+      }
+      demo1.isAllChecked = $table.isAllCheckboxChecked();
+      demo1.isIndeterminate = $table.isAllCheckboxIndeterminate();
+      demo1.selectRecords = $table.getCheckboxRecords();
+    };
+
+    const changeAllEvent = () => {
+      const $table = xTable.value;
+      if (!$table) {
+        return;
+      }
+      $table.setAllCheckboxRow(demo1.isAllChecked);
+      demo1.selectRecords = $table.getCheckboxRecords();
+    };
+
+    const sumNum = (list: any[], field: string) => {
+      let count = 0;
+      list.forEach((item) => {
+        count += Number(item[field]);
+      });
+      return count;
+    };
+
+    const footerMethod: VxeTablePropTypes.FooterMethod = ({
+      columns,
+      data,
+    }) => {
+      return [
+        columns.map((column) => {
+          if (["sex", "num"].includes(column.field)) {
+            return sumNum(data, column.field);
+          }
+          return null;
+        }),
+      ];
+    };
+    const onChange = () => {};
+
+    return {
+      value,
+      formState,
+      demo1,
+      xTable,
+      formatDate,
+      filterSexMethod,
+      checkboxChangeEvent,
+      changeAllEvent,
+      footerMethod,
+      onChange,
+    };
+  },
+});
 </script>
 <template>
-    <div class="block">
-        <h3 class="title">编辑模块</h3>
-
-        <div class="message">
-            <span>模块信息</span>
-            <a-form 
-            class="flex"
-            :model="formState"
-            layout= 'vertical'
-            >
-               <a-form-item
-                label="模块名称"
-                name="username"
-                
-                :rules="[{ required: true, message: '请输入模块名称' }]"
-                 >
-                     <a-input v-model:value="formState.username" />
-                </a-form-item>
-                 <a-form-item
-                label="模块名称"
-                name="username"
-                layout= vertical
-                :rules="[{ required: true, message: '请输入模块名称' }]"
-                 >
-                     <a-input v-model:value="formState.username" />
-                </a-form-item>
-                  <a-form-item
-                label="模块名称"
-                name="username"
-                layout= vertical
-                :rules="[{ required: true, message: '请输入模块名称' }]"
-                 >
-                     <a-input v-model:value="formState.username" />
-                </a-form-item>
-
-            </a-form>
-        </div>
+  <div class="block">
+    <div class="top">
+      <h2 class="title">编辑模块</h2>
+      <a-button class="btn">导出</a-button>
     </div>
+
+    <div class="message">
+      <p>模块信息</p>
+      <a-form class="flex" :model="formState" layout="vertical">
+        <a-form-item
+          label="模块名称"
+          name="username"
+          :rules="[{ required: true, message: '请输入模块名称' }]"
+        >
+          <a-input v-model:value="formState.username" />
+        </a-form-item>
+        <a-form-item
+          label="模块名称"
+          name="username"
+          layout="vertical"
+          :rules="[{ required: true, message: '请输入模块名称' }]"
+        >
+          <a-input v-model:value="formState.username" />
+        </a-form-item>
+        <a-form-item
+          label="模块名称"
+          name="username"
+          layout="vertical"
+          :rules="[{ required: true, message: '请输入模块名称' }]"
+        >
+          <a-input v-model:value="formState.username" />
+        </a-form-item>
+      </a-form>
+    </div>
+    <div class="table">
+      <p style="padding-top: 20px; font-weight: 600px">管理记录字段</p>
+      <!-- 表格 -->
+      <vxe-table
+        border
+        ref="xTable"
+        header-align="center"
+        :column-config="{ resizable: true }"
+        :footer-method="footerMethod"
+        :data="demo1.tableData"
+        @checkbox-change="checkboxChangeEvent"
+        @checkbox-all="checkboxChangeEvent"
+        
+      >
+        <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+        <vxe-column field="html1" title="名称"  show-overflow>
+          <template #default="{ row }">
+            <span v-html="row.html1"></span>
+          </template>
+        </vxe-column>
+        <vxe-column field="html2" title="标题"  show-overflow>
+          <template #default="{ row }">
+            <span v-html="row.html2"></span>
+          </template>
+        </vxe-column>
+        <vxe-column field="flag1" title="类型" show-overflow>
+          <template #default="{ row }">
+            <vxe-select v-model="row.flag1" transfer>
+              <vxe-option value="Y" label="是"></vxe-option>
+              <vxe-option value="N" label="否"></vxe-option>
+            </vxe-select>
+          </template>
+        </vxe-column>
+        <vxe-column field="checkbox" title="属性" show-overflow>
+          <template #default="{ row }">
+            <a-checkbox-group
+              v-model="row.checkedList"
+              :options="row.plainOptions"
+              @change="onChange"
+            />
+          </template>
+        </vxe-column>
+      </vxe-table>
+      <div class="btn">
+        <a-button type="primary" @click="insertEvent()"> + 新增加字段</a-button>
+      </div>
+      
+    </div>
+  </div>
 </template>
 
-<style scoped>
-.block{
-   
-    margin-top:10px;
-    margin-left:10px;
-   
+<style scoped lang="less">
+.block {
+  margin-top: 10px;
+  margin-left: 10px;
 }
-.title{
-     background:#ffff;
-      margin-bottom:2px;
-      padding-left:10px;
-      padding-top:10px;
+.top {
+  margin-bottom: 2px;
+  padding-left: 20px;
+  padding-right:20px;
+  padding-top: 10px;
+  opacity: 1;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 6px 15px NaNpx rgba(0, 0, 0, 0.05);
 }
-.message{
-    margin-top:0;
-    background:#ffff;
+.btn {
+  margin-bottom: 10px;
+  background: #d8d8d8;
 }
-.flex{
-    display:flex;
-    justify-content: space-between;
+.message {
+  margin-bottom: 2px;
+  padding-left: 20px;
+  padding-right:20px;
+  opacity: 1;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 6px 15px NaNpx rgba(0, 0, 0, 0.05);
+  p {
+    font-size: 20px;
+    font-weight: 700px;
+    padding-top: 20px;
+  }
+  .btn{
+    margin-top:20px;
+    margin-bottom:20px;
+  }
 }
-.flex div{
-    width:250px;
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+.flex div {
+  width: 250px;
+}
+.table {
+  margin-top: 0;
+  padding-left: 20px;
+  padding-right:20px;
+  opacity: 1;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 6px 15px NaNpx rgba(0, 0, 0, 0.05);
+  p {
+    font-size: 20px;
+    font-weight: 700px;
+  }
+
+  .btn {
+    margin-top:20px;
+    padding-bottom: 20px;
+    background: #ffff;
+  }
 }
 </style>
