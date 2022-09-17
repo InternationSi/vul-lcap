@@ -48,11 +48,11 @@ export default defineComponent({
 </script>
 <template>
   <a-layout>
-    <a-layout-sider
+    <a-layout-sider 
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
-      style="background: #ffff; width: 272px"
+      style="background: #ffff; width: 272px border-left: 1px solid rgba(0, 0, 0, 0.1);"
     >
       <div style="height: 50px">
         <menu-outlined
@@ -111,7 +111,7 @@ export default defineComponent({
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
-    <a-layout>
+    <a-layout class="right">
       <a-layout-header class="header">
         <a-dropdown :trigger="['hover']">
           <div>
@@ -127,9 +127,15 @@ export default defineComponent({
         </a-dropdown>
         <mail-outlined class="mail" @click="Email" />
       </a-layout-header>
-      <a-layout-content>
+      <a-layout-content class="content">
         <router-view> </router-view>
       </a-layout-content>
+      <a-layout-footer class="foot">
+        <div class="saveBtn">
+          <a-radio-button value="default" class="saveClose">保存并关闭</a-radio-button>
+          <a-button type="primary">保存</a-button>
+        </div>
+      </a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
@@ -150,11 +156,20 @@ export default defineComponent({
 .site-layout .site-layout-background {
   background: #fff;
 }
+.right{
+  display:flex;
+  flex-direction: column;
+}
 .header {
   background: #fff;
   padding: 0;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   height: 50px;
+}
+
+.content{
+  overflow: hidden;
+  padding-bottom:80px;
 }
 .bell {
   font-size: 14px;
@@ -173,5 +188,23 @@ export default defineComponent({
   height: auto;
   float: right;
   margin-top: 50px;
+}
+.foot{
+  /* padding-left:200px; */
+  position: fixed;
+  height: 80px;
+  width:86%;
+  bottom:0;
+  background: #ffff;
+  justify-content: space-between ;
+  padding-left:0;
+  padding-right:0;
+}
+.saveBtn{
+  float:right;
+   margin-right:15px;
+}
+.saveClose{
+  margin-right:20px;
 }
 </style>

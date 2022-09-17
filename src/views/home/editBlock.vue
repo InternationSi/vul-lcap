@@ -30,11 +30,11 @@ export default defineComponent({
         {
           id: 10001,
           flag1: "Y",
-          html1: '<input style="color:red">请输入名称</input>',
-          html2: '<input style="color:red">请输入标题</input>',
-
+          html1: "",
+          html2: "",
           checkedList: [],
           plainOptions: ["多个值", "必需的", "主键值", "主键"],
+          button: "",
         },
       ],
       tablePage: {
@@ -45,7 +45,6 @@ export default defineComponent({
     });
 
     const xTable = ref<VxeTableInstance>();
-
     const formatDate = (value: any) => {
       return XEUtils.toDateString(value, "yyyy-MM-dd HH:mm:ss.S");
     };
@@ -98,7 +97,32 @@ export default defineComponent({
       ];
     };
     const onChange = () => {};
-
+    const deleteBtn = async (row: any) => {
+      const $table = xTable.value;
+      if (!$table) {
+        return;
+      }
+      const type = await VXETable.modal.confirm("您确定要删除该数据?");
+      if (type === "confirm") {
+        $table.remove(row);
+      }
+    };
+    const add = async (row: any) => {
+      const $table = xTable.value;
+      if (!$table) {
+        return;
+      }
+      const record = {
+        flag1: "Y",
+        html1: "",
+        html2: "",
+        checkedList: [],
+        plainOptions: ["多个值", "必需的", "主键值", "主键"],
+        button: "",
+      };
+      const { row: newRow } = await $table.insertAt(record, row);
+      await $table.setEditCell(newRow, "name");
+    };
     return {
       value,
       formState,
@@ -110,6 +134,8 @@ export default defineComponent({
       changeAllEvent,
       footerMethod,
       onChange,
+      deleteBtn,
+      add,
     };
   },
 });
@@ -161,20 +187,26 @@ export default defineComponent({
         :data="demo1.tableData"
         @checkbox-change="checkboxChangeEvent"
         @checkbox-all="checkboxChangeEvent"
-        
       >
-        <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
-        <vxe-column field="html1" title="名称"  show-overflow>
+        <vxe-column field="html1" title="名称" width="250" show-overflow>
           <template #default="{ row }">
-            <span v-html="row.html1"></span>
+            <vxe-input
+              v-model="row.value1"
+              placeholder="请输入名称"
+              size="mini"
+            ></vxe-input>
           </template>
         </vxe-column>
-        <vxe-column field="html2" title="标题"  show-overflow>
+        <vxe-column field="html2" title="标题" width="250" show-overflow>
           <template #default="{ row }">
-            <span v-html="row.html2"></span>
+            <vxe-input
+              v-model="row.value1"
+              placeholder="请输入标题"
+              size="mini"
+            ></vxe-input>
           </template>
         </vxe-column>
-        <vxe-column field="flag1" title="类型" show-overflow>
+        <vxe-column field="flag1" title="类型" width="200" show-overflow>
           <template #default="{ row }">
             <vxe-select v-model="row.flag1" transfer>
               <vxe-option value="Y" label="是"></vxe-option>
@@ -182,7 +214,7 @@ export default defineComponent({
             </vxe-select>
           </template>
         </vxe-column>
-        <vxe-column field="checkbox" title="属性" show-overflow>
+        <vxe-column field="checkbox" title="属性" width="350" show-overflow>
           <template #default="{ row }">
             <a-checkbox-group
               v-model="row.checkedList"
@@ -191,11 +223,15 @@ export default defineComponent({
             />
           </template>
         </vxe-column>
+        <vxe-column field="button" title="编辑" align="center" show-overflow>
+          <template #default="{ row }">
+            <a-button type="link"  @click="deleteBtn(row)">删除</a-button>
+          </template>
+        </vxe-column>
       </vxe-table>
       <div class="btn">
-        <a-button type="primary" @click="insertEvent()"> + 新增加字段</a-button>
+        <a-button type="primary" @click="add(-1)"> + 新增加字段</a-button>
       </div>
-      
     </div>
   </div>
 </template>
@@ -208,7 +244,7 @@ export default defineComponent({
 .top {
   margin-bottom: 2px;
   padding-left: 20px;
-  padding-right:20px;
+  padding-right: 20px;
   padding-top: 10px;
   opacity: 1;
   border-radius: 5px;
@@ -222,7 +258,7 @@ export default defineComponent({
 .message {
   margin-bottom: 2px;
   padding-left: 20px;
-  padding-right:20px;
+  padding-right: 20px;
   opacity: 1;
   border-radius: 5px;
   background: rgba(255, 255, 255, 1);
@@ -232,9 +268,9 @@ export default defineComponent({
     font-weight: 700px;
     padding-top: 20px;
   }
-  .btn{
-    margin-top:20px;
-    margin-bottom:20px;
+  .btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 }
 .flex {
@@ -247,7 +283,7 @@ export default defineComponent({
 .table {
   margin-top: 0;
   padding-left: 20px;
-  padding-right:20px;
+  padding-right: 20px;
   opacity: 1;
   border-radius: 5px;
   background: rgba(255, 255, 255, 1);
@@ -258,7 +294,7 @@ export default defineComponent({
   }
 
   .btn {
-    margin-top:20px;
+    margin-top: 20px;
     padding-bottom: 20px;
     background: #ffff;
   }
