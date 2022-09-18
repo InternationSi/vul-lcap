@@ -36,12 +36,16 @@ export default defineComponent({
     const block = () => {
       router.push({ path: "/editBlock" });
     };
+    const rename =()=>{
+      router.push({path:"/renameBlock"})
+    }
     return {
       selectedKeys: ref<string[]>(["1"]),
       collapsed: ref<boolean>(false),
       Email,
       loginOut,
       block,
+      rename,
     };
   },
 });
@@ -78,11 +82,11 @@ export default defineComponent({
           <template #title>
             <span>
               <user-outlined />
-              <span>编辑模块</span>
+              <span>模块管理</span>
             </span>
           </template>
-          <a-menu-item key="3" @click="block">模块管理</a-menu-item>
-          <a-menu-item key="4">Bill</a-menu-item>
+          <a-menu-item key="4" @click="rename">命名空间</a-menu-item>
+          <a-menu-item key="3" @click="block">编辑模块</a-menu-item>
           <a-menu-item key="5">Alex</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub2">

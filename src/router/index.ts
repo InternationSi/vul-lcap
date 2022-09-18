@@ -5,9 +5,13 @@ import home from '../views/home/home.vue'
 import login from '../views/login/login.vue'
 import eamil from '../views/email/email.vue'
 import editBlock from '../views/home/editBlock.vue'
+import renameBlock from "../views/renameBlock/renameBlock.vue"
 const routes = [
     { path: '/home', component: home ,
-     children:[{path:'/editBlock', component: editBlock}]  
+     children:[{path:'/editBlock', component: editBlock},
+            {path:'/renameBlock', component: renameBlock}
+    
+    ]  
     },
     { path: '/login', component: login },
     { path: '', redirect: "/home" },
