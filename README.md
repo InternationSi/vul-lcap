@@ -2,18 +2,26 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:23:47
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-04 17:24:55
+ * @LastEditTime: 2022-10-04 17:45:29
  * @FilePath: /vulture/README.md
  * @Description: update here
 -->
 # `使用指南`
+需要启动所有子应用，找到主应用的入口
 
-> TODO: description
+## 安装项目依赖
+```
+npm run bootstrap
+```
 
-## Usage
+### 启动主应用
 
 ```
-const vulCentre = require('vul-centre');
+npm run centre
+```
 
-// TODO: DEMONSTRATE API
+### 启动admin应用
+
+```
+npm run admin
 ```
