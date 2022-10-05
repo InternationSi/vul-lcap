@@ -1,17 +1,9 @@
 /*
  * @Author: sfy
- * @Date: 2022-10-05 20:07:24
- * @LastEditors: sfy
- * @LastEditTime: 2022-10-05 20:07:24
- * @FilePath: /vulture/packages/base/src/pages/content.tsx
- * @Description: update here
- */
-/*
- * @Author: sfy
  * @Date: 2022-10-05 19:41:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-05 19:46:21
- * @FilePath: /vulture/packages/vul-shed/src/content.tsx
+ * @LastEditTime: 2022-10-05 23:07:16
+ * @FilePath: /vulture/packages/vul-shed/src/pages/content.tsx
  * @Description: update here
  */
 import React from 'react'
