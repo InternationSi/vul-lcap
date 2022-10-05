@@ -7,6 +7,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "admin": "yarn workspace vul-admin start",
+    "shed": "yarn workspace vul-shed start",
     "build": "lerna run build",
     "clean": "lerna clean"
   },
