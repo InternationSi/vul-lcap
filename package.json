@@ -13,5 +13,8 @@
   },
   "devDependencies": {
     "lerna": "^5.5.4"
+  },
+  "dependencies": {
+    "@umijs/plugin-qiankun": "^2.40.0"
   }
 }

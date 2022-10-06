@@ -39,6 +39,9 @@ export default defineComponent({
     const rename =()=>{
       router.push({path:"/renameBlock"})
     }
+    const openDesign = () => {
+      router.push('/client/design')
+    }
     return {
       selectedKeys: ref<string[]>(["1"]),
       collapsed: ref<boolean>(false),
@@ -46,6 +49,7 @@ export default defineComponent({
       loginOut,
       block,
       rename,
+      openDesign
     };
   },
 });
@@ -87,32 +91,17 @@ export default defineComponent({
           </template>
           <a-menu-item key="4" @click="rename">命名空间</a-menu-item>
           <a-menu-item key="3" @click="block">编辑模块</a-menu-item>
-          <a-menu-item key="5">Alex</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub2">
           <template #title>
             <span>
               <team-outlined />
-              <span>Team</span>
+              <span>应用空间</span>
             </span>
           </template>
-          <a-menu-item key="6">Team 1</a-menu-item>
+          <a-menu-item key="6" @click="openDesign">页面构建器</a-menu-item>
           <a-menu-item key="8">Team 2</a-menu-item>
         </a-sub-menu>
-        <a-sub-menu key="sub3">
-          <template #title>
-            <span>
-              <team-outlined />
-              <span>option</span>
-            </span>
-          </template>
-          <a-menu-item key="9">option1</a-menu-item>
-          <a-menu-item key="10">option 2</a-menu-item>
-        </a-sub-menu>
-        <a-menu-item key="11">
-          <file-outlined />
-          <span>File</span>
-        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout class="right">
@@ -132,7 +121,7 @@ export default defineComponent({
         <mail-outlined class="mail" @click="Email" />
       </a-layout-header>
       <a-layout-content class="content">
-        <router-view> </router-view>
+          <router-view > </router-view>
       </a-layout-content>
       <a-layout-footer class="foot">
         <div class="saveBtn">
