@@ -11,17 +11,18 @@
 
 ## 安装项目依赖
 ```
-npm run bootstrap
+npm run bootstrap 建议使用淘宝镜像
 ```
 
 ### 启动主应用
-
+*暂时舍弃*
 ```
-npm run centre
+npm run centre 
 ```
 
 ### 启动admin应用
 
+*需要cd进入相应文件后npm install安装依赖*
 ```
-npm run admin
+npm run admin 在项目文件直接运行,首屏加载较慢,稍作等待
 ```
