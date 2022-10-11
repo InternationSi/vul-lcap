@@ -7,7 +7,7 @@
  * @Description: update here
  */
 import React from 'react'
-import { Content } from './content'
+import { Content } from './Design/content'
 import { renderSandboxContent } from '@designable/react-sandbox'
 import './theme.less'
 
