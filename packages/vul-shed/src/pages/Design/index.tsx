@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import {
   Designer,
-  IconWidget,
   Workbench,
   ViewPanel,
   DesignerToolsWidget,
@@ -17,7 +16,6 @@ import {
   HistoryWidget,
 } from '@designable/react'
 import { SettingsForm, MonacoInput } from '@designable/react-settings-form'
-import { observer } from '@formily/react'
 import {
   createDesigner,
   createResource,
@@ -25,10 +23,10 @@ import {
   GlobalRegistry,
 } from '@designable/core'
 import { Content } from './content'
-import { Space, Button, Radio } from 'antd'
-import { GithubOutlined } from '@ant-design/icons'
-//import { Sandbox } from '@designable/react-sandbox'
 import 'antd/dist/antd.less'
+import { ComponentsgroupMeta } from './plugin/goupMeta'
+import Logo from './plugin/logo'
+import Actions from './plugin/actions'
 
 const RootBehavior = createBehavior({
   name: 'Root',
@@ -318,7 +316,6 @@ const Card = createResource({
   title: {
     'zh-CN': '卡片',
     'en-US': 'Card',
-    'ko-KR': '카드 상자',
   },
   icon: 'CardSource',
   elements: [
@@ -330,71 +327,9 @@ const Card = createResource({
     },
   ],
 })
+// 注册层级
+GlobalRegistry.registerDesignerLocales(ComponentsgroupMeta)
 
-GlobalRegistry.registerDesignerLocales({
-  'zh-CN': {
-    sources: {
-      Inputs: '输入控件',
-      Displays: '展示控件',
-      Feedbacks: '反馈控件',
-    },
-  },
-  'en-US': {
-    sources: {
-      Inputs: 'Inputs',
-      Displays: 'Displays',
-      Feedbacks: 'Feedbacks',
-    },
-  },
-  'ko-KR': {
-    sources: {
-      Inputs: '입력',
-      Displays: '디스플레이',
-      Feedbacks: '피드백',
-    },
-  },
-})
-
-const Logo: React.FC = () => (
-  <div style={{ display: 'flex', alignItems: 'center', fontSize: 14 }}>
-    <IconWidget
-      infer="Logo"
-      style={{ margin: 10, height: 24, width: 'auto' }}
-    />
-  </div>
-)
-
-const Actions = observer(() => {
-  const supportLocales = ['zh-cn', 'en-us', 'ko-kr']
-  useEffect(() => {
-    if (!supportLocales.includes(GlobalRegistry.getDesignerLanguage())) {
-      GlobalRegistry.setDesignerLanguage('zh-cn')
-    }
-  }, [])
-
-  return (
-    <Space style={{ marginRight: 10 }}>
-      <Radio.Group
-        value={GlobalRegistry.getDesignerLanguage()}
-        optionType="button"
-        options={[
-          { label: 'English', value: 'en-us' },
-          { label: '简体中文', value: 'zh-cn' },
-          { label: '한국어', value: 'ko-kr' },
-        ]}
-        onChange={(e) => {
-          GlobalRegistry.setDesignerLanguage(e.target.value)
-        }}
-      />
-      <Button href="https://github.com/alibaba/designable" target="_blank">
-        <GithubOutlined />
-        Github
-      </Button>
-      <Button>保存</Button>
-      <Button type="primary">发布</Button>
-    </Space>
-  )
-})
 
 const engine = createDesigner()
 const App = () => {
@@ -424,7 +359,7 @@ const App = () => {
           <WorkspacePanel>
             <ToolbarPanel>
               <DesignerToolsWidget />
-              <ViewToolsWidget />{' '}
+              <ViewToolsWidget />
             </ToolbarPanel>
             <ViewportPanel>
               <ViewPanel type="DESIGNABLE">{() => <Content />}</ViewPanel>
