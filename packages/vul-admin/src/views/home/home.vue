@@ -33,7 +33,7 @@ export default defineComponent({
       router.push({ path: "/renameBlock" });
     };
     const openDesign = () => {
-      router.push("/client/design");
+      router.push("/grid");
     };
     return {
       selectedKeys: ref<string[]>(["1"]),
@@ -93,7 +93,7 @@ export default defineComponent({
             </span>
           </template>
           <a-menu-item key="6" @click="openDesign">页面构建器</a-menu-item>
-          <a-menu-item key="8">Team 2</a-menu-item>
+          <a-menu-item key="8">页面</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>

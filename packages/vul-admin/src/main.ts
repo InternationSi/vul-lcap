@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-13 00:18:31
+ * @LastEditTime: 2022-10-13 13:57:12
  * @FilePath: /vulture/packages/vul-admin/src/main.ts
  * @Description: update here
  */
@@ -14,11 +14,16 @@ import App from "./App.vue";
 import VXETable from "vxe-table";
 import "vxe-table/lib/style.css";
 import router from "./router";
+import VueGridLayout from "vue-grid-layout";
+import { GridLayout, GridItem } from "vue-grid-layout";
 
 const v = createApp(App);
 v.use(Antd);
 v.use(router);
 v.use(VXETable);
+v.use(VueGridLayout);
+v.component("GridLayout", GridLayout);
+v.component("GridItem", GridItem);
 v.mount("#app");
 
 // 主应用/scr/main.js

@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-06 11:09:48
+ * @LastEditTime: 2022-10-13 14:57:43
  * @FilePath: /vulture/packages/vul-admin/src/router/index.ts
  * @Description: update here
  */
@@ -14,6 +14,7 @@ import eamil from "../views/email/email.vue";
 import editBlock from "../views/home/editBlock.vue";
 import renameBlock from "../views/renameBlock/renameBlock.vue";
 import client from "../views/client/client.vue";
+import grid from "../views/grid/index";
 const routes = [
   {
     path: "/home",
@@ -26,6 +27,7 @@ const routes = [
   { path: "/login", component: login },
   { path: "/email", component: eamil },
   { path: "/client/:name", component: client },
+  { path: "/grid", component: grid },
   { path: "", redirect: "/home" },
 ];
 
