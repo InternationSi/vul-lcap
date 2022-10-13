@@ -2,8 +2,7 @@
 import { defineComponent, ref, reactive } from "vue";
 import { VXETable, VxeColumnPropTypes, VxeTablePropTypes } from "vxe-table";
 import XEUtils from "xe-utils";
-import { getNameSpaces } from '../../request/ns_req'
-
+import { getNameSpaces } from "../../request/ns_req";
 
 interface FormState {
   username: string;
@@ -99,7 +98,6 @@ export default defineComponent({
         }),
       ];
     };
-    const onChange = () => {};
     const deleteBtn = async (row: any) => {
       const $table = xTable.value;
       if (!$table) {
@@ -126,11 +124,10 @@ export default defineComponent({
       const { row: newRow } = await $table.insertAt(record, row);
       await $table.setEditCell(newRow, "name");
     };
-    const  exportMessage = async ()=>{
-      const res = await getNameSpaces()
-      console.log(res, 'rrr');
-      
-    }
+    const exportMessage = async () => {
+      const res = await getNameSpaces();
+      console.log(res, "rrr");
+    };
     return {
       value,
       formState,
@@ -141,10 +138,9 @@ export default defineComponent({
       checkboxChangeEvent,
       changeAllEvent,
       footerMethod,
-      onChange,
       deleteBtn,
       add,
-      exportMessage
+      exportMessage,
     };
   },
 });
@@ -188,7 +184,7 @@ export default defineComponent({
       <p style="padding-top: 20px; font-weight: 600px">管理记录字段</p>
       <!-- 表格 -->
       <vxe-table
-        style="width:auto"
+        style="width: auto"
         border
         ref="xTable"
         header-align="center"
@@ -229,13 +225,12 @@ export default defineComponent({
             <a-checkbox-group
               v-model="row.checkedList"
               :options="row.plainOptions"
-              @change="onChange"
             />
           </template>
         </vxe-column>
         <vxe-column field="button" title="编辑" align="center" show-overflow>
           <template #default="{ row }">
-            <a-button type="link"  @click="deleteBtn(row)">删除</a-button>
+            <a-button type="link" @click="deleteBtn(row)">删除</a-button>
           </template>
         </vxe-column>
       </vxe-table>
@@ -291,7 +286,7 @@ export default defineComponent({
   width: 250px;
 }
 .table {
-  width:100%;
+  width: 100%;
   margin-top: 0;
   padding-left: 20px;
   padding-right: 20px;

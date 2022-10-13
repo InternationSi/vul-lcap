@@ -1,11 +1,10 @@
-import Api from '../api'
+import Api from "../api";
 
-
-export const getNameSpaces =async () => {
+export const getNameSpaces = async () => {
   const res = await Api.request({
-    method:'get',
-    url: '/metaData/namespaces'
-  })
-  
-  return res
-}
+    method: "get",
+    url: "/metaData/namespaces",
+  });
+
+  return res;
+};

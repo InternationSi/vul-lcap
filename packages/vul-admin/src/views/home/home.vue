@@ -1,11 +1,7 @@
 <script lang="ts">
 import {
-  PieChartOutlined,
-  DesktopOutlined,
   UserOutlined,
   TeamOutlined,
-  FileOutlined,
-  SearchOutlined,
   MenuOutlined,
   MailOutlined,
   BellOutlined,
@@ -13,13 +9,10 @@ import {
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 export default defineComponent({
+  name: "home",
   components: {
-    PieChartOutlined,
-    DesktopOutlined,
     UserOutlined,
     TeamOutlined,
-    FileOutlined,
-    SearchOutlined,
     MenuOutlined,
     MailOutlined,
     BellOutlined,
@@ -36,12 +29,12 @@ export default defineComponent({
     const block = () => {
       router.push({ path: "/editBlock" });
     };
-    const rename =()=>{
-      router.push({path:"/renameBlock"})
-    }
+    const rename = () => {
+      router.push({ path: "/renameBlock" });
+    };
     const openDesign = () => {
-      router.push('/client/design')
-    }
+      router.push("/client/design");
+    };
     return {
       selectedKeys: ref<string[]>(["1"]),
       collapsed: ref<boolean>(false),
@@ -49,14 +42,14 @@ export default defineComponent({
       loginOut,
       block,
       rename,
-      openDesign
+      openDesign,
     };
   },
 });
 </script>
 <template>
   <a-layout>
-    <a-layout-sider 
+    <a-layout-sider
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
@@ -121,11 +114,13 @@ export default defineComponent({
         <mail-outlined class="mail" @click="Email" />
       </a-layout-header>
       <a-layout-content class="content">
-          <router-view > </router-view>
+        <router-view> </router-view>
       </a-layout-content>
       <a-layout-footer class="foot">
         <div class="saveBtn">
-          <a-radio-button value="default" class="saveClose">保存并关闭</a-radio-button>
+          <a-radio-button value="default" class="saveClose"
+            >保存并关闭</a-radio-button
+          >
           <a-button type="primary">保存</a-button>
         </div>
       </a-layout-footer>
@@ -149,8 +144,8 @@ export default defineComponent({
 .site-layout .site-layout-background {
   background: #fff;
 }
-.right{
-  display:flex;
+.right {
+  display: flex;
   flex-direction: column;
 }
 .header {
@@ -160,9 +155,9 @@ export default defineComponent({
   height: 50px;
 }
 
-.content{
+.content {
   overflow: hidden;
-  padding-bottom:80px;
+  padding-bottom: 80px;
 }
 .bell {
   font-size: 14px;
@@ -182,22 +177,22 @@ export default defineComponent({
   float: right;
   margin-top: 50px;
 }
-.foot{
+.foot {
   /* padding-left:200px; */
   position: fixed;
   height: 80px;
-  width:86%;
-  bottom:0;
+  width: 86%;
+  bottom: 0;
   background: #ffff;
-  justify-content: space-between ;
-  padding-left:0;
-  padding-right:0;
+  justify-content: space-between;
+  padding-left: 0;
+  padding-right: 0;
 }
-.saveBtn{
-  float:right;
-   margin-right:15px;
+.saveBtn {
+  float: right;
+  margin-right: 15px;
 }
-.saveClose{
-  margin-right:20px;
+.saveClose {
+  margin-right: 20px;
 }
 </style>

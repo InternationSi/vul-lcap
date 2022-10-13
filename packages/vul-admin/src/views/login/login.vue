@@ -1,4 +1,4 @@
-<script  lang="ts">
+<script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -48,10 +48,10 @@ export default defineComponent({
           <div v-if="boxShow" style="height: 100%">
             <div class="main">
               <img
-                @click="changeBox"
                 class="imgPath"
-                src="../../asset/images/qrcode.png"
+                src="../../assets/images/qrcode.png"
                 alt=""
+                @click="changeBox"
               />
               <div class="title">欢迎使用~~</div>
               <a-tabs v-model:activeKey="activeKey">
@@ -80,14 +80,14 @@ export default defineComponent({
           <div v-else style="height: 100%">
             <div class="main">
               <img
-                @click="changeBox"
                 class="imgPath"
-                src="../../asset/images/pc.png"
+                src="../../assets/images/pc.png"
                 alt=""
+                @click="changeBox"
               />
               <img
                 class="imgQrCode"
-                src="../../asset/images/laijiaw.png"
+                src="../../assets/images/laijiaw.png"
                 alt=""
               />
               <h2 style="font-weight: bold">来加我</h2>
@@ -100,7 +100,7 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped lang='less'>
+<style scoped lang="less">
 .login {
   min-width: 1040px;
   min-height: 99.9vh;
@@ -120,7 +120,7 @@ export default defineComponent({
       display: flex;
       .leftBox {
         width: 50%;
-        background-image: url("../../asset/images/tujiu.jpeg");
+        background-image: url("../../assets/images/tujiu.jpeg");
         // background-repeat: no-repeat;
         // background-size: 170%;
         font-size: 18px;

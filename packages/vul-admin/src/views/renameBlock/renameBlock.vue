@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
-import { any, number } from "vue-types";
-import _ from 'lodash'
+import _ from "lodash";
 interface FormState {
   name: string;
   introduce: string;
@@ -9,7 +8,6 @@ interface FormState {
 }
 export default defineComponent({
   setup() {
-  
     const dataList = ref([
       {
         name: "第一个列表",
@@ -36,11 +34,11 @@ export default defineComponent({
     const editIndex = ref<number>();
     const visible = ref<boolean>(false);
     const add = () => {
-      formState.name = "",
-      formState.introduce= "",
-      formState.content= "",
-      visible.value = true;
-      console.log(formState,'333');
+      (formState.name = ""),
+        (formState.introduce = ""),
+        (formState.content = ""),
+        (visible.value = true);
+      console.log(formState, "333");
     };
     const deleteBtn = (index: number) => {
       console.log(index);
@@ -50,18 +48,18 @@ export default defineComponent({
     const edit = (index: number) => {
       editIndex.value = index;
       visible.value = true;
-      formState.name = dataList.value[index].name
-      formState.introduce = dataList.value[index].introduce
-      formState.content = dataList.value[index].content
+      formState.name = dataList.value[index].name;
+      formState.introduce = dataList.value[index].introduce;
+      formState.content = dataList.value[index].content;
     };
 
     const handleOk = (e: MouseEvent) => {
       if (editIndex.value == undefined) {
         var deep = _.cloneDeep(formState);
-        dataList.value.push(deep)
+        dataList.value.push(deep);
       } else {
         var deep1 = _.cloneDeep(formState);
-        dataList.value[editIndex.value] = deep1
+        dataList.value[editIndex.value] = deep1;
       }
       visible.value = false;
     };
@@ -146,7 +144,7 @@ export default defineComponent({
     </a-modal>
   </div>
 </template>
-<style scoped lang='less'>
+<style scoped lang="less">
 .warp {
   background: rgba(250, 250, 250, 1);
 
@@ -162,17 +160,21 @@ export default defineComponent({
     padding-top: 32px;
     margin-left: 30px;
   }
+
   .btn {
     margin-left: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
   }
+
   .content {
     list-style: none;
+
     li {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px solid rgba(238, 238, 238, 1);
+
       li div .header {
         font-size: 16px;
         font-weight: 400;
@@ -180,6 +182,7 @@ export default defineComponent({
         line-height: 20px;
         color: rgba(34, 34, 38, 1);
       }
+
       li div p {
         font-size: 14px;
         font-weight: 400;
@@ -191,5 +194,3 @@ export default defineComponent({
   }
 }
 </style>
-
-
