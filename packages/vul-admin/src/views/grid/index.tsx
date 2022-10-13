@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-13 15:00:30
+ * @LastEditTime: 2022-10-13 16:33:06
  * @FilePath: /vulture/packages/vul-admin/src/views/grid/index.tsx
  * @Description: update here
  */
@@ -11,7 +11,7 @@ import "./index.moduel.less";
 
 export default defineComponent({
   setup() {
-    const layout = [
+    const layout = ref([
       { x: 0, y: 0, w: 2, h: 2, i: "0", static: false },
       { x: 2, y: 0, w: 2, h: 4, i: "1", static: true },
       { x: 4, y: 0, w: 2, h: 5, i: "2", static: false },
@@ -32,7 +32,7 @@ export default defineComponent({
       { x: 10, y: 4, w: 2, h: 2, i: "17", static: false },
       { x: 0, y: 9, w: 2, h: 3, i: "18", static: false },
       { x: 2, y: 6, w: 2, h: 2, i: "19", static: false },
-    ];
+    ]);
     const draggable = true;
     const resizable = true;
     const index = 0;
@@ -48,7 +48,7 @@ export default defineComponent({
     return () => (
       <div>
         <grid-layout
-          layout={layout}
+          layout={layout.value}
           col-num={12}
           row-height={30}
           is-draggable={draggable}
@@ -56,7 +56,7 @@ export default defineComponent({
           vertical-compact={true}
           use-css-transforms={true}
         >
-          {layout.map((item: any, index: number) => {
+          {layout.value.map((item: any, index: number) => {
             return (
               <grid-item
                 key={index}

@@ -2,12 +2,12 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-13 13:57:12
+ * @LastEditTime: 2022-10-13 22:16:12
  * @FilePath: /vulture/packages/vul-admin/src/main.ts
  * @Description: update here
  */
 import { createApp } from "vue";
-import Antd from "ant-design-vue";
+import Antd from "ant-design-vue/es";
 import "ant-design-vue/dist/antd.css";
 import "./style.css";
 import App from "./App.vue";

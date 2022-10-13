@@ -116,7 +116,7 @@ export default defineComponent({
     z-index: 1;
     .centerBox {
       height: 80%;
-      box-shadow: 0px 20px 80px 0px rgb(0 0 0 / 30%);
+      // box-shadow: 0px 20px 80px 0px rgb(0 0 0 / 30%);
       display: flex;
       .leftBox {
         width: 50%;
