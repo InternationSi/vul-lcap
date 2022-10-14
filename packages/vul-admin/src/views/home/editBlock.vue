@@ -2,7 +2,7 @@
 import { defineComponent, ref, reactive } from "vue";
 import { VXETable, VxeColumnPropTypes, VxeTablePropTypes } from "vxe-table";
 import XEUtils from "xe-utils";
-import { getNameSpaces } from "../../request/ns_req";
+import { getNameSpaces } from "../../request/namespaces";
 
 interface FormState {
   username: string;
