@@ -6,7 +6,7 @@ import {
   getNameSpaces,
   addNameSpaces,
   editNameSpaces,
-} from "../../request/ns_req";
+} from "../../request/namespaces";
 import _ from "lodash";
 import type { NsType } from "./renameBlock.type";
 // import { string } from "vue-types";
@@ -42,8 +42,7 @@ export default defineComponent({
     const edit = (index: number) => {
       editIndex.value = true;
       visible.value = true;
-      formState.namespacesName = dataList.value[index].name;
-      spacesName;
+      formState.namespacesName = dataList.value[index].namespacesName;
       formState.label = dataList.value[index].label;
       formState.describe = dataList.value[index].describe;
     };
@@ -112,20 +111,16 @@ export default defineComponent({
       <a-form :model="formState">
         <a-form-item label="Name" prop="namespacesName">
           <a-input
-            v-model:value="formState.namespacesName"
+            v-model="formState.namespacesName"
             :disabled="editIndex == true"
           />
         </a-form-item>
 
         <a-form-item label="标签">
-          <a-input v-model:value="formState.label" />
+          <a-input v-model="formState.label" />
         </a-form-item>
         <a-form-item label="介绍">
-          <a-input
-            type="textarea"
-            rows="3"
-            v-model:value="formState.describe"
-          />
+          <a-input type="textarea" rows="3" v-model="formState.describe" />
         </a-form-item>
       </a-form>
     </a-modal>

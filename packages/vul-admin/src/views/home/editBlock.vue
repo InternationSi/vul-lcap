@@ -314,20 +314,19 @@ export default defineComponent({
     background: #ffff;
   }
 }
-.saveBtn{
-    background:#ffff;
-    width:100%;
-    height:80px;
-    position:fixed;
-    bottom:0;
-    .bottom{
-      line-height:80px;
-      margin-left:70%;
+.saveBtn {
+  background: #ffff;
+  width: 100%;
+  height: 80px;
+  position: fixed;
+  bottom: 0;
+  .bottom {
+    line-height: 80px;
+    margin-left: 70%;
 
-      .saveClose{
-        margin-right:20px;
-      }
-
+    .saveClose {
+      margin-right: 20px;
     }
   }
+}
 </style>
