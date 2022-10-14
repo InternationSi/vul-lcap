@@ -239,6 +239,15 @@ export default defineComponent({
       </div>
     </div>
   </div>
+
+  <div class="saveBtn">
+    <div class="bottom">
+      <a-radio-button value="default" class="saveClose"
+        >保存并关闭</a-radio-button
+      >
+      <a-button type="primary">保存</a-button>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="less">
@@ -305,4 +314,20 @@ export default defineComponent({
     background: #ffff;
   }
 }
+.saveBtn{
+    background:#ffff;
+    width:100%;
+    height:80px;
+    position:fixed;
+    bottom:0;
+    .bottom{
+      line-height:80px;
+      margin-left:70%;
+
+      .saveClose{
+        margin-right:20px;
+      }
+
+    }
+  }
 </style>

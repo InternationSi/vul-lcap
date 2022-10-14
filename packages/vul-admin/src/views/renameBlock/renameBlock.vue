@@ -1,44 +1,40 @@
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, onMounted } from "vue";
+// import { any, number } from "vue-types";
+
+import {
+  getNameSpaces,
+  addNameSpaces,
+  editNameSpaces,
+} from "../../request/ns_req";
 import _ from "lodash";
-interface FormState {
-  name: string;
-  introduce: string;
-  content: string;
-}
+import type { NsType } from "./renameBlock.type";
+// import { string } from "vue-types";
+
 export default defineComponent({
   setup() {
-    const dataList = ref([
-      {
-        name: "第一个列表",
-        introduce: "介绍一下",
-        content: "标签1",
-      },
-      {
-        name: "第二个列表",
-        introduce: "介绍一下",
-        content: "标签2",
-      },
-      {
-        name: "第三个列表",
-        introduce: "介绍一下",
-        content: "标签3",
-      },
-    ]);
-
-    const formState = reactive<FormState>({
-      name: "",
-      introduce: "",
-      content: "",
+    const dataList = ref<NsType[]>([]);
+    onMounted(async () => {
+      const res = await getNameSpaces();
+      if (res.sucess) {
+        dataList.value = res.data;
+      }
     });
-    const editIndex = ref<number>();
+    const formState = reactive<NsType>({
+      namespacesName: "",
+      label: "",
+      describe: "",
+    });
+    const editIndex = ref<boolean>(false);
     const visible = ref<boolean>(false);
     const add = () => {
-      (formState.name = ""),
-        (formState.introduce = ""),
-        (formState.content = ""),
-        (visible.value = true);
-      console.log(formState, "333");
+      (formState.namespacesName = ""),
+        (formState.label = ""),
+        (formState.describe = ""),
+        visible.value = true;
+        editIndex.value = false;
+       
+       
     };
     const deleteBtn = (index: number) => {
       console.log(index);
@@ -46,23 +42,35 @@ export default defineComponent({
     };
 
     const edit = (index: number) => {
-      editIndex.value = index;
+      editIndex.value = true;
       visible.value = true;
-      formState.name = dataList.value[index].name;
-      formState.introduce = dataList.value[index].introduce;
-      formState.content = dataList.value[index].content;
+      formState.namespacesName = dataList.value[index].name;spacesName;
+      formState.label = dataList.value[index].label;;
+      formState.describe = dataList.value[index].describe;;
     };
-
-    const handleOk = (e: MouseEvent) => {
-      if (editIndex.value == undefined) {
-        var deep = _.cloneDeep(formState);
-        dataList.value.push(deep);
+    const handleCancel = ()=>{
+      visible.value = false;
+    };
+    const handleOk = async (e: MouseEvent) => {
+      if (!editIndex.value ) {
+        let deep = _.cloneDeep(formState);
+        const res = await addNameSpaces(deep);
+        console.log(res, "uuuu");
+        const resList = await getNameSpaces();
+        dataList.value = resList.data;;
       } else {
         var deep1 = _.cloneDeep(formState);
-        dataList.value[editIndex.value] = deep1;
+        const resList = await editNameSpaces(deep1);
+        console.log(resList, "pppp");
+        if (resList.sucess) {
+          const resList = await getNameSpaces();
+          dataList.value = resList.data;
+        };
       }
       visible.value = false;
     };
+    
+
 
     return {
       add,
@@ -70,9 +78,11 @@ export default defineComponent({
       deleteBtn,
       visible,
       edit,
+      handleCancel,
       handleOk,
       editIndex,
       formState,
+      
     };
   },
 });
@@ -84,9 +94,9 @@ export default defineComponent({
     <ul class="content" v-for="(item, index) in dataList" :key="index">
       <li>
         <div>
-          <span class="header">{{ item.name }}</span>
-          <span class="introduce">{{ item.introduce }}</span>
-          <p>{{ item.content }}</p>
+          <span class="header">{{ item.namespacesName }}</span>
+          <span class="introduce">{{ item.label }}</span>
+          <p>{{ item.describe }}</p>
         </div>
         <div>
           <a-button type="link" @click="edit(index)">编辑</a-button>
@@ -95,53 +105,33 @@ export default defineComponent({
       </li>
     </ul>
     <a-modal
-      v-model:visible="visible"
-      :title="editIndex != undefined ? '编辑' : '新增'"
+      :visible="visible"
+      cancelText="取消"
+      okText="确定"
+      :title="editIndex ==true ? '编辑' : '新增'"
       @ok="handleOk"
+      @cancel="handleCancel"
+      style="min-height: 330px"
     >
       <a-form
         :model="formState"
-        name="basic"
-        :label-col="{ span: 8 }"
-        :wrapper-col="{ span: 16 }"
-        autocomplete="off"
-        labelAlign="left"
+        
       >
-        <a-form-item
-          label="Name"
-          name="username"
-          :rules="[{ required: true, message: 'Please input your username!' }]"
-        >
-          <a-input v-model:value="formState.name" />
+        <a-form-item label="Name" prop="namespacesName">
+          <a-input v-model:value="formState.namespacesName" :disabled="editIndex == true"  />
         </a-form-item>
 
-        <a-form-item
-          label="introduce"
-          name="password"
-          :rules="[{ required: true, message: 'Please input your password!' }]"
-        >
-          <a-input v-model:value="formState.introduce" />
+        <a-form-item label="标签" >
+          <a-input v-model:value="formState.label" />
         </a-form-item>
-        <a-form-item
-          label="content"
-          name="content"
-          :rules="[{ required: true, message: 'Please input your password!' }]"
-        >
-          <a-input v-model:value="formState.content" />
+        <a-form-item label="介绍" >
+          <a-input  type='textarea' rows="3" v-model:value="formState.describe"  />
         </a-form-item>
       </a-form>
-      <!-- <a-input
-        v-model:value="value1"
-        placeholder="请输入名称"
-        style="margin-bottom: 10px"
-      />
-      <a-input
-        v-model:value="value2"
-        placeholder="请输入介绍"
-        style="margin-bottom: 10px"
-      />
-      <a-input v-model:value="value3" placeholder="请输入内容" /> -->
-    </a-modal>
+    </a-modal> 
+
+
+
   </div>
 </template>
 <style scoped lang="less">
