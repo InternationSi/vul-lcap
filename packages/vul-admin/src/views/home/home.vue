@@ -123,12 +123,12 @@ export default defineComponent({
       <a-layout-content class="content">
           <router-view > </router-view>
       </a-layout-content>
-      <a-layout-footer class="foot">
+      <!-- <a-layout-footer class="foot">
         <div class="saveBtn">
           <a-radio-button value="default" class="saveClose">保存并关闭</a-radio-button>
           <a-button type="primary">保存</a-button>
         </div>
-      </a-layout-footer>
+      </a-layout-footer> -->
     </a-layout>
   </a-layout>
 </template>
