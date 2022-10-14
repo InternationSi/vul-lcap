@@ -44,9 +44,9 @@ export default defineComponent({
     const edit = (index: number) => {
       editIndex.value = true;
       visible.value = true;
-      formState.namespacesName = dataList.value[index].namespacesName;
-      formState.label = dataList.value[index].label;
-      formState.describe = dataList.value[index].describe;
+      formState.namespacesName = dataList.value[index].name;spacesName;
+      formState.label = dataList.value[index].label;;
+      formState.describe = dataList.value[index].describe;;
     };
     const handleCancel = ()=>{
       visible.value = false;
@@ -57,7 +57,7 @@ export default defineComponent({
         const res = await addNameSpaces(deep);
         console.log(res, "uuuu");
         const resList = await getNameSpaces();
-        dataList.value = resList.data;
+        dataList.value = resList.data;;
       } else {
         var deep1 = _.cloneDeep(formState);
         const resList = await editNameSpaces(deep1);
@@ -65,7 +65,7 @@ export default defineComponent({
         if (resList.sucess) {
           const resList = await getNameSpaces();
           dataList.value = resList.data;
-        }
+        };
       }
       visible.value = false;
     };
@@ -134,7 +134,7 @@ export default defineComponent({
 
   </div>
 </template>
-<style scoped lang='less'>
+<style scoped lang="less">
 .warp {
   background: rgba(250, 250, 250, 1);
 
@@ -150,17 +150,21 @@ export default defineComponent({
     padding-top: 32px;
     margin-left: 30px;
   }
+
   .btn {
     margin-left: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
   }
+
   .content {
     list-style: none;
+
     li {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px solid rgba(238, 238, 238, 1);
+
       li div .header {
         font-size: 16px;
         font-weight: 400;
@@ -168,6 +172,7 @@ export default defineComponent({
         line-height: 20px;
         color: rgba(34, 34, 38, 1);
       }
+
       li div p {
         font-size: 14px;
         font-weight: 400;
@@ -179,5 +184,3 @@ export default defineComponent({
   }
 }
 </style>
-
-

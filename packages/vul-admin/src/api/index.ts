@@ -1,45 +1,53 @@
-import axios from 'axios'
-import type { AxiosInstance, AxiosRequestConfig } from 'axios'
-import type { Config } from './type'
-import {
-  BASE_URL,
-  TIME_OUT
-} from './env'
-
+import axios from "axios";
+import type { AxiosInstance, AxiosRequestConfig } from "axios";
+import type { Config } from "./type";
+import { BASE_URL, TIME_OUT } from "./env";
 
 // 导出的属性和方法比较多 所以使用类来进行封装
 // 因为类具有比较好的封装性
 class Api {
-  instance: AxiosInstance
+  instance: AxiosInstance;
 
   constructor(config: Config) {
     // 每次创建实例的时候，都调用axios.create方法
     // axios.create可以返回一个axios实例
     // 这样保证我们可以使用不同的配置创建多个axios实例
-    this.instance = axios.create(config)
+    this.instance = axios.create(config);
 
     // 如果存在实例级别的拦截器 就使用拦截器
     // 这是针对于每一个请求特有的拦截器 --- 实例拦截
     // 这里的操作也可以通过transformRequest和transformResponse配置项来进行实现
     if (config.interceptor) {
-      const { interceptor } = config
-      this.instance.interceptors.request.use(interceptor.requestInterceptor, interceptor.requestInterceptorCatch)
-      this.instance.interceptors.response.use(interceptor.responseInterceptor, interceptor.responseInterceptorCatch)
+      const { interceptor } = config;
+      this.instance.interceptors.request.use(
+        interceptor.requestInterceptor,
+        interceptor.requestInterceptorCatch
+      );
+      this.instance.interceptors.response.use(
+        interceptor.responseInterceptor,
+        interceptor.responseInterceptorCatch
+      );
     }
 
     // 访问私有方法
-    this.#registerGlobalInterceptor(config)
+    this.registerGlobalInterceptor(config);
   }
 
   // 这是所有实例共有的拦截器 --- 全局拦截
   // 如果存在多个拦截器，那么多个拦截器都会被执行
-  #registerGlobalInterceptor(option: Config) {
-    this.instance.interceptors.request.use(config => config, err => err)
-    this.instance.interceptors.response.use(res => res.data, err => err)
+  registerGlobalInterceptor(option: Config) {
+    this.instance.interceptors.request.use(
+      (config) => config,
+      (err) => err
+    );
+    this.instance.interceptors.response.use(
+      (res) => res.data,
+      (err) => err
+    );
   }
 
   request(config: AxiosRequestConfig) {
-    return this.instance.request(config)
+    return this.instance.request(config);
   }
 }
 
@@ -58,4 +66,4 @@ export default new Api({
   //   responseInterceptor: res => res.data,
   //   responseInterceptorCatch:  err => console.error(err)
   // }
-})
+});

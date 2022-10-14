@@ -98,7 +98,6 @@ export default defineComponent({
         }),
       ];
     };
-    const onChange = () => {};
     const deleteBtn = async (row: any) => {
       const $table = xTable.value;
       if (!$table) {
@@ -139,7 +138,6 @@ export default defineComponent({
       checkboxChangeEvent,
       changeAllEvent,
       footerMethod,
-      onChange,
       deleteBtn,
       add,
       exportMessage,
@@ -227,7 +225,6 @@ export default defineComponent({
             <a-checkbox-group
               v-model="row.checkedList"
               :options="row.plainOptions"
-              @change="onChange"
             />
           </template>
         </vxe-column>

@@ -1,3 +1,11 @@
+<!--
+ * @Author: sfy
+ * @Date: 2022-10-13 22:14:54
+ * @LastEditors: sfy
+ * @LastEditTime: 2022-10-13 22:14:54
+ * @FilePath: /vulture/packages/vul-admin/src/views/test/home.vue
+ * @Description: update here
+-->
 <script lang="ts">
 import {
   UserOutlined,
@@ -6,11 +14,31 @@ import {
   MailOutlined,
   BellOutlined,
 } from "@ant-design/icons-vue";
+import {
+  Layout,
+  LayoutSider,
+  Menu,
+  SubMenu,
+  MenuItem,
+  Dropdown,
+  LayoutHeader,
+  LayoutContent,
+  LayoutFooter,
+} from "ant-design-vue";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 export default defineComponent({
   name: "home",
   components: {
+    Layout,
+    LayoutSider,
+    MenuAll: Menu,
+    SubMenu,
+    MenuItem,
+    Dropdown,
+    LayoutHeader,
+    LayoutContent,
+    LayoutFooter,
     UserOutlined,
     TeamOutlined,
     MenuOutlined,
@@ -48,8 +76,8 @@ export default defineComponent({
 });
 </script>
 <template>
-  <a-layout>
-    <a-layout-sider
+  <layout>
+    <layout-sider
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
@@ -69,63 +97,63 @@ export default defineComponent({
           style="font-size: 14px; margin-left: 24px; padding-top: 20px"
         />
       </div>
-      <a-menu
+      <menu-all
         v-model:selectedKeys="selectedKeys"
         theme="light"
         mode="inline"
         style="height: 100vh"
       >
-        <a-sub-menu key="sub1">
+        <sub-menu key="sub1">
           <template #title>
             <span>
               <user-outlined />
               <span>模块管理</span>
             </span>
           </template>
-          <a-menu-item key="4" @click="rename">命名空间</a-menu-item>
-          <a-menu-item key="3" @click="block">编辑模块</a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub2">
+          <menu-item key="4" @click="rename">命名空间</menu-item>
+          <menu-item key="3" @click="block">编辑模块</menu-item>
+        </sub-menu>
+        <sub-menu key="sub2">
           <template #title>
             <span>
               <team-outlined />
               <span>应用空间</span>
             </span>
           </template>
-          <a-menu-item key="6" @click="openDesign">页面构建器</a-menu-item>
-          <a-menu-item key="8">页面</a-menu-item>
-        </a-sub-menu>
-      </a-menu>
-    </a-layout-sider>
-    <a-layout class="right">
-      <a-layout-header class="header">
-        <a-dropdown :trigger="['hover']">
+          <menu-item key="6" @click="openDesign">页面构建器</menu-item>
+          <menu-item key="8">页面</menu-item>
+        </sub-menu>
+      </menu-all>
+    </layout-sider>
+    <layout class="right">
+      <layout-header class="header">
+        <dropdown :trigger="['hover']">
           <div>
             <bell-outlined class="bell" />
           </div>
           <template #overlay>
-            <a-menu class="dropMenu">
-              <a-menu-item key="1">个人中心</a-menu-item>
-              <a-menu-item key="2">设置</a-menu-item>
-              <a-menu-item key="3" @click="loginOut">退出登陆</a-menu-item>
-            </a-menu>
+            <menu-all class="dropMenu">
+              <menu-item key="1">个人中心</menu-item>
+              <menu-item key="2">设置</menu-item>
+              <menu-item key="3" @click="loginOut">退出登陆</menu-item>
+            </menu-all>
           </template>
-        </a-dropdown>
+        </dropdown>
         <mail-outlined class="mail" @click="Email" />
-      </a-layout-header>
-      <a-layout-content class="content">
+      </layout-header>
+      <layout-content class="content">
         <router-view> </router-view>
-      </a-layout-content>
-      <!-- <a-layout-footer class="foot">
-        <div class="saveBtn">
+      </layout-content>
+      <layout-footer class="foot">
+        <!-- <div class="saveBtn">
           <a-radio-button value="default" class="saveClose"
             >保存并关闭</a-radio-button
           >
           <a-button type="primary">保存</a-button>
-        </div>
-      </a-layout-footer> -->
-    </a-layout>
-  </a-layout>
+        </div> -->
+      </layout-footer>
+    </layout>
+  </layout>
 </template>
 
 <style scoped>
