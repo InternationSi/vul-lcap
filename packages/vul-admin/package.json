@@ -12,7 +12,7 @@
     "@ant-design/icons-vue": "^6.1.0",
     "@formily/antdv-x3": "^1.0.0-alpha.5",
     "@formily/core": "^2.2.7",
-    "@formily/vue": "^2.2.7",
+    "@formily/vue": "^2.2.6",
     "ant-design-vue": "^3.2.12",
     "axios": "^0.27.2",
     "core-js": "^3.8.3",

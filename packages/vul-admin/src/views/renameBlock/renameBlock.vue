@@ -31,10 +31,8 @@ export default defineComponent({
       (formState.namespacesName = ""),
         (formState.label = ""),
         (formState.describe = ""),
-        visible.value = true;
-        editIndex.value = false;
-       
-       
+        (visible.value = true);
+      editIndex.value = false;
     };
     const deleteBtn = (index: number) => {
       console.log(index);
@@ -44,20 +42,21 @@ export default defineComponent({
     const edit = (index: number) => {
       editIndex.value = true;
       visible.value = true;
-      formState.namespacesName = dataList.value[index].name;spacesName;
-      formState.label = dataList.value[index].label;;
-      formState.describe = dataList.value[index].describe;;
+      formState.namespacesName = dataList.value[index].name;
+      spacesName;
+      formState.label = dataList.value[index].label;
+      formState.describe = dataList.value[index].describe;
     };
-    const handleCancel = ()=>{
+    const handleCancel = () => {
       visible.value = false;
     };
     const handleOk = async (e: MouseEvent) => {
-      if (!editIndex.value ) {
+      if (!editIndex.value) {
         let deep = _.cloneDeep(formState);
         const res = await addNameSpaces(deep);
         console.log(res, "uuuu");
         const resList = await getNameSpaces();
-        dataList.value = resList.data;;
+        dataList.value = resList.data;
       } else {
         var deep1 = _.cloneDeep(formState);
         const resList = await editNameSpaces(deep1);
@@ -65,12 +64,10 @@ export default defineComponent({
         if (resList.sucess) {
           const resList = await getNameSpaces();
           dataList.value = resList.data;
-        };
+        }
       }
       visible.value = false;
     };
-    
-
 
     return {
       add,
@@ -82,7 +79,6 @@ export default defineComponent({
       handleOk,
       editIndex,
       formState,
-      
     };
   },
 });
@@ -108,30 +104,31 @@ export default defineComponent({
       :visible="visible"
       cancelText="取消"
       okText="确定"
-      :title="editIndex ==true ? '编辑' : '新增'"
+      :title="editIndex == true ? '编辑' : '新增'"
       @ok="handleOk"
       @cancel="handleCancel"
       style="min-height: 330px"
     >
-      <a-form
-        :model="formState"
-        
-      >
+      <a-form :model="formState">
         <a-form-item label="Name" prop="namespacesName">
-          <a-input v-model:value="formState.namespacesName" :disabled="editIndex == true"  />
+          <a-input
+            v-model:value="formState.namespacesName"
+            :disabled="editIndex == true"
+          />
         </a-form-item>
 
-        <a-form-item label="标签" >
+        <a-form-item label="标签">
           <a-input v-model:value="formState.label" />
         </a-form-item>
-        <a-form-item label="介绍" >
-          <a-input  type='textarea' rows="3" v-model:value="formState.describe"  />
+        <a-form-item label="介绍">
+          <a-input
+            type="textarea"
+            rows="3"
+            v-model:value="formState.describe"
+          />
         </a-form-item>
       </a-form>
-    </a-modal> 
-
-
-
+    </a-modal>
   </div>
 </template>
 <style scoped lang="less">
