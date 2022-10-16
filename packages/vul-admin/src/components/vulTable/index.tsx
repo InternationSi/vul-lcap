@@ -2,15 +2,15 @@
  * @Author: sfy
  * @Date: 2022-10-13 21:10:06
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-16 17:32:32
+ * @LastEditTime: 2022-10-16 22:19:54
  * @FilePath: /vulture/packages/vul-admin/src/components/vulTable/index.tsx
  * @Description: update here
  */
 
 import { defineComponent, reactive, onMounted, ref } from "vue";
 import useModule from "./effect/useModule";
-import { VxeFormPropTypes } from "vxe-table";
 import CreateColumn from "./components/createColumn";
+import useDrawShow from "./effect/useDrawShow";
 import VulForm from "../vulForm";
 import "./index.module.less";
 
@@ -20,17 +20,13 @@ export default defineComponent({
     const demo1 = reactive({
       tableData: [] as any[],
     });
+    const FormWithModel = ref<InstanceType<any> | null>(null);
 
     const { moduleInfo, columsInfo } = useModule("111", "sam66");
+    const { visible, showDrawer, closeDrawer } = useDrawShow();
 
-    const visible = ref<boolean>(false);
-
-    const afterVisibleChange = (bool: boolean) => {
-      console.log("visible", bool);
-    };
-
-    const showDrawer = () => {
-      visible.value = true;
+    const saveFormModel = () => {
+      console.log(FormWithModel.value?.formData);
     };
 
     return () => (
@@ -57,15 +53,16 @@ export default defineComponent({
           title="模型编辑"
           placement="right"
           width="500"
-          afterVisibleChang={afterVisibleChange}
           footer={
             <a-space>
-              <a-button>取消</a-button>
-              <a-button type="primary">提交</a-button>
+              <a-button onClick={closeDrawer}>取消</a-button>
+              <a-button type="primary" onClick={saveFormModel}>
+                提交
+              </a-button>
             </a-space>
           }
         >
-          <VulForm />
+          <VulForm ref={FormWithModel} />
         </a-drawer>
       </>
     );

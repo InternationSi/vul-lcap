@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-16 13:51:43
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-16 14:09:25
+ * @LastEditTime: 2022-10-16 22:18:51
  * @FilePath: /vulture/packages/vul-admin/src/components/vulForm/components/createFormItem.tsx
  * @Description: update here
  */
@@ -29,8 +29,8 @@ export default defineComponent({
               title={item.title}
             >
               {{
-                default({ item }: { item: ColumType }) {
-                  return [<StringField v-model={item.fieldName} />];
+                default({ data }: { data: any }) {
+                  return [<StringField v-model={data[item.fieldName]} />];
                 },
               }}
             </vxe-form-item>
