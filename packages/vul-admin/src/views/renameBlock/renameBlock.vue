@@ -1,16 +1,17 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
 // import { any, number } from "vue-types";
-
+import type { FormInstance } from "ant-design-vue";
+// import type { Rule } from "ant-design-vue/es/form";
+import { message } from "ant-design-vue";
 import {
   getNameSpaces,
   addNameSpaces,
   editNameSpaces,
+  deletNameSpaces,
 } from "../../request/namespaces";
 import _ from "lodash";
 import type { NsType } from "./renameBlock.type";
-// import { string } from "vue-types";
-
 export default defineComponent({
   setup() {
     const dataList = ref<NsType[]>([]);
@@ -20,6 +21,7 @@ export default defineComponent({
         dataList.value = res.data;
       }
     });
+    const formRef = ref<FormInstance>();
     const formState = reactive<NsType>({
       namespacesName: "",
       label: "",
@@ -34,10 +36,6 @@ export default defineComponent({
         (visible.value = true);
       editIndex.value = false;
     };
-    const deleteBtn = (index: number) => {
-      console.log(index);
-      dataList.value.splice(index, 1);
-    };
 
     const edit = (index: number) => {
       editIndex.value = true;
@@ -46,20 +44,25 @@ export default defineComponent({
       formState.label = dataList.value[index].label;
       formState.describe = dataList.value[index].describe;
     };
-    const handleCancel = () => {
+    const cancel = () => {
       visible.value = false;
     };
     const handleOk = async (e: MouseEvent) => {
+      console.log(formState.label, "11111");
+      const res = await formRef.value?.validateFields();
+      console.log(res, "===");
       if (!editIndex.value) {
         let deep = _.cloneDeep(formState);
+        console.log(deep, "77777");
         const res = await addNameSpaces(deep);
-        console.log(res, "uuuu");
+        console.log(res, "222");
+        message.success(res.msg);
         const resList = await getNameSpaces();
         dataList.value = resList.data;
       } else {
         var deep1 = _.cloneDeep(formState);
         const resList = await editNameSpaces(deep1);
-        console.log(resList, "pppp");
+        message.success(resList.msg);
         if (resList.sucess) {
           const resList = await getNameSpaces();
           dataList.value = resList.data;
@@ -67,17 +70,38 @@ export default defineComponent({
       }
       visible.value = false;
     };
+    const confirm = async (index: number) => {
+      var name = _.cloneDeep(dataList.value[index].namespacesName);
+      const res = await deletNameSpaces(name);
+      if (res.sucess) {
+        message.success(res.msg);
+        const res2 = await getNameSpaces();
+        if (res2.sucess) {
+          dataList.value = res2.data;
+        }
+      }
+    };
+    const cancelPop = (e: MouseEvent) => {
+      console.log(e);
+    };
+    const layout = reactive({
+      labelCol: { span: 3 },
+    });
 
     return {
+      formRef,
       add,
       dataList,
-      deleteBtn,
+      // deleteBtn,
       visible,
       edit,
-      handleCancel,
+      cancel,
       handleOk,
       editIndex,
       formState,
+      confirm,
+      cancelPop,
+      layout,
     };
   },
 });
@@ -86,41 +110,72 @@ export default defineComponent({
   <div class="warp">
     <div class="top">命名空间</div>
     <a-button type="primary" @click="add()" class="btn">新增</a-button>
-    <ul class="content" v-for="(item, index) in dataList" :key="index">
+    <ul
+      class="content"
+      v-for="(item, index) in dataList"
+      :key="index"
+      style="padding-right: 30px"
+    >
       <li>
         <div>
-          <span class="header">{{ item.namespacesName }}</span>
-          <span class="introduce">{{ item.label }}</span>
-          <p>{{ item.describe }}</p>
+          <span class="header" style="font-size: 14px">{{ item.label }}</span>
+          <a-tag color="blue" style="margin-left: 20px; font-size: 12px">{{
+            item.namespacesName
+          }}</a-tag>
+          <p style="color: rgba(117, 117, 117, 1); font-size: 12px">
+            {{ item.describe }}
+          </p>
         </div>
         <div>
-          <a-button type="link" @click="edit(index)">编辑</a-button>
-          <a-button type="link" @click="deleteBtn(index)">删除</a-button>
+          <a-button type="link" @click="edit(index)" style="font-size: 14px"
+            >编辑</a-button
+          >
+          <a-popconfirm
+            title="是否确定删除此项目?"
+            ok-text="Yes"
+            cancel-text="No"
+            @confirm="confirm(index)"
+            @cancel="cancelPop"
+          >
+            <a href="#" style="font-size: 14px">删除</a>
+          </a-popconfirm>
         </div>
       </li>
     </ul>
     <a-modal
       :visible="visible"
-      cancelText="取消"
-      okText="确定"
       :title="editIndex == true ? '编辑' : '新增'"
       @ok="handleOk"
-      @cancel="handleCancel"
+      @cancel="cancel"
+      cancelText="取消"
+      okText="确定"
       style="min-height: 330px"
     >
-      <a-form :model="formState">
-        <a-form-item label="Name" prop="namespacesName">
+      <a-form
+        ref="formRef"
+        name="custom-validation"
+        :model="formState"
+        :labelCol="{ span: 3 }"
+      >
+        <a-form-item
+          label="Names"
+          name="namespacesName"
+          :rules="[{ required: true, message: '请填写名称' }]"
+        >
           <a-input
-            v-model="formState.namespacesName"
-            :disabled="editIndex == true"
+            v-model:value="formState.namespacesName"
+            :disabled="editIndex"
           />
         </a-form-item>
-
-        <a-form-item label="标签">
-          <a-input v-model="formState.label" />
+        <a-form-item
+          label="标签"
+          name="label"
+          :rules="[{ required: true, message: '请填写标签' }]"
+        >
+          <a-input v-model:value="formState.label" />
         </a-form-item>
-        <a-form-item label="介绍">
-          <a-input type="textarea" rows="3" v-model="formState.describe" />
+        <a-form-item label="介绍" name="describe">
+          <a-textarea v-model:value="formState.describe" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -158,7 +213,7 @@ export default defineComponent({
       border-bottom: 1px solid rgba(238, 238, 238, 1);
 
       li div .header {
-        font-size: 16px;
+        font-size: 25px;
         font-weight: 400;
         letter-spacing: 0px;
         line-height: 20px;
@@ -166,7 +221,6 @@ export default defineComponent({
       }
 
       li div p {
-        font-size: 14px;
         font-weight: 400;
         letter-spacing: 0px;
         line-height: 17px;

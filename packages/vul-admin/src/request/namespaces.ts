@@ -29,3 +29,15 @@ export const editNameSpaces = async (params: NsType) => {
 
   return res;
 };
+
+export const deletNameSpaces = async (namespacesName: string) => {
+  const res: any = await Api.request({
+    method: "delete",
+    url: "/metaData/namespaces",
+    params: {
+      namespacesName,
+    },
+  });
+
+  return res;
+};
