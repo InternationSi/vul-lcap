@@ -2,35 +2,33 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-13 21:29:12
+ * @LastEditTime: 2022-10-16 20:52:33
  * @FilePath: /vulture/packages/vul-admin/src/router/index.ts
  * @Description: update here
  */
 import { createRouter, createWebHistory } from "vue-router";
 
-import home from "../views/home/home.vue";
+import home from "../views/layout/layout.vue";
 import login from "../views/login/login.vue";
 import eamil from "../views/email/email.vue";
-import editBlock from "../views/home/editBlock.vue";
+import editBlock from "../views/moduleEditor/moduleEditor.vue";
 import renameBlock from "../views/renameBlock/renameBlock.vue";
-import client from "../views/client/client.vue";
 import grid from "../views/grid/index";
 import test from "../views/test/test.vue";
 const routes = [
   {
-    path: "/home",
+    path: "/",
     component: home,
     children: [
-      { path: "/editBlock", component: editBlock },
       { path: "/renameBlock", component: renameBlock },
-      { path: "/grid", component: grid },
+      { path: "/editBlock", component: editBlock },
     ],
   },
   { path: "/login", component: login },
   { path: "/email", component: eamil },
-  { path: "/client/:name", component: client },
+  { path: "/grid", component: grid },
   { path: "/test", component: test },
-  { path: "", redirect: "/home" },
+  { path: "", redirect: "/renameBlock" },
 ];
 
 const router = createRouter({

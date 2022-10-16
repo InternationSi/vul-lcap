@@ -251,10 +251,6 @@ export default defineComponent({
 </template>
 
 <style scoped lang="less">
-.block {
-  margin-top: 10px;
-  margin-left: 10px;
-}
 .top {
   margin-bottom: 2px;
   padding-left: 20px;
