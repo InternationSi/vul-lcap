@@ -1,13 +1,21 @@
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, Ref, UnwrapRef } from "vue";
 import { VXETable, VxeColumnPropTypes, VxeTablePropTypes } from "vxe-table";
 import XEUtils from "xe-utils";
+import { cloneDeep } from "lodash-es";
 import { getNameSpaces } from "../../request/namespaces";
 
 interface FormState {
   username: string;
   nickname: string;
   checkNick: boolean;
+}
+
+interface DataItem {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
 }
 import { VxeTableInstance } from "vxe-table";
 export default defineComponent({
@@ -20,33 +28,16 @@ export default defineComponent({
     });
 
     //定义表格数据
-    const demo1 = reactive({
-      value1: "",
-      value2: "",
-      showDetails: false,
-      selectRow: null,
-      isAllChecked: false,
-      isIndeterminate: false,
-      selectRecords: [] as any[],
-      tableData: [
-        {
-          id: 10001,
-          flag1: "Y",
-          html1: "",
-          html2: "",
-          checkedList: [],
-          plainOptions: ["多个值", "必需的", "主键值", "主键"],
-          button: "",
-        },
-      ],
-      tablePage: {
-        total: 0,
-        currentPage: 1,
-        pageSize: 10,
-      },
-    });
+    const data = [
+      {
+        key: "1",
+        name: "John",
 
-    const xTable = ref<VxeTableInstance>();
+        age: 32,
+        address: "New York No. 1 Lake Park",
+        tags: ["nice", "developer"],
+      },
+    ];
     const formatDate = (value: any) => {
       return XEUtils.toDateString(value, "yyyy-MM-dd HH:mm:ss.S");
     };
@@ -56,25 +47,6 @@ export default defineComponent({
       row,
     }) => {
       return row.sex === option.data;
-    };
-
-    const checkboxChangeEvent = () => {
-      const $table = xTable.value;
-      if (!$table) {
-        return;
-      }
-      demo1.isAllChecked = $table.isAllCheckboxChecked();
-      demo1.isIndeterminate = $table.isAllCheckboxIndeterminate();
-      demo1.selectRecords = $table.getCheckboxRecords();
-    };
-
-    const changeAllEvent = () => {
-      const $table = xTable.value;
-      if (!$table) {
-        return;
-      }
-      $table.setAllCheckboxRow(demo1.isAllChecked);
-      demo1.selectRecords = $table.getCheckboxRecords();
     };
 
     const sumNum = (list: any[], field: string) => {
@@ -98,32 +70,20 @@ export default defineComponent({
         }),
       ];
     };
-    const deleteBtn = async (row: any) => {
-      const $table = xTable.value;
-      if (!$table) {
-        return;
-      }
-      const type = await VXETable.modal.confirm("您确定要删除该数据?");
-      if (type === "confirm") {
-        $table.remove(row);
-      }
+
+    const handleAdd = () => {
+      // const newData = {
+      //   key: `${count.value}`,
+      //   name: `Edward King ${count.value}`,
+      //   age: 32,
+      //   address: `London, Park Lane no. ${count.value}`,
+      // };
+      // dataSource.value.push(newData);
     };
-    const add = async (row: any) => {
-      const $table = xTable.value;
-      if (!$table) {
-        return;
-      }
-      const record = {
-        flag1: "Y",
-        html1: "",
-        html2: "",
-        checkedList: [],
-        plainOptions: ["多个值", "必需的", "主键值", "主键"],
-        button: "",
-      };
-      const { row: newRow } = await $table.insertAt(record, row);
-      await $table.setEditCell(newRow, "name");
-    };
+
+    //   const { row: newRow } = await $table.insertAt(record, row);
+    //   await $table.setEditCell(newRow, "name");
+    // };
     const exportMessage = async () => {
       const res = await getNameSpaces();
       console.log(res, "rrr");
@@ -131,15 +91,11 @@ export default defineComponent({
     return {
       value,
       formState,
-      demo1,
-      xTable,
+      data,
       formatDate,
       filterSexMethod,
-      checkboxChangeEvent,
-      changeAllEvent,
       footerMethod,
-      deleteBtn,
-      add,
+      handleAdd,
       exportMessage,
     };
   },
@@ -182,61 +138,47 @@ export default defineComponent({
     </div>
     <div class="table">
       <p style="padding-top: 20px; font-weight: 600px">管理记录字段</p>
-      <!-- 表格 -->
-      <vxe-table
-        style="width: auto"
-        border
-        ref="xTable"
-        header-align="center"
-        :column-config="{ resizable: true }"
-        :footer-method="footerMethod"
-        :data="demo1.tableData"
-        @checkbox-change="checkboxChangeEvent"
-        @checkbox-all="checkboxChangeEvent"
+      <a-button
+        class="editable-add-btn"
+        style="margin-bottom: 8px"
+        @click="handleAdd"
+        >Add</a-button
       >
-        <vxe-column field="html1" title="名称" width="25%" show-overflow>
-          <template #default="{ row }">
-            <vxe-input
-              v-model="row.value1"
-              placeholder="请输入名称"
-              size="mini"
-            ></vxe-input>
+      <a-table :data-source="data">
+        <a-table-column key="name" title="名称" data-index="name">
+          <template #default>
+            <span>
+              <a-input></a-input>
+            </span>
           </template>
-        </vxe-column>
-        <vxe-column field="html2" title="标题" width="25%" show-overflow>
-          <template #default="{ row }">
-            <vxe-input
-              v-model="row.value1"
-              placeholder="请输入标题"
-              size="mini"
-            ></vxe-input>
+        </a-table-column>
+        <a-table-column key="age" title="标题" data-index="age">
+          <template #default>
+            <span>
+              <a-input></a-input>
+            </span>
           </template>
-        </vxe-column>
-        <vxe-column field="flag1" title="类型" width="15%" show-overflow>
-          <template #default="{ row }">
-            <vxe-select v-model="row.flag1" transfer>
-              <vxe-option value="Y" label="是"></vxe-option>
-              <vxe-option value="N" label="否"></vxe-option>
-            </vxe-select>
+        </a-table-column>
+        <a-table-column key="address" title="类型" data-index="address" />
+        <a-table-column key="tags" title="属性" data-index="tags">
+          <template #default="{ text: tags }">
+            <span>
+              <a-tag v-for="tag in tags" :key="tag" color="blue">{{
+                tag
+              }}</a-tag>
+            </span>
           </template>
-        </vxe-column>
-        <vxe-column field="checkbox" title="属性" width="35%" show-overflow>
-          <template #default="{ row }">
-            <a-checkbox-group
-              v-model="row.checkedList"
-              :options="row.plainOptions"
-            />
+        </a-table-column>
+        <a-table-column key="Action" title="操作">
+          <template #default="{ record }">
+            <span>
+              <a>Action 一 {{ record.firstName }}</a>
+              <a-divider type="vertical" />
+              <a>Delete</a>
+            </span>
           </template>
-        </vxe-column>
-        <vxe-column field="button" title="编辑" align="center" show-overflow>
-          <template #default="{ row }">
-            <a-button type="link" @click="deleteBtn(row)">删除</a-button>
-          </template>
-        </vxe-column>
-      </vxe-table>
-      <div class="btn">
-        <a-button type="primary" @click="add(-1)"> + 新增加字段</a-button>
-      </div>
+        </a-table-column>
+      </a-table>
     </div>
   </div>
 
