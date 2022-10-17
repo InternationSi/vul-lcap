@@ -2,137 +2,69 @@
  * @Author: sfy
  * @Date: 2022-10-13 21:10:06
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-13 23:09:45
+ * @LastEditTime: 2022-10-16 22:19:54
  * @FilePath: /vulture/packages/vul-admin/src/components/vulTable/index.tsx
  * @Description: update here
  */
 
-import { defineComponent, ref } from "vue";
-import { createForm } from "@formily/core";
-import { FormProvider, createSchemaField } from "@formily/vue";
-import {
-  Submit,
-  FormItem,
-  ArrayTable,
-  Input,
-  Editable,
-} from "@formily/antdv-x3";
-const {
-  SchemaArrayField,
-  SchemaObjectField,
-  SchemaVoidField,
-  SchemaStringField,
-  SchemaField,
-} = createSchemaField({
-  components: {
-    FormItem,
-    ArrayTable,
-    Input,
-    Editable,
-  },
-});
+import { defineComponent, reactive, onMounted, ref } from "vue";
+import useModule from "./effect/useModule";
+import CreateColumn from "./components/createColumn";
+import useDrawShow from "./effect/useDrawShow";
+import VulForm from "../vulForm";
+import "./index.module.less";
 
 export default defineComponent({
-  components: {
-    FormProvider,
-    Submit,
-    SchemaField,
-    SchemaArrayField,
-    SchemaObjectField,
-    SchemaVoidField,
-    SchemaStringField,
-  },
+  components: { CreateColumn, VulForm },
   setup() {
-    const form = createForm();
-    console.log(form, "formform");
+    const demo1 = reactive({
+      tableData: [] as any[],
+    });
+    const FormWithModel = ref<InstanceType<any> | null>(null);
+
+    const { moduleInfo, columsInfo } = useModule("111", "sam66");
+    const { visible, showDrawer, closeDrawer } = useDrawShow();
+
+    const saveFormModel = () => {
+      console.log(FormWithModel.value?.formData);
+    };
 
     return () => (
-      <div>
-        <FormProvider form={form}>
-          <SchemaField>
-            <SchemaArrayField
-              name="array"
-              x-decorator="FormItem"
-              x-component="ArrayTable"
-              x-component-props={{
-                pagination: { pageSize: 10 },
-                scroll: { x: 800 },
-              }}
-            >
-              <SchemaObjectField>
-                <SchemaVoidField
-                  x-component="ArrayTable.Column"
-                  x-component-props={{
-                    width: 80,
-                    title: "Index",
-                    align: "center",
-                  }}
-                >
-                  <SchemaVoidField
-                    x-decorator="FormItem"
-                    x-component="ArrayTable.Index"
-                  />
-                </SchemaVoidField>
-                <SchemaVoidField
-                  x-component="ArrayTable.Column"
-                  x-component-props={{
-                    title: "A1",
-                    dataIndex: "a1",
-                    width: 200,
-                  }}
-                >
-                  <SchemaStringField
-                    x-decorator="Editable"
-                    name="a1"
-                    required={true}
-                    x-component="Input"
-                  />
-                </SchemaVoidField>
-                <SchemaVoidField
-                  x-component="ArrayTable.Column"
-                  x-component-props={{ title: "A2", width: 200 }}
-                >
-                  <SchemaStringField
-                    x-decorator="FormItem"
-                    name="a2"
-                    required={true}
-                    x-component="Input"
-                  />
-                </SchemaVoidField>
-                <SchemaVoidField
-                  x-component="ArrayTable.Column"
-                  x-component-props={{ title: "A3", width: 200 }}
-                >
-                  <SchemaStringField
-                    name="a3"
-                    required={true}
-                    x-decorator="FormItem"
-                    x-component="Input"
-                  />
-                </SchemaVoidField>
-                <SchemaVoidField
-                  x-component="ArrayTable.Column"
-                  x-component-props={{
-                    title: "Operations",
-                    dataIndex: "operations",
-                    width: 200,
-                    fixed: "right",
-                  }}
-                >
-                  <SchemaVoidField x-component="FormItem">
-                    <SchemaVoidField x-component="ArrayTable.Remove" />
-                  </SchemaVoidField>
-                </SchemaVoidField>
-              </SchemaObjectField>
-              <SchemaVoidField
-                x-component="ArrayTable.Addition"
-                title="添加条目"
-              />
-            </SchemaArrayField>
-          </SchemaField>
-          <Submit>提交</Submit>
-        </FormProvider>
-      </div>
+      <>
+        <div>
+          <a-button type="primary" onClick={showDrawer}>
+            添加
+          </a-button>
+        </div>
+        <vxe-table
+          border
+          show-overflow
+          ref="xTable"
+          height="300"
+          column-config={{ resizable: true }}
+          row-config={{ isHover: true }}
+          data={demo1.tableData}
+        >
+          <CreateColumn columsInfo={columsInfo.value} />
+        </vxe-table>
+        <a-drawer
+          v-model={[visible.value, "visible"]}
+          class="custom-class"
+          title="模型编辑"
+          placement="right"
+          width="500"
+          footer={
+            <a-space>
+              <a-button onClick={closeDrawer}>取消</a-button>
+              <a-button type="primary" onClick={saveFormModel}>
+                提交
+              </a-button>
+            </a-space>
+          }
+        >
+          <VulForm ref={FormWithModel} />
+        </a-drawer>
+      </>
     );
   },
 });
