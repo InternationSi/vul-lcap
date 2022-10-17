@@ -12,6 +12,7 @@
     "clean": "lerna clean"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.6",
     "lerna": "^5.5.4"
   }
 }
