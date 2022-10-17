@@ -1,10 +1,19 @@
+/*
+ * @Author: sfy
+ * @Date: 2022-10-17 21:56:34
+ * @LastEditors: sfy
+ * @LastEditTime: 2022-10-17 22:09:12
+ * @FilePath: /vulture/packages/vul-admin/src/request/namespaces.ts
+ * @Description: update here
+ */
 import Api from "../api";
+import { API_URL } from "@/api/env";
 import type { NsType } from "../views/renameBlock/renameBlock.type";
 
 export const getNameSpaces = async () => {
   const res: any = await Api.request({
     method: "get",
-    url: "/metaData/namespaces",
+    url: `${API_URL}/namespaces`,
   });
 
   return res;
@@ -13,7 +22,7 @@ export const getNameSpaces = async () => {
 export const addNameSpaces = async (params: NsType) => {
   const res: any = await Api.request({
     method: "post",
-    url: "/metaData/namespaces",
+    url: `${API_URL}/namespaces`,
     data: params,
   });
 
@@ -23,7 +32,7 @@ export const addNameSpaces = async (params: NsType) => {
 export const editNameSpaces = async (params: NsType) => {
   const res: any = await Api.request({
     method: "put",
-    url: "/metaData/namespaces",
+    url: `${API_URL}/namespaces`,
     data: params,
   });
 
@@ -33,7 +42,7 @@ export const editNameSpaces = async (params: NsType) => {
 export const deletNameSpaces = async (namespacesName: string) => {
   const res: any = await Api.request({
     method: "delete",
-    url: "/metaData/namespaces",
+    url: `${API_URL}/namespaces`,
     params: {
       namespacesName,
     },
