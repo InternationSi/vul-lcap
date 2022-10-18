@@ -2,12 +2,13 @@
  * @Author: sfy
  * @Date: 2022-10-14 23:10:12
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-14 23:14:46
+ * @LastEditTime: 2022-10-17 22:08:17
  * @FilePath: /vulture/packages/vul-admin/src/request/module.ts
  * @Description: update here
  */
 
 import Api from "../api";
+import { API_URL } from "@/api/env";
 
 /**
  * @name: 查询单个模型的信息
@@ -22,7 +23,7 @@ export const moduleFind = async (
 ): Promise<any> => {
   const res = await Api.request({
     method: "get",
-    url: `/metaData/${namespaceName}/module/${moduleName}`,
+    url: `${API_URL}/${namespaceName}/module/${moduleName}`,
   });
   return res;
 };

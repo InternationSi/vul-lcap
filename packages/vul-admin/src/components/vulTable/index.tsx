@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 21:10:06
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-16 22:19:54
+ * @LastEditTime: 2022-10-17 23:11:42
  * @FilePath: /vulture/packages/vul-admin/src/components/vulTable/index.tsx
  * @Description: update here
  */
@@ -11,6 +11,7 @@ import { defineComponent, reactive, onMounted, ref } from "vue";
 import useModule from "./effect/useModule";
 import CreateColumn from "./components/createColumn";
 import useDrawShow from "./effect/useDrawShow";
+import useRecordOptions from "./effect/useRecordOptions";
 import VulForm from "../vulForm";
 import "./index.module.less";
 
@@ -24,10 +25,7 @@ export default defineComponent({
 
     const { moduleInfo, columsInfo } = useModule("111", "sam66");
     const { visible, showDrawer, closeDrawer } = useDrawShow();
-
-    const saveFormModel = () => {
-      console.log(FormWithModel.value?.formData);
-    };
+    const { createRecordEvent } = useRecordOptions({ FormWithModel });
 
     return () => (
       <>
@@ -56,7 +54,7 @@ export default defineComponent({
           footer={
             <a-space>
               <a-button onClick={closeDrawer}>取消</a-button>
-              <a-button type="primary" onClick={saveFormModel}>
+              <a-button type="primary" onClick={createRecordEvent}>
                 提交
               </a-button>
             </a-space>
