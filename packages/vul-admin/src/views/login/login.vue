@@ -1,37 +1,61 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref,watch } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
   setup() {
-    const password = ref("");
-    const user = ref("");
-    const activeKey = ref("1");
-    const phone = ref("");
-    const checkedCode = ref("");
     const router = useRouter();
-    const value = ref("");
+    //导航栏
+    const activeKey = ref("1");
+    //判断密码框是否显示
+    let passShow = false;
+    //密码
+    const password = ref("");
+    //手机号
+    const phoneValue = ref("");
+    //11位手机号码正则
+    const reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;    
+    //邮箱
+    const emailValue = ref("");
+    //邮箱正则
+    const reg_email =  /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    //协议勾选
     const checked = ref("");
-    const clickAdd = () => {
-      router.push({ path: "/home" });
-    };
-
+    //验证码按钮
+    const codeButton = ref(true);
+    //判断密码登录还是扫码登录
     let boxShow = ref(true);
+    //切换登录方式
     const changeBox = () => {
       boxShow.value = !boxShow.value;
     };
+    const clickAdd = () => {
+      router.push({ path: "/home" });
+    };
+    //监听手机号输入
+    watch(phoneValue,(newVal)=>{
+      console.log(newVal);
+      
+      if (newVal) {
+        passShow = true
+      }else{
+        passShow = false
+      }
+    })
     return {
       activeKey,
       password,
-      user,
-      phone,
-      value,
+      passShow,
+      phoneValue,
+      reg_tel,
+      emailValue,
+      reg_email,
       checked,
-      checkedCode,
       clickAdd,
       changeBox,
       router,
       boxShow,
+      codeButton
     };
   },
 });
@@ -56,12 +80,24 @@ export default defineComponent({
               <div class="title">欢迎使用~~</div>
               <a-tabs v-model:activeKey="activeKey">
                 <a-tab-pane key="1" tab="手机号"
-                  ><a-input v-model:value="value" placeholder="请输入手机号"
-                /></a-tab-pane>
+                  ><a-input
+                    v-model:phoneValue="phoneValue"
+                    placeholder="请输入手机号"
+                  /><a-button :disabled="!codeButton"
+                    >发送验证码</a-button
+                  ></a-tab-pane
+                >
                 <a-tab-pane key="2" tab="邮箱">
-                  <a-input v-model:value="value" placeholder="请输入邮箱"
-                /></a-tab-pane>
+                  <a-input v-model:emailValue="emailValue" placeholder="请输入邮箱"
+                /><a-button :disabled="!codeButton"
+                    >发送验证码</a-button
+                  ></a-tab-pane>
               </a-tabs>
+              <a-input
+                    v-model:passWord="password"
+                    placeholder="请输入密码"
+                    v-show="passShow"
+                  />
               <a-button class="nextBtn">下一步</a-button>
               <div>
                 <a-checkbox v-model:checked="checked"
@@ -132,7 +168,7 @@ export default defineComponent({
         background-color: rgb(223, 223, 223);
         position: relative;
         .main {
-          height: 80%;
+          height: 90%;
           width: 70%;
           background-color: #fff;
           position: absolute;
@@ -141,6 +177,11 @@ export default defineComponent({
           transform: translateX(-50%) translateY(-50%);
           border-radius: 10px;
           padding: 30px;
+
+          .ant-input {
+              border-radius: 5px;
+              border: 1px solid rgb(171, 171, 171);
+            }
           .imgPath {
             position: absolute;
             top: 0;
@@ -161,6 +202,10 @@ export default defineComponent({
           .ant-tabs {
             margin-bottom: 20px;
             .ant-input {
+              width: 175px;
+              margin-right: 10px;
+            }
+            .ant-btn {
               border-radius: 5px;
               border: 1px solid rgb(171, 171, 171);
             }
@@ -171,13 +216,14 @@ export default defineComponent({
             background-color: #3270ff;
             color: #fff;
             margin-bottom: 20px;
+            margin-top: 20px;
           }
           .foot {
             display: flex; //生成浏览器兼容性代码
             width: 80%;
             margin: 30px auto 24px auto;
             position: absolute;
-            bottom: 50px;
+            bottom: 40px;
             .line {
               flex: 1;
               position: relative;
@@ -192,7 +238,7 @@ export default defineComponent({
           .footBtn {
             width: 80%;
             position: absolute;
-            bottom: 20px;
+            bottom: 15px;
             border: 1px solid rgb(171, 171, 171);
             border-radius: 50px;
           }
