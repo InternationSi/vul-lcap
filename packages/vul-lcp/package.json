@@ -1,4 +1,7 @@
 {
+  "name": "vul-lcp",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "start": "build-scripts start --disable-reload --port 5557",
     "build": "build-scripts build"
