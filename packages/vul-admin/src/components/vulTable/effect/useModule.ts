@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-15 11:28:06
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-15 14:15:42
+ * @LastEditTime: 2022-10-18 22:31:18
  * @FilePath: /vulture/packages/vul-admin/src/components/vulTable/effect/useModule.ts
  * @Description: update here
  */
@@ -11,7 +11,12 @@ import { onMounted, ref, watch } from "vue";
 import useCoulumsPorps from "./useColumsProps";
 import type { ModuleType, ColumType } from "../type";
 
-const useModule = (namespaceName: string, moduleName: string) => {
+interface useModuleType {
+  namespaceName: string
+  moduleName: string
+}
+
+const useModule = ({namespaceName, moduleName}:useModuleType) => {
   const moduleInfo = ref<ModuleType>();
   const columsInfo = ref<ColumType[]>([]);
 

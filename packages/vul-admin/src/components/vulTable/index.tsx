@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 21:10:06
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-17 23:11:42
+ * @LastEditTime: 2022-10-18 23:14:36
  * @FilePath: /vulture/packages/vul-admin/src/components/vulTable/index.tsx
  * @Description: update here
  */
@@ -12,20 +12,31 @@ import useModule from "./effect/useModule";
 import CreateColumn from "./components/createColumn";
 import useDrawShow from "./effect/useDrawShow";
 import useRecordOptions from "./effect/useRecordOptions";
+import useRequestRows from "./effect/useRequestRows";
 import VulForm from "../vulForm";
 import "./index.module.less";
 
 export default defineComponent({
   components: { CreateColumn, VulForm },
   setup() {
-    const demo1 = reactive({
-      tableData: [] as any[],
-    });
-    const FormWithModel = ref<InstanceType<any> | null>(null);
 
-    const { moduleInfo, columsInfo } = useModule("111", "sam66");
+    const namespaceName = "111"
+    const moduleName = "sam66"
+
+    const tableData = ref<any[]>([])
+    const FormWithModel = ref<InstanceType<any> | null>(null);
+    const xTable = ref<InstanceType<any> | null>(null);
+
+    const { moduleInfo, columsInfo } = useModule({namespaceName, moduleName});
+    
     const { visible, showDrawer, closeDrawer } = useDrawShow();
-    const { createRecordEvent } = useRecordOptions({ FormWithModel });
+    const { createRecordEvent } = useRecordOptions({ FormWithModel,closeDrawer, xTable, useRequestRows });
+
+    onMounted(() => {
+      useRequestRows({moduleName}).then(res => {
+        tableData.value = res
+      })
+    })
 
     return () => (
       <>
@@ -37,11 +48,11 @@ export default defineComponent({
         <vxe-table
           border
           show-overflow
-          ref="xTable"
+          ref={xTable}
           height="300"
           column-config={{ resizable: true }}
           row-config={{ isHover: true }}
-          data={demo1.tableData}
+          data={tableData.value}
         >
           <CreateColumn columsInfo={columsInfo.value} />
         </vxe-table>

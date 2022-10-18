@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-17 22:03:19
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-17 22:14:13
+ * @LastEditTime: 2022-10-18 22:40:38
  * @FilePath: /vulture/packages/vul-admin/src/request/record.ts
  * @Description: update here
  */
@@ -15,6 +15,13 @@ export const recordCreate = async (params: SaveRecordType) => {
     method: "post",
     url: `${API_URL}/module/{moduleName}/record`,
     data: params,
+  });
+  return res;
+};
+export const recordListFind = async (moduleName: string) => {
+  const res = await Api.request({
+    method: "get",
+    url: `${API_URL}/module/${moduleName}/record`,
   });
   return res;
 };

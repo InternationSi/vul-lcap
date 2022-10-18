@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-15 23:27:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-17 21:48:32
+ * @LastEditTime: 2022-10-18 22:33:40
  * @FilePath: /vulture/packages/vul-admin/src/components/vulForm/index.tsx
  * @Description: update here
  */
@@ -16,8 +16,10 @@ export default defineComponent({
   components: { CreateFormItem },
   setup(props, { expose }) {
     const formData = ref({});
+    const namespaceName = "111"
+    const moduleName = "sam66"
 
-    const { moduleInfo, columsInfo } = useModule("111", "sam66");
+    const { moduleInfo, columsInfo } = useModule({namespaceName, moduleName});
     const { saveFormData } = useSaveForm({
       formData,
       moduleInfo,
