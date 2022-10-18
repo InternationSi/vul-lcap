@@ -1,9 +1,10 @@
 <script lang="ts">
-import { defineComponent, ref, reactive, Ref, UnwrapRef } from "vue";
-import { VXETable, VxeColumnPropTypes, VxeTablePropTypes } from "vxe-table";
+import { defineComponent, ref, reactive, toRefs } from "vue";
+//import { VXETable, VxeColumnPropTypes, VxeTablePropTypes } from "vxe-table";
 import XEUtils from "xe-utils";
-import { cloneDeep } from "lodash-es";
+
 import { getNameSpaces } from "../../request/namespaces";
+import type { SelectProps } from "ant-design-vue";
 
 interface FormState {
   username: string;
@@ -11,13 +12,6 @@ interface FormState {
   checkNick: boolean;
 }
 
-interface DataItem {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-}
-import { VxeTableInstance } from "vxe-table";
 export default defineComponent({
   setup() {
     const value = ref("");
@@ -35,42 +29,31 @@ export default defineComponent({
 
         age: 32,
         address: "New York No. 1 Lake Park",
-        tags: ["nice", "developer"],
       },
     ];
     const formatDate = (value: any) => {
       return XEUtils.toDateString(value, "yyyy-MM-dd HH:mm:ss.S");
     };
 
-    const filterSexMethod: VxeColumnPropTypes.FilterMethod = ({
-      option,
-      row,
-    }) => {
-      return row.sex === option.data;
+    //下拉框值
+    const options = ref<SelectProps["options"]>([
+      {
+        value: "string",
+        label: "string",
+      },
+      {
+        value: "select",
+        label: "select",
+      },
+    ]);
+    const handleChange: SelectProps["onChange"] = (value) => {
+      console.log(value); // { key: "lucy", label: "Lucy (101)" }
     };
-
-    const sumNum = (list: any[], field: string) => {
-      let count = 0;
-      list.forEach((item) => {
-        count += Number(item[field]);
-      });
-      return count;
-    };
-
-    const footerMethod: VxeTablePropTypes.FooterMethod = ({
-      columns,
-      data,
-    }) => {
-      return [
-        columns.map((column) => {
-          if (["sex", "num"].includes(column.field)) {
-            return sumNum(data, column.field);
-          }
-          return null;
-        }),
-      ];
-    };
-
+    //多选框
+    const plainOptions = ["主键", "必填"];
+    const state = reactive({
+      value1: [],
+    });
     const handleAdd = () => {
       // const newData = {
       //   key: `${count.value}`,
@@ -89,14 +72,16 @@ export default defineComponent({
       console.log(res, "rrr");
     };
     return {
-      value,
+      value: ref({ value: "string" }),
       formState,
       data,
       formatDate,
-      filterSexMethod,
-      footerMethod,
       handleAdd,
       exportMessage,
+      options,
+      handleChange,
+      plainOptions,
+      ...toRefs(state),
     };
   },
 });
@@ -142,9 +127,9 @@ export default defineComponent({
         class="editable-add-btn"
         style="margin-bottom: 8px"
         @click="handleAdd"
-        >Add</a-button
+        >新增</a-button
       >
-      <a-table :data-source="data">
+      <a-table :data-source="data" bordered>
         <a-table-column key="name" title="名称" data-index="name">
           <template #default>
             <span>
@@ -159,22 +144,32 @@ export default defineComponent({
             </span>
           </template>
         </a-table-column>
-        <a-table-column key="address" title="类型" data-index="address" />
+        <a-table-column key="address" title="类型" data-index="address">
+          <template #default>
+            <a-select
+              v-model:value="value"
+              label-in-value
+              style="width: 120px"
+              :options="options"
+              @change="handleChange"
+            ></a-select>
+          </template>
+        </a-table-column>
         <a-table-column key="tags" title="属性" data-index="tags">
-          <template #default="{ text: tags }">
-            <span>
-              <a-tag v-for="tag in tags" :key="tag" color="blue">{{
-                tag
-              }}</a-tag>
-            </span>
+          <template #default>
+            <a-checkbox-group
+              v-model:value="value1"
+              name="checkboxgroup"
+              :options="plainOptions"
+            />
           </template>
         </a-table-column>
         <a-table-column key="Action" title="操作">
-          <template #default="{ record }">
+          <template #default>
             <span>
-              <a>Action 一 {{ record.firstName }}</a>
-              <a-divider type="vertical" />
-              <a>Delete</a>
+              <a>编辑 </a>&nbsp;
+
+              <a>删除</a>
             </span>
           </template>
         </a-table-column>
