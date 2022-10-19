@@ -10,3 +10,4 @@
 export * from "./module";
 export * from "./namespaces";
 export * from "./record";
+export * from "./login";

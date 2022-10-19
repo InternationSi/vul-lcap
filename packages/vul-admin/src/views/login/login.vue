@@ -1,58 +1,76 @@
 <script lang="ts">
-import { defineComponent, ref,watch } from "vue";
+import { defineComponent, ref, watch, reactive } from "vue";
 import { useRouter } from "vue-router";
+import { handleLogin } from "@/request/index";
+import { message } from 'ant-design-vue';
 
 export default defineComponent({
   setup() {
     const router = useRouter();
-    //导航栏
     const activeKey = ref("1");
-    //判断密码框是否显示
-    let passShow = false;
-    //密码
-    const password = ref("");
-    //手机号
-    const phoneValue = ref("");
+    let formUser = reactive({
+      password: '',
+      userName: ''
+    })
+    let formPhone = reactive({
+      phoneValue: '',
+      codePhone: ''
+    })
+    let formEmail = reactive({
+      emailValue: '',
+      codeEmail: ''
+    })
+    let formData = reactive({
+    })
     //11位手机号码正则
-    const reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;    
-    //邮箱
-    const emailValue = ref("");
+    const reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
     //邮箱正则
-    const reg_email =  /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-    //协议勾选
-    const checked = ref("");
-    //验证码按钮
-    const codeButton = ref(true);
+    const reg_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    let checked = ref("");
+    let codeButton = ref(true);
+    let codeShow = ref(false)
     //判断密码登录还是扫码登录
     let boxShow = ref(true);
     //切换登录方式
     const changeBox = () => {
       boxShow.value = !boxShow.value;
     };
+    //登录
+    const Login = async () => {
+      const res = await handleLogin(formData)
+      if (res.code == 200) {
+        message.success(res.msg);
+        router.push('/')
+        sessionStorage.setItem('login', JSON.stringify(res.data))
+      } else {
+        message.error(res.msg);
+      }
+
+    }
     const clickAdd = () => {
       router.push({ path: "/home" });
     };
-    //监听手机号输入
-    watch(phoneValue,(newVal)=>{
-      console.log(newVal);
-      
-      if (newVal) {
-        passShow = true
-      }else{
-        passShow = false
+    watch(activeKey, (newVal) => {
+      if (newVal == '1') {
+        formData = formPhone
+      } else if (newVal == '2') {
+        formData = formEmail
+      } else {
+        formData = formUser
       }
     })
     return {
       activeKey,
-      password,
-      passShow,
-      phoneValue,
+      codeShow,
+      formPhone,
+      formEmail,
+      formUser,
       reg_tel,
-      emailValue,
       reg_email,
       checked,
       clickAdd,
       changeBox,
+      Login,
       router,
       boxShow,
       codeButton
@@ -71,39 +89,32 @@ export default defineComponent({
         <div class="rightBox">
           <div v-if="boxShow" style="height: 100%">
             <div class="main">
-              <img
-                class="imgPath"
-                src="../../assets/images/qrcode.png"
-                alt=""
-                @click="changeBox"
-              />
+              <img class="imgPath" src="../../assets/images/qrcode.png" alt="" @click="changeBox" />
               <div class="title">欢迎使用~~</div>
               <a-tabs v-model:activeKey="activeKey">
-                <a-tab-pane key="1" tab="手机号"
-                  ><a-input
-                    v-model:phoneValue="phoneValue"
-                    placeholder="请输入手机号"
-                  /><a-button :disabled="!codeButton"
-                    >发送验证码</a-button
-                  ></a-tab-pane
-                >
+                <a-tab-pane key="1" tab="手机号">
+                  <a-input v-model:value="formPhone.phoneValue" placeholder="请输入手机号" />
+                  <a-button :disabled="!codeButton">发送验证码</a-button>
+                  <a-input class="code" v-model:value="formPhone.codePhone" placeholder="请输入验证码" />
+                </a-tab-pane>
                 <a-tab-pane key="2" tab="邮箱">
-                  <a-input v-model:emailValue="emailValue" placeholder="请输入邮箱"
-                /><a-button :disabled="!codeButton"
-                    >发送验证码</a-button
-                  ></a-tab-pane>
+                  <a-input v-model:value="formEmail.emailValue" placeholder="请输入邮箱" />
+                  <a-button :disabled="!codeButton">发送验证码</a-button>
+                  <a-input class="code" v-model:value="formEmail.codeEmail" placeholder="请输入验证码" />
+                </a-tab-pane>
+                <a-tab-pane key="3" tab="账号密码">
+                  <a-input style="width:288px" v-model:value="formUser.userName" placeholder="请输入用户名" />
+                  <a-input class="code" v-model:value="formUser.password" placeholder="请输入密码" />
+                  <p style="margin-bottom: -5px;float: right;">没有账号？<span
+                      style="color: skyblue;font-size: 12px;cursor: pointer;">请注册</span> </p>
+                </a-tab-pane>
               </a-tabs>
-              <a-input
-                    v-model:passWord="password"
-                    placeholder="请输入密码"
-                    v-show="passShow"
-                  />
-              <a-button class="nextBtn">下一步</a-button>
-              <div>
-                <a-checkbox v-model:checked="checked"
-                  >我已阅读并同意 <a href=""> 服务协议 </a> 和
-                  <a href=""> 隐私政策 </a></a-checkbox
-                >
+
+              <a-button class="nextBtn" @click="Login">下一步</a-button>
+              <div class="agreement">
+                <a-checkbox v-model:checked="checked">我已阅读并同意 <a href=""> 服务协议 </a> 和
+                  <a href=""> 隐私政策 </a>
+                </a-checkbox>
               </div>
               <div class="foot">
                 <div class="line"></div>
@@ -115,17 +126,8 @@ export default defineComponent({
           </div>
           <div v-else style="height: 100%">
             <div class="main">
-              <img
-                class="imgPath"
-                src="../../assets/images/pc.png"
-                alt=""
-                @click="changeBox"
-              />
-              <img
-                class="imgQrCode"
-                src="../../assets/images/laijiaw.png"
-                alt=""
-              />
+              <img class="imgPath" src="../../assets/images/pc.png" alt="" @click="changeBox" />
+              <img class="imgQrCode" src="../../assets/images/laijiaw.png" alt="" />
               <h2 style="font-weight: bold">来加我</h2>
             </div>
           </div>
@@ -141,6 +143,7 @@ export default defineComponent({
   min-width: 1040px;
   min-height: 99.9vh;
   position: relative;
+
   .loginBox {
     height: calc(100% - 40px);
     margin-top: 40px;
@@ -150,10 +153,12 @@ export default defineComponent({
     transform: translate(-50%, 0);
     width: 1000px;
     z-index: 1;
+
     .centerBox {
       height: 80%;
       // box-shadow: 0px 20px 80px 0px rgb(0 0 0 / 30%);
       display: flex;
+
       .leftBox {
         width: 50%;
         background-image: url("../../assets/images/tujiu.jpeg");
@@ -162,11 +167,13 @@ export default defineComponent({
         font-size: 18px;
         font-weight: bold;
       }
+
       .rightBox {
         width: 50%;
 
         background-color: rgb(223, 223, 223);
         position: relative;
+
         .main {
           height: 90%;
           width: 70%;
@@ -179,66 +186,87 @@ export default defineComponent({
           padding: 30px;
 
           .ant-input {
-              border-radius: 5px;
-              border: 1px solid rgb(171, 171, 171);
-            }
+            border-radius: 5px;
+            border: 1px solid rgb(171, 171, 171);
+          }
+
           .imgPath {
             position: absolute;
             top: 0;
             right: 0;
           }
+
           .imgQrCode {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translateX(-50%) translateY(-50%);
           }
+
           .title {
             // padding-left: 30px;
             // padding-top: 30px;
             font-weight: bold;
             font-size: 22px;
           }
+
           .ant-tabs {
             margin-bottom: 20px;
+
             .ant-input {
               width: 175px;
               margin-right: 10px;
             }
+
+            .code {
+              width: 288px;
+              margin-top: 20px;
+            }
+
             .ant-btn {
               border-radius: 5px;
               border: 1px solid rgb(171, 171, 171);
             }
           }
+
           .nextBtn {
             width: 100%;
             border-radius: 5px;
             background-color: #3270ff;
             color: #fff;
             margin-bottom: 20px;
-            margin-top: 20px;
           }
+
+          .agreement {
+            position: absolute;
+            bottom: 100px;
+          }
+
           .foot {
             display: flex; //生成浏览器兼容性代码
             width: 80%;
             margin: 30px auto 24px auto;
             position: absolute;
             bottom: 40px;
+
             .line {
               flex: 1;
               position: relative;
               top: -6px;
               border-bottom: 1px solid rgb(190, 188, 188);
             }
+
             .text {
               padding: 0 14px;
               font-size: 14px;
             }
           }
+
           .footBtn {
             width: 80%;
             position: absolute;
             bottom: 15px;
+            right: 38px;
             border: 1px solid rgb(171, 171, 171);
             border-radius: 50px;
           }

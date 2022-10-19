@@ -7,6 +7,7 @@
  * @Description: update here
  */
 import { createRouter, createWebHistory } from "vue-router";
+import { message } from 'ant-design-vue';
 
 import home from "../views/layout/layout.vue";
 import login from "../views/login/login.vue";
@@ -35,4 +36,15 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+router.beforeEach((to, from, next) => {
+  if (to.path !== '/login') {
+    const login = JSON.parse(sessionStorage.getItem('login') || '{}')
+    if (!login.token) {
+      message.warning('请先登录')
+      next('/login')
+      return
+    }
+  }
+  next()
+})
 export default router;
