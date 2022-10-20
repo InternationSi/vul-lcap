@@ -11,6 +11,7 @@ import { message } from 'ant-design-vue';
 
 import home from "../views/layout/layout.vue";
 import login from "../views/login/login.vue";
+import register from "../views/register/register.vue"
 import eamil from "../views/email/email.vue";
 import editBlock from "../views/moduleEditor/moduleEditor.vue";
 import renameBlock from "../views/renameBlock/renameBlock.vue";
@@ -26,6 +27,7 @@ const routes = [
     ],
   },
   { path: "/login", component: login },
+  { path: "/register", component: register },
   { path: "/email", component: eamil },
   { path: "/grid", component: grid },
   { path: "/test", component: test },
@@ -37,7 +39,7 @@ const router = createRouter({
   routes,
 });
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login') {
+  if (to.path !== '/login' && to.path !== '/register') {
     const login = JSON.parse(sessionStorage.getItem('login') || '{}')
     if (!login.token) {
       message.warning('请先登录')

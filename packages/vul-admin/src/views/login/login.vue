@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { handleLogin } from "@/request/index";
 import { message } from 'ant-design-vue';
 
+
 export default defineComponent({
   setup() {
     const router = useRouter();
@@ -22,12 +23,17 @@ export default defineComponent({
     })
     let formData = reactive({
     })
+    //判断按钮状态
+    const show = ref(true)
+    //倒计时
+    const count = ref(60)
+    //定时器
+    const timer = ref('')
     //11位手机号码正则
     const reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
     //邮箱正则
     const reg_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
     let checked = ref("");
-    let codeButton = ref(true);
     let codeShow = ref(false)
     //判断密码登录还是扫码登录
     let boxShow = ref(true);
@@ -37,6 +43,9 @@ export default defineComponent({
     };
     //登录
     const Login = async () => {
+      // if (formData.hasOwnProperty("phoneValue")) {
+      //   !reg_tel.test(formData.phoneValue)
+      // }
       const res = await handleLogin(formData)
       if (res.code == 200) {
         message.success(res.msg);
@@ -45,11 +54,24 @@ export default defineComponent({
       } else {
         message.error(res.msg);
       }
-
     }
-    const clickAdd = () => {
-      router.push({ path: "/home" });
+    //倒计时
+    const getCode = () => {
+      show.value = false;
+      const Timer = setInterval(() => {
+        if (count.value > 0 && count.value <= 60) {
+          count.value--;
+        } else {
+          show.value = true;
+          clearInterval(Timer);
+          count.value = 60
+        }
+      }, 1000)
     };
+    //跳转至注册页
+    const toRegister = () => {
+      router.push('/register')
+    }
     watch(activeKey, (newVal) => {
       if (newVal == '1') {
         formData = formPhone
@@ -60,20 +82,25 @@ export default defineComponent({
       }
     })
     return {
+      //变量
       activeKey,
       codeShow,
+      timer,
+      show,
+      count,
       formPhone,
       formEmail,
       formUser,
       reg_tel,
       reg_email,
       checked,
-      clickAdd,
-      changeBox,
-      Login,
       router,
       boxShow,
-      codeButton
+      //函数
+      changeBox,
+      Login,
+      getCode,
+      toRegister
     };
   },
 });
@@ -94,19 +121,25 @@ export default defineComponent({
               <a-tabs v-model:activeKey="activeKey">
                 <a-tab-pane key="1" tab="手机号">
                   <a-input v-model:value="formPhone.phoneValue" placeholder="请输入手机号" />
-                  <a-button :disabled="!codeButton">发送验证码</a-button>
+                  <a-button @click="getCode">
+                    <span style="width: 70px;display: inline-block;" v-show="show">获取验证码</span>
+                    <span style="width: 70px;display: inline-block;" v-show="!show" class="count">{{count}} s</span>
+                  </a-button>
                   <a-input class="code" v-model:value="formPhone.codePhone" placeholder="请输入验证码" />
                 </a-tab-pane>
                 <a-tab-pane key="2" tab="邮箱">
                   <a-input v-model:value="formEmail.emailValue" placeholder="请输入邮箱" />
-                  <a-button :disabled="!codeButton">发送验证码</a-button>
+                  <a-button @click="getCode">
+                    <span style="width: 70px;display: inline-block;" v-show="show">获取验证码</span>
+                    <span style="width: 70px;display: inline-block;" v-show="!show" class="count">{{count}} s</span>
+                  </a-button>
                   <a-input class="code" v-model:value="formEmail.codeEmail" placeholder="请输入验证码" />
                 </a-tab-pane>
                 <a-tab-pane key="3" tab="账号密码">
                   <a-input style="width:288px" v-model:value="formUser.userName" placeholder="请输入用户名" />
                   <a-input class="code" v-model:value="formUser.password" placeholder="请输入密码" />
                   <p style="margin-bottom: -5px;float: right;">没有账号？<span
-                      style="color: skyblue;font-size: 12px;cursor: pointer;">请注册</span> </p>
+                      style="color: skyblue;font-size: 12px;cursor: pointer;" @click="toRegister">请注册</span> </p>
                 </a-tab-pane>
               </a-tabs>
 
