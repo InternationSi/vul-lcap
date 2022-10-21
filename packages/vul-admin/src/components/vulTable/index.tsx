@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 21:10:06
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-19 23:13:39
+ * @LastEditTime: 2022-10-21 23:13:59
  * @FilePath: /vulture/packages/vul-admin/src/components/vulTable/index.tsx
  * @Description: update here
  */
@@ -66,15 +66,19 @@ export default defineComponent({
           row-config={{ isHover: true }}
           data={tableData.value}
         >
-          <CreateColumn columsInfo={columsInfo.value} />
+          <CreateColumn columsInfo={columsInfo.value} tableRef={xTable} />
         </vxe-table>
         <vxe-modal
           v-model={visible.value}
           title="模型编辑"
-          width="600"
+          width="800"
+          minWidth="600"
+          minHeight="300"
           showFooter={true}
-          type="confirm"
           onConfirm={createRecordEvent}
+          resize
+          draggable={false}
+          destroy-on-close
         >
           {{
             default() {
