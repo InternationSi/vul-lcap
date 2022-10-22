@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 21:10:06
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-21 23:13:59
+ * @LastEditTime: 2022-10-22 17:31:21
  * @FilePath: /vulture/packages/vul-admin/src/components/vulTable/index.tsx
  * @Description: update here
  */
@@ -10,7 +10,6 @@
 import { defineComponent, reactive, onMounted, ref } from "vue";
 import useModule from "./effect/useModule";
 import CreateColumn from "./components/createColumn";
-import useDrawShow from "./effect/useDrawShow";
 import useRecordOptions from "./effect/useRecordOptions";
 import useRequestRows from "./effect/useRequestRows";
 import VulForm from "../vulForm";
@@ -28,10 +27,8 @@ export default defineComponent({
 
     const { moduleInfo, columsInfo } = useModule({ namespaceName, moduleName });
 
-    const { visible, showDrawer, closeDrawer } = useDrawShow();
     const { createRecordEvent } = useRecordOptions({
       FormWithModel,
-      closeDrawer,
       xTable,
       useRequestRows
     });
@@ -44,15 +41,19 @@ export default defineComponent({
 
     return () => (
       <>
+        {/* <vxe-grid v-bind={{}}>
+          {{
+            form() {
+              return [<VulForm ref={FormWithModel} />];
+            }
+          }}
+        </vxe-grid> */}
+        <VulForm ref={FormWithModel} />
         <div>
           <vxe-toolbar ref="xToolbar1" custom refresh>
             {{
               buttons() {
-                return [
-                  <vxe-button icon="vxe-icon-square-plus" onClick={showDrawer}>
-                    添加
-                  </vxe-button>
-                ];
+                return [];
               }
             }}
           </vxe-toolbar>
@@ -60,40 +61,13 @@ export default defineComponent({
         <vxe-table
           border
           show-overflow
+          keep-source={true}
           ref={xTable}
-          height="300"
-          column-config={{ resizable: true }}
-          row-config={{ isHover: true }}
           data={tableData.value}
+          edit-config={{ trigger: "manual", mode: "row" }}
         >
           <CreateColumn columsInfo={columsInfo.value} tableRef={xTable} />
         </vxe-table>
-        <vxe-modal
-          v-model={visible.value}
-          title="模型编辑"
-          width="800"
-          minWidth="600"
-          minHeight="300"
-          showFooter={true}
-          onConfirm={createRecordEvent}
-          resize
-          draggable={false}
-          destroy-on-close
-        >
-          {{
-            default() {
-              return [<VulForm ref={FormWithModel} />];
-            }
-          }}
-          {/* {{
-            footer() {
-              return [
-                <vxe-button onClick={closeDrawer}>取消</vxe-button>,
-                <vxe-button onClick={createRecordEvent}>提交</vxe-button>
-              ];
-            }
-          }} */}
-        </vxe-modal>
       </>
     );
   }

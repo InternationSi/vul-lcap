@@ -1,27 +1,25 @@
-<!--
- * @Author: sfy
- * @Date: 2022-10-04 17:23:47
- * @LastEditors: sfy
- * @LastEditTime: 2022-10-04 17:45:29
- * @FilePath: /vulture/README.md
- * @Description: update here
--->
-# `使用指南`
-需要启动所有子应用，找到主应用的入口
+# hello-world
 
-## 安装项目依赖
-首先npm全局安装lerna,见官网 
+## Project setup
+```
+npm install
+```
 
-安装依赖包方法
-方法一. （建议使用第一种）
+### Compiles and hot-reloads for development
 ```
-npm run bootstrap 建议使用淘宝镜像
+npm run serve
 ```
-方法二.
- cd进入项目文件夹 install安装依赖
-### 启动admin应用
-方法一. 在最外层
+
+### Compiles and minifies for production
 ```
-npm run admin 在项目文件直接运行,首屏加载较慢,稍作等待
+npm run build
 ```
-方法二.需要cd进入相应文件后npm start （建议使用方法二）
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+

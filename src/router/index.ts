@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-21 22:57:49
+ * @LastEditTime: 2022-10-22 21:15:17
  * @FilePath: /vulture/packages/vul-admin/src/router/index.ts
  * @Description: update here
  */
@@ -15,7 +15,7 @@ import register from "../views/register/register.vue";
 import eamil from "../views/email/email.vue";
 import editBlock from "../views/moduleEditor/moduleEditor.vue";
 import renameBlock from "../views/renameBlock/renameBlock.vue";
-import grid from "../views/grid/index";
+import grid from "../designer/grid";
 import test from "../views/test/test.vue";
 const routes = [
   {

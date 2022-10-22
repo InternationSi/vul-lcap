@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-15 13:56:27
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-21 23:39:35
+ * @LastEditTime: 2022-10-22 14:56:11
  * @FilePath: /vulture/packages/vul-admin/src/components/vulTable/components/createColumn.tsx
  * @Description: update here
  */
@@ -46,11 +46,21 @@ export default defineComponent({
       });
     };
 
+    const isActiveStatus = (row: any) => {
+      const $table = props.tableRef.value;
+      return $table.isEditByRow(row);
+    };
+
     return () => (
       <>
         {props.columsInfo.map((item: ColumType) => {
           return (
-            <vxe-column field={item.fieldName} title={item.title}>
+            <vxe-column
+              field={item.fieldName}
+              title={item.title}
+              width="300"
+              editRender={{}}
+            >
               {{
                 default({ row }: { row: any }) {
                   return [<span>{row[item.fieldName]}</span>];
@@ -67,20 +77,34 @@ export default defineComponent({
             </vxe-column>
           );
         })}
-        <vxe-column title="操作" width="100" show-overflow>
+        <vxe-column title="操作" width="200" fixed="right" show-overflow>
           {{
             default({ row }: { row: any }) {
               const $table = props.tableRef.value;
               if ($table.isEditByRow(row)) {
                 return [
-                  <vxe-button onClick={() => saveRowEvent()}>保存</vxe-button>,
-                  <vxe-button onClick={() => cancelRowEvent(row)}>
+                  <vxe-button
+                    type="text"
+                    status="primary"
+                    onClick={() => saveRowEvent()}
+                  >
+                    保存
+                  </vxe-button>,
+                  <vxe-button
+                    type="text"
+                    status="primary"
+                    onClick={() => cancelRowEvent(row)}
+                  >
                     取消
                   </vxe-button>
                 ];
               } else {
                 return [
-                  <vxe-button onClick={() => editRowEvent(row)}>
+                  <vxe-button
+                    type="text"
+                    status="primary"
+                    onClick={() => editRowEvent(row)}
+                  >
                     编辑
                   </vxe-button>
                 ];
