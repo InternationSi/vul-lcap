@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-22 21:32:33
+ * @LastEditTime: 2022-10-22 22:50:34
  * @FilePath: /vulture/src/main.ts
  * @Description: update here
  */
@@ -17,8 +17,8 @@ import VXETable from "vxe-table";
 import "vxe-table/lib/style.css";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
-
 import VueGridLayout from "vue-grid-layout";
+import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import { GridLayout, GridItem } from "vue-grid-layout";
 
 const v = createApp(App);
@@ -29,6 +29,11 @@ v.use(VXETable);
 v.use(VueGridLayout);
 v.component("GridLayout", GridLayout);
 v.component("GridItem", GridItem);
+
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  v.component(key, component);
+}
+
 v.mount("#app");
 
 // 主应用/scr/main.js
