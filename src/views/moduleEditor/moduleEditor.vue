@@ -1,72 +1,52 @@
 <script lang="ts">
-import { defineComponent, ref, reactive, toRefs } from "vue";
-//import { VXETable, VxeColumnPropTypes, VxeTablePropTypes } from "vxe-table";
-import XEUtils from "xe-utils";
-
+import { defineComponent, ref, reactive } from "vue";
+import { InfoFilled } from "@element-plus/icons-vue";
 import { getNameSpaces } from "../../request/namespaces";
-import type { SelectProps } from "ant-design-vue";
-
 interface FormState {
   username: string;
   nickname: string;
   checkNick: boolean;
 }
+interface Data {
+  name: string;
+  title: string;
+  types: string;
+  checks: string;
+}
 
 export default defineComponent({
   setup() {
-    const value = ref("");
     const formState = reactive<FormState>({
       username: "",
       nickname: "",
-      checkNick: false,
+      checkNick: false
     });
 
     //定义表格数据
-    const data = [
+    const tableData = ref<Data[]>([]);
+    const onAddItem = () => {
+      tableData.value.push({
+        name: "",
+        title: "",
+        types: "",
+        checks: ""
+      });
+    };
+    //下拉框
+    const options = [
       {
-        key: "1",
-        name: "John",
-
-        age: 32,
-        address: "New York No. 1 Lake Park",
+        value: "Option1",
+        label: "select"
       },
+      {
+        value: "Option2",
+        label: "string"
+      }
     ];
-    const formatDate = (value: any) => {
-      return XEUtils.toDateString(value, "yyyy-MM-dd HH:mm:ss.S");
+    const deleteRow = (index: number) => {
+      tableData.value.splice(index, 1);
     };
 
-    //下拉框值
-    const options = ref<SelectProps["options"]>([
-      {
-        value: "string",
-        label: "string",
-      },
-      {
-        value: "select",
-        label: "select",
-      },
-    ]);
-    const handleChange: SelectProps["onChange"] = (value) => {
-      console.log(value); // { key: "lucy", label: "Lucy (101)" }
-    };
-    //多选框
-    const plainOptions = ["主键", "必填"];
-    const state = reactive({
-      value1: [],
-    });
-    const handleAdd = () => {
-      // const newData = {
-      //   key: `${count.value}`,
-      //   name: `Edward King ${count.value}`,
-      //   age: 32,
-      //   address: `London, Park Lane no. ${count.value}`,
-      // };
-      // dataSource.value.push(newData);
-    };
-
-    //   const { row: newRow } = await $table.insertAt(record, row);
-    //   await $table.setEditCell(newRow, "name");
-    // };
     const exportMessage = async () => {
       const res = await getNameSpaces();
       console.log(res, "rrr");
@@ -74,16 +54,13 @@ export default defineComponent({
     return {
       value: ref({ value: "string" }),
       formState,
-      data,
-      formatDate,
-      handleAdd,
+      tableData,
       exportMessage,
-      options,
-      handleChange,
-      plainOptions,
-      ...toRefs(state),
+      onAddItem,
+      deleteRow,
+      options
     };
-  },
+  }
 });
 </script>
 <template>
@@ -120,60 +97,50 @@ export default defineComponent({
           <a-input v-model:value="formState.username" />
         </a-form-item>
       </a-form>
-    </div>
-    <div class="table">
-      <p style="padding-top: 20px; font-weight: 600px">管理记录字段</p>
-      <a-button
-        class="editable-add-btn"
-        style="margin-bottom: 8px"
-        @click="handleAdd"
-        >新增</a-button
-      >
-      <a-table :data-source="data" bordered>
-        <a-table-column key="name" title="名称" data-index="name">
-          <template #default>
-            <span>
-              <a-input></a-input>
-            </span>
+      <el-button class="mt-4" @click="onAddItem">新增</el-button>
+      <el-table :data="tableData" style="width: 100%" border>
+        <el-table-column fixed prop="name" label="名称">
+          <template #default="scope">
+            <el-input placeholder="Please input" />
           </template>
-        </a-table-column>
-        <a-table-column key="age" title="标题" data-index="age">
-          <template #default>
-            <span>
-              <a-input></a-input>
-            </span>
+        </el-table-column>
+        <el-table-column prop="title" label="标题">
+          <template #default="scope">
+            <el-input placeholder="Please input" />
           </template>
-        </a-table-column>
-        <a-table-column key="address" title="类型" data-index="address">
-          <template #default>
-            <a-select
-              v-model:value="value"
-              label-in-value
-              style="width: 120px"
-              :options="options"
-              @change="handleChange"
-            ></a-select>
+        </el-table-column>
+        <el-table-column prop="types" label="类型">
+          <template #default="scope">
+            <el-select v-model="value" placeholder="Select">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </template>
-        </a-table-column>
-        <a-table-column key="tags" title="属性" data-index="tags">
-          <template #default>
-            <a-checkbox-group
-              v-model:value="value1"
-              name="checkboxgroup"
-              :options="plainOptions"
+        </el-table-column>
+        <el-table-column prop="checks" label="属性" />
+        <el-table-column fixed="right" label="操作">
+          <template #default="scope">
+            <el-popconfirm
+              confirm-button-text="OK"
+              cancel-button-text="No, Thanks"
+              icon-color="#626AEF"
+              title="Are you sure to delete this?"
             />
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click.prevent="deleteRow(scope.$index)"
+            >
+              删除
+            </el-button>
           </template>
-        </a-table-column>
-        <a-table-column key="Action" title="操作">
-          <template #default>
-            <span>
-              <a>编辑 </a>&nbsp;
-
-              <a>删除</a>
-            </span>
-          </template>
-        </a-table-column>
-      </a-table>
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 
