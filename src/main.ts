@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-23 10:30:32
+ * @LastEditTime: 2022-10-23 17:46:49
  * @FilePath: /vulture/src/main.ts
  * @Description: update here
  */
@@ -19,6 +19,7 @@ import "element-plus/dist/index.css";
 import VueGridLayout from "vue-grid-layout";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import { GridLayout, GridItem } from "vue-grid-layout";
+
 
 const app = createApp(App);
 app.use(Antd);

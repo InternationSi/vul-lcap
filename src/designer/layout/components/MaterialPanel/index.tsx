@@ -2,18 +2,20 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-23 15:33:24
+ * @LastEditTime: 2022-10-24 22:25:26
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref } from "vue";
 import styles from "./index.module.less";
+import { Subject } from 'rxjs'
+export const panelSubject$ = new Subject();
 
 export default defineComponent({
   setup(props) {
     const activeTab = ref("graph");
     const choiceBlock = () => {
-      console.log("22");
+      panelSubject$.next("22");
     };
 
     const block = () => {
@@ -22,7 +24,7 @@ export default defineComponent({
           <el-icon>
             <picture-rounded />
           </el-icon>
-          <span>饼图</span>
+          <span>间距</span>
         </div>
       );
     };
