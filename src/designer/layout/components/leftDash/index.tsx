@@ -2,16 +2,16 @@
  * @Author: sfy
  * @Date: 2022-10-22 22:24:41
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-22 23:05:31
+ * @LastEditTime: 2022-10-23 15:33:49
  * @FilePath: /vulture/src/designer/layout/components/leftDash/index.tsx
  * @Description: update here
  */
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, getCurrentInstance } from "vue";
 import Drawer from "../drawer";
 import useDrawVisi from "./effect/useDrawVisi";
-
+import MaterialPanel from "../MaterialPanel";
 export default defineComponent({
-  components: { Drawer },
+  components: { Drawer, MaterialPanel },
   setup() {
     const { drawerShow, openDrawer, closeDrawer } = useDrawVisi();
 
@@ -29,7 +29,13 @@ export default defineComponent({
             </el-icon>
           </el-menu-item>
         </el-menu>
-        <Drawer v-show={drawerShow.value} closeDrawer={closeDrawer} />
+        <Drawer
+          class="GSAP_DRAWBOX"
+          v-show={drawerShow.value}
+          closeDrawer={closeDrawer}
+        >
+          <MaterialPanel />
+        </Drawer>
       </>
     );
   }
