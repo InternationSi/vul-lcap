@@ -8,7 +8,7 @@ import {
   getNameSpaces,
   addNameSpaces,
   editNameSpaces,
-  deletNameSpaces,
+  deletNameSpaces
 } from "../../request/namespaces";
 import _ from "lodash";
 import type { NsType } from "./renameBlock.type";
@@ -25,7 +25,7 @@ export default defineComponent({
     const formState = reactive<NsType>({
       namespacesName: "",
       label: "",
-      describe: "",
+      describe: ""
     });
     const editIndex = ref<boolean>(false);
     const visible = ref<boolean>(false);
@@ -85,7 +85,7 @@ export default defineComponent({
       console.log(e);
     };
     const layout = reactive({
-      labelCol: { span: 3 },
+      labelCol: { span: 3 }
     });
 
     return {
@@ -101,14 +101,15 @@ export default defineComponent({
       formState,
       confirm,
       cancelPop,
-      layout,
+      layout
     };
-  },
+  }
 });
 </script>
 <template>
   <div class="warp">
-    <div class="top">命名空间</div>
+    <!-- <div class="top">命名空间</div> -->
+    <h2>命名空间</h2>
     <a-button type="primary" @click="add()" class="btn">新增</a-button>
     <ul
       class="content"
@@ -184,6 +185,14 @@ export default defineComponent({
 <style scoped lang="less">
 .warp {
   background: rgba(250, 250, 250, 1);
+  margin-bottom: 2px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  opacity: 1;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 6px 15px NaNpx rgba(0, 0, 0, 0.05);
 
   .top {
     font-size: 35px;
@@ -194,12 +203,12 @@ export default defineComponent({
     line-height: 42px;
     color: rgba(34, 34, 38, 1);
     text-align: left;
-    padding-top: 32px;
+    padding-top: 10px;
     margin-left: 30px;
   }
 
   .btn {
-    margin-left: 30px;
+    // margin-left: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
   }
