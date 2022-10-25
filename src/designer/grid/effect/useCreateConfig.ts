@@ -33,7 +33,11 @@ const useCreateConfig:UseCreateConfigType = ({
     y: 0, 
     w: 2,
     h: 2,
-    i: nanoid()
+    i: nanoid(),
+    type, 
+    config: {
+    
+    }
   };
 }
 export default useCreateConfig
