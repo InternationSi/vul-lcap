@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-24 22:25:26
+ * @LastEditTime: 2022-10-25 22:29:21
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
@@ -15,7 +15,7 @@ export default defineComponent({
   setup(props) {
     const activeTab = ref("graph");
     const choiceBlock = () => {
-      panelSubject$.next("22");
+      panelSubject$.next("spacing");
     };
 
     const block = () => {
