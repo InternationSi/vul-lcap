@@ -108,7 +108,6 @@ export default defineComponent({
 </script>
 <template>
   <div class="warp">
-    <!-- <div class="top">命名空间</div> -->
     <h2>命名空间</h2>
     <a-button type="primary" @click="add()" class="btn">新增</a-button>
     <ul

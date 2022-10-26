@@ -1,6 +1,7 @@
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, onMounted } from "vue";
 import { getNameSpaces } from "../../request/namespaces";
+import type { NsType } from "../renameBlock/renameBlock.type";
 interface FormState {
   username: string;
   nickname: string;
@@ -24,10 +25,19 @@ export default defineComponent({
       nickname: "",
       checkNick: false
     });
-
+    //模块信息 命名空间下拉框值
+    const renameBlockSelectList = ref<NsType[]>([]);
+    onMounted(async () => {
+      const res = await getNameSpaces();
+      if (res.sucess) {
+        console.log(res.data, "00000");
+        renameBlockSelectList.value = res.data;
+        // dataList.value = res.data;
+      }
+    });
     //定义表格数据
     const tableData = ref<Data[]>([]);
-    //下拉框
+    //表格下拉框
     const options = [
       {
         value: "string",
@@ -47,12 +57,10 @@ export default defineComponent({
       });
     };
 
-    const deleteRow = (index: number) => {
-      tableData.value.splice(index, 1);
-    };
     //删除弹框
-    const confirmEvent = () => {
-      console.log("confirm");
+    const confirmEvent = (index: number) => {
+      console.log(index, "confirm");
+      tableData.value.splice(index, 1);
     };
     const cancelEvent = () => {
       console.log("cancel!");
@@ -67,10 +75,10 @@ export default defineComponent({
       tableData,
       exportMessage,
       onAddItem,
-      deleteRow,
       options,
       confirmEvent,
-      cancelEvent
+      cancelEvent,
+      renameBlockSelectList
     };
   }
 });
@@ -86,14 +94,14 @@ export default defineComponent({
       <p>模块信息</p>
       <el-form class="flex" :model="formState" layout="vertical">
         <el-form-item
-          label="模块名称"
+          label="Model Name"
           name="username"
           :rules="[{ required: true, message: '请输入模块名称' }]"
         >
           <a-input v-model:value="formState.username" />
         </el-form-item>
         <el-form-item
-          label="模块名称"
+          label="模型名称"
           name="username"
           layout="vertical"
           :rules="[{ required: true, message: '请输入模块名称' }]"
@@ -101,54 +109,86 @@ export default defineComponent({
           <a-input v-model:value="formState.username" />
         </el-form-item>
         <el-form-item
-          label="模块名称"
+          label="类型"
           name="username"
           layout="vertical"
           :rules="[{ required: true, message: '请输入模块名称' }]"
         >
-          <a-input v-model:value="formState.username" />
+          <el-select v-model="value" class="m-2" placeholder="Select">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item
-          label="模块名称"
+          label="所属命名空间"
           name="username"
           layout="vertical"
           :rules="[{ required: true, message: '请输入模块名称' }]"
         >
-          <a-input v-model:value="formState.username" />
+          <el-select v-model="value" class="m-2" placeholder="Select">
+            <el-option
+              v-for="item in renameBlockSelectList"
+              :key="item.describe"
+              :label="item.namespacesName"
+              :value="item.namespacesName"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
 
-      <el-table :data="tableData" style="width: 100%" border>
+      <el-table :data="tableData" style="width: 100%; font-size: 12px" border>
         <el-table-column fixed prop="name" label="名称" align="center">
           <template #default="scope">
-            <el-input v-model="scope.row.name" placeholder="请输入名称" />
+            <el-input
+              v-model="scope.row.name"
+              placeholder="请输入名称"
+              style="font-size: 12px"
+            />
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" align="center">
           <template #default="scope">
-            <el-input v-model="scope.row.title" placeholder="请输入标题" />
+            <el-input
+              v-model="scope.row.title"
+              placeholder="请输入标题"
+              style="font-size: 12px"
+            />
           </template>
         </el-table-column>
-        <el-table-column prop="types" label="类型" align="center" width="150px">
+        <el-table-column prop="types" label="类型" align="center" width="160px">
           <template #default="scope">
-            <el-select v-model="scope.row.types">
+            <el-select
+              v-model="scope.row.types"
+              style="width: 70%; margin-right: 15px"
+            >
               <el-option
                 v-for="item in options"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
+                style="font-size: 12px"
               />
             </el-select>
+            <span style="background: #f0f2f5">
+              <el-icon style="font-size: 14px"><Share /></el-icon>
+            </span>
           </template>
         </el-table-column>
         <el-table-column
           prop="checks"
           label="属性"
-          width="170px"
+          width="160px"
           align="center"
         >
           <template #default="scope">
-            <el-checkbox-group v-model="scope.row.checks">
+            <el-checkbox-group
+              v-model="scope.row.checks"
+              style="font-size: 12px"
+            >
               <el-checkbox label="主键" />
               <el-checkbox label="唯一" />
             </el-checkbox-group>
@@ -158,31 +198,23 @@ export default defineComponent({
           type="index"
           fixed="right"
           label="操作"
-          width="100px"
+          width="70px"
           align="center"
         >
-          <el-popconfirm
-            confirm-button-text="确定"
-            cancel-button-text="取消"
-            icon-color="#626AEF"
-            title="是否确认删除此行?"
-            @confirm="confirmEvent()"
-            @cancel="cancelEvent"
-          >
-            <template #reference>
-              <el-button>删除</el-button>
-            </template>
-          </el-popconfirm>
-
-          <!-- <template #default="scope">
-            <el-button
-              type="primary"
-              size="small"
-              @click.prevent="deleteRow(scope.$index)"
+          <template #default="scope">
+            <el-popconfirm
+              confirm-button-text="确定"
+              cancel-button-text="取消"
+              icon-color="#626AEF"
+              title="是否确认删除此行?"
+              @confirm="confirmEvent(scope.$index)"
+              @cancel="cancelEvent"
             >
-              删除
-            </el-button>
-          </template> -->
+              <template #reference>
+                <el-icon style="color: red"><Delete /></el-icon>
+              </template>
+            </el-popconfirm>
+          </template>
         </el-table-column>
       </el-table>
       <el-button class="mt-4" style="width: 100%" @click="onAddItem"
