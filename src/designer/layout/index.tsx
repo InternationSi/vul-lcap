@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-22 21:34:52
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-22 22:51:22
+ * @LastEditTime: 2022-10-26 22:48:35
  * @FilePath: /vulture/src/designer/layout/index.tsx
  * @Description: update here
  */
@@ -22,7 +22,7 @@ export default defineComponent({
             <el-aside width="70px">
               <leftDash />
             </el-aside>
-            <el-main>
+            <el-main class="main-main" >
               <Grid />
             </el-main>
           </el-container>
