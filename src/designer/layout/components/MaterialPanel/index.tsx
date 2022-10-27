@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-25 22:29:21
+ * @LastEditTime: 2022-10-27 22:12:48
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
@@ -14,17 +14,29 @@ export const panelSubject$ = new Subject();
 export default defineComponent({
   setup(props) {
     const activeTab = ref("graph");
-    const choiceBlock = () => {
-      panelSubject$.next("spacing");
-    };
+
 
     const block = () => {
       return (
-        <div class={styles.block} onClick={choiceBlock}>
+        <div class={styles.block} onClick={() => {
+          panelSubject$.next("spacing");
+        }}>
           <el-icon>
             <picture-rounded />
           </el-icon>
           <span>间距</span>
+        </div>
+      );
+    };
+    const container = () => {
+      return (
+        <div class={styles.block} onClick={() => {
+          panelSubject$.next("container");
+        }}>
+          <el-icon>
+            <picture-rounded />
+          </el-icon>
+          <span>容器</span>
         </div>
       );
     };
@@ -35,7 +47,7 @@ export default defineComponent({
           <el-tab-pane label="图表" name="graph">
             <el-row gutter={10}>
               <el-col span={8}>{block()}</el-col>
-              <el-col span={8}>{block()}</el-col>
+              <el-col span={8}>{container()}</el-col>
               <el-col span={8}>{block()}</el-col>
             </el-row>
           </el-tab-pane>
