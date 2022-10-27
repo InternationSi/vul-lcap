@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-26 22:51:02
+ * @LastEditTime: 2022-10-27 23:07:54
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -16,7 +16,7 @@ import "./index.moduel.less";
 export default defineComponent({
   setup() {
     const { itemInfo } = useAddGridItem();
-    const layout = ref([{ x: 0, y: 0, w: 2, h: 2, i: "0",}]);
+    const layout = ref([{ x: 0, y: 0, w: 2, h: 3, i: "0",}]);
 
     watch(
       () => itemInfo.value,
@@ -26,15 +26,6 @@ export default defineComponent({
         }));
       }
     );
-
-
-    const itemTitle = (item: any) => {
-      let result = item.i;
-      if (item.static) {
-        result += " - Static";
-      }
-      return result;
-    };
 
     return () => (
         <grid-layout
@@ -57,7 +48,6 @@ export default defineComponent({
                 h={item.h}
                 i={item.i}
               >
-                {/* <span class="text">{itemTitle(item)}</span> */}
                 <GridItemList config={item} />
               </grid-item>
             );

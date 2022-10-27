@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-24 23:01:50
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-24 23:15:57
+ * @LastEditTime: 2022-10-27 22:30:36
  * @FilePath: /vulture/src/designer/grid/effect/useCreateConfig.ts
  * @Description: update here
  */
@@ -31,8 +31,8 @@ const useCreateConfig:UseCreateConfigType = ({
   return {
     x: 6,
     y: 0, 
-    w: 2,
-    h: 2,
+    w: 4,
+    h: 6,
     i: nanoid(),
     type, 
     config: {
