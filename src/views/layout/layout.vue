@@ -1,8 +1,10 @@
 <script lang="ts">
 import {
-  UserOutlined, MenuOutlined, BellOutlined,
+  UserOutlined,
+  MenuOutlined,
+  BellOutlined,
   AppstoreOutlined,
-  CloudOutlined,
+  CloudOutlined
 } from "@ant-design/icons-vue";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -13,7 +15,7 @@ export default defineComponent({
     MenuOutlined,
     BellOutlined,
     AppstoreOutlined,
-    CloudOutlined,
+    CloudOutlined
   },
   setup() {
     const router = useRouter();
@@ -22,11 +24,11 @@ export default defineComponent({
       router.push({ path: "/email" });
     };
     const loginOut = () => {
-      sessionStorage.clear()
+      sessionStorage.clear();
       router.push({ path: "/login" });
     };
     const block = () => {
-      router.push({ path: "/editBlock" });
+      router.push({ path: "/moduleEditor" });
     };
     const rename = () => {
       router.push({ path: "/renameBlock" });
@@ -41,9 +43,9 @@ export default defineComponent({
       loginOut,
       block,
       rename,
-      openDesign,
+      openDesign
     };
-  },
+  }
 });
 </script>
 <template>
@@ -79,19 +81,37 @@ export default defineComponent({
     </div>
   </a-layout-header>
   <a-layout>
-    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible style="
+    <a-layout-sider
+      v-model:collapsed="collapsed"
+      :trigger="null"
+      collapsible
+      style="
         background: #ffff;
         height: calc(100vh - 80px);
         width: 250px;
         border-left: 1px solid rgba(0, 0, 0, 0.1);
-      ">
+      "
+    >
       <div style="height: 30px">
-        <menu-outlined v-if="collapsed" style="font-size: 14px; margin-left: 32px; padding-top: 10px" class="trigger"
-          @click="() => (collapsed = !collapsed)" />
-        <menu-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)"
-          style="font-size: 14px; margin-left: 24px; padding-top: 10px" />
+        <menu-outlined
+          v-if="collapsed"
+          style="font-size: 14px; margin-left: 32px; padding-top: 10px"
+          class="trigger"
+          @click="() => (collapsed = !collapsed)"
+        />
+        <menu-outlined
+          v-else
+          class="trigger"
+          @click="() => (collapsed = !collapsed)"
+          style="font-size: 14px; margin-left: 24px; padding-top: 10px"
+        />
       </div>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="light" mode="inline" style="height: 100%">
+      <a-menu
+        v-model:selectedKeys="selectedKeys"
+        theme="light"
+        mode="inline"
+        style="height: 100%"
+      >
         <a-sub-menu key="sub1">
           <template #title>
             <span>
