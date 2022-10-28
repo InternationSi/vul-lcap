@@ -13,7 +13,7 @@ import home from "../views/layout/layout.vue";
 import login from "../views/login/login.vue";
 import register from "../views/register/register.vue";
 import eamil from "../views/email/email.vue";
-import editBlock from "../views/moduleEditor/moduleEditor.vue";
+import moduleEditor from "../views/moduleEditor/moduleEditor.vue";
 import renameBlock from "../views/renameBlock/renameBlock.vue";
 import grid from "../designer/layout";
 import test from "../views/test/test.vue";
@@ -23,7 +23,7 @@ const routes = [
     component: home,
     children: [
       { path: "/renameBlock", component: renameBlock },
-      { path: "/editBlock", component: editBlock }
+      { path: "/moduleEditor", component: moduleEditor }
     ]
   },
   { path: "/login", component: login },

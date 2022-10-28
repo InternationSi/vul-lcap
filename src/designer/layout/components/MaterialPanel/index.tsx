@@ -8,7 +8,7 @@
  */
 import { defineComponent, ref } from "vue";
 import styles from "./index.module.less";
-import { Subject } from 'rxjs'
+ import { Subject } from 'rxjs';
 export const panelSubject$ = new Subject();
 
 export default defineComponent({

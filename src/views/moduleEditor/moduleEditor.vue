@@ -2,10 +2,12 @@
 import { defineComponent, ref, reactive, onMounted } from "vue";
 import { getNameSpaces } from "../../request/namespaces";
 import type { NsType } from "../renameBlock/renameBlock.type";
+import { addModule } from "@/request/module";
 interface FormState {
-  username: string;
-  nickname: string;
-  checkNick: boolean;
+  ModelEnglishName: string;
+  ModelName: string;
+  ModelType: string;
+  ModelRenameBlock: string;
 }
 interface Obj {
   value: string;
@@ -21,9 +23,10 @@ interface Data {
 export default defineComponent({
   setup() {
     const formState = reactive<FormState>({
-      username: "",
-      nickname: "",
-      checkNick: false
+      ModelEnglishName: "",
+      ModelName: "",
+      ModelType: "",
+      ModelRenameBlock: ""
     });
     //模块信息 命名空间下拉框值
     const renameBlockSelectList = ref<NsType[]>([]);
@@ -69,6 +72,11 @@ export default defineComponent({
       const res = await getNameSpaces();
       console.log(res, "rrr");
     };
+    //底部保存按钮
+    const save = async () => {
+      // const saveBtn = await addModule();
+      // console.log(saveBtn, "3333");
+    };
     return {
       value: ref({ value: "string" }),
       formState,
@@ -78,7 +86,8 @@ export default defineComponent({
       options,
       confirmEvent,
       cancelEvent,
-      renameBlockSelectList
+      renameBlockSelectList,
+      save
     };
   }
 });
@@ -94,27 +103,31 @@ export default defineComponent({
       <p>模块信息</p>
       <el-form class="flex" :model="formState" layout="vertical">
         <el-form-item
-          label="Model Name"
-          name="username"
+          label="ModelName"
+          name="ModelEnglishName"
           :rules="[{ required: true, message: '请输入模块名称' }]"
         >
-          <a-input v-model:value="formState.username" />
+          <a-input v-model:value="formState.ModelEnglishName" />
         </el-form-item>
         <el-form-item
           label="模型名称"
-          name="username"
+          name="ModelName"
           layout="vertical"
           :rules="[{ required: true, message: '请输入模块名称' }]"
         >
-          <a-input v-model:value="formState.username" />
+          <a-input v-model:value="formState.ModelName" />
         </el-form-item>
         <el-form-item
           label="类型"
-          name="username"
+          name="ModelType"
           layout="vertical"
           :rules="[{ required: true, message: '请输入模块名称' }]"
         >
-          <el-select v-model="value" class="m-2" placeholder="Select">
+          <el-select
+            v-model="formState.ModelType"
+            class="m-2"
+            placeholder="Select"
+          >
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -125,11 +138,15 @@ export default defineComponent({
         </el-form-item>
         <el-form-item
           label="所属命名空间"
-          name="username"
+          name="ModelRenameBlock"
           layout="vertical"
           :rules="[{ required: true, message: '请输入模块名称' }]"
         >
-          <el-select v-model="value" class="m-2" placeholder="Select">
+          <el-select
+            v-model="formState.ModelRenameBlock"
+            class="m-2"
+            placeholder="Select"
+          >
             <el-option
               v-for="item in renameBlockSelectList"
               :key="item.describe"
@@ -228,7 +245,7 @@ export default defineComponent({
       <a-radio-button value="default" class="saveClose"
         >保存并关闭</a-radio-button
       >
-      <a-button type="primary">保存</a-button>
+      <a-button type="primary" @click="save">保存</a-button>
     </div>
   </div>
 </template>
