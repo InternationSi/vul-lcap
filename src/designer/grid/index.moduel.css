@@ -1,0 +1,39 @@
+.vue-grid-layout {
+  background: #f3f3f5;
+}
+.vue-grid-item:not(.vue-grid-placeholder) {
+  background: #ffffff;
+  padding: 10px;
+  background: linear-gradient(45deg, #f3f2f4 25%, #ddd 0, #ddd 50%, #f3f2f4 0, #f3f2f4 75%, #ddd 0);
+  background-size: 20px 20px;
+}
+.vue-grid-item .resizing {
+  opacity: 0.9;
+}
+.vue-grid-item .static {
+  background: #cce;
+}
+.vue-grid-item .no-drag {
+  height: 100%;
+  width: 100%;
+}
+.vue-grid-item .minMax {
+  font-size: 12px;
+}
+.vue-grid-item .add {
+  cursor: pointer;
+}
+.vue-draggable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 0;
+  left: 0;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><circle cx='5' cy='5' r='5' fill='#999999'/></svg>") no-repeat;
+  background-position: bottom right;
+  padding: 0 8px 8px 0;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  cursor: pointer;
+}
