@@ -2,31 +2,33 @@
 import { defineComponent, ref, reactive, onMounted } from "vue";
 import { getNameSpaces } from "../../request/namespaces";
 import type { NsType } from "../renameBlock/renameBlock.type";
-import { addModule } from "@/request/module";
+// import type { Moduletype } from "../moduleEditor/moduleEdit.type";
+import { addModule, addModuleField } from "@/request/module";
 interface FormState {
-  ModelEnglishName: string;
-  ModelName: string;
-  ModelType: string;
-  ModelRenameBlock: string;
-}
-interface Obj {
-  value: string;
   label: string;
+  moduleName: string;
+  category: string;
+  namespaceName: string;
 }
+// interface Obj {
+//   value: string;
+//   label: string;
+// }
 interface Data {
-  name: string;
-  title: string;
-  types: Obj[];
-  checks: string[];
+  fieldName: string; //表格名称
+  label: string; //表格标题
+  selfType: string; //表格类型
+  isPrimary: boolean; //表格是否主键
+  isUnique: boolean; //表格是否唯一
 }
 
 export default defineComponent({
   setup() {
     const formState = reactive<FormState>({
-      ModelEnglishName: "",
-      ModelName: "",
-      ModelType: "",
-      ModelRenameBlock: ""
+      label: "",
+      moduleName: "",
+      category: "",
+      namespaceName: ""
     });
     //模块信息 命名空间下拉框值
     const renameBlockSelectList = ref<NsType[]>([]);
@@ -39,7 +41,15 @@ export default defineComponent({
       }
     });
     //定义表格数据
-    const tableData = ref<Data[]>([]);
+    const tableData = ref<Data[]>([
+      {
+        fieldName: "", //表格名称
+        label: "", //表格标题
+        selfType: "", //表格类型
+        isPrimary: false, //表格是否主键
+        isUnique: false
+      } //表格是否唯一
+    ]);
     //表格下拉框
     const options = [
       {
@@ -51,12 +61,14 @@ export default defineComponent({
         label: "select"
       }
     ];
+    //表格添加一条数据
     const onAddItem = () => {
       tableData.value.push({
-        name: "",
-        title: "",
-        types: [],
-        checks: []
+        fieldName: "",
+        label: "",
+        selfType: "",
+        isPrimary: false,
+        isUnique: false
       });
     };
 
@@ -74,8 +86,26 @@ export default defineComponent({
     };
     //底部保存按钮
     const save = async () => {
-      // const saveBtn = await addModule();
-      // console.log(saveBtn, "3333");
+      console.log(formState.moduleName, "111");
+      console.log(formState.namespaceName, "2222");
+      //保存模块
+      // const saveModule = await addModule(
+      //   formState.moduleName, //模型英文名
+      //   formState.namespaceName,
+      //   {
+      //     category: formState.category, //类型
+      //     label: formState.label, //模型中文名
+      //     meta: {},
+      //     updateUser: ""
+      //   }
+      // );
+      //保存表格中数据
+      // const saveModuleField = addModuleField(
+      //   formState.namespaceName,
+      //   formState.moduleName,
+      //   tableData.value.fieldName,
+      //   {}
+      // );
     };
     return {
       value: ref({ value: "string" }),
@@ -103,28 +133,28 @@ export default defineComponent({
       <p>模块信息</p>
       <el-form class="flex" :model="formState" layout="vertical">
         <el-form-item
-          label="ModelName"
-          name="ModelEnglishName"
-          :rules="[{ required: true, message: '请输入模块名称' }]"
+          label="moduleName"
+          name="moduleName"
+          layout="vertical"
+          :rules="[{ required: true, message: '请输入模块英文名称' }]"
         >
-          <a-input v-model:value="formState.ModelEnglishName" />
+          <a-input v-model:value="formState.moduleName" />
         </el-form-item>
         <el-form-item
           label="模型名称"
-          name="ModelName"
-          layout="vertical"
-          :rules="[{ required: true, message: '请输入模块名称' }]"
+          name="label"
+          :rules="[{ required: true, message: '请输入模块中文名称' }]"
         >
-          <a-input v-model:value="formState.ModelName" />
+          <a-input v-model:value="formState.label" />
         </el-form-item>
         <el-form-item
           label="类型"
-          name="ModelType"
+          name="category"
           layout="vertical"
-          :rules="[{ required: true, message: '请输入模块名称' }]"
+          :rules="[{ required: true, message: '请选择模块类型' }]"
         >
           <el-select
-            v-model="formState.ModelType"
+            v-model="formState.category"
             class="m-2"
             placeholder="Select"
           >
@@ -140,10 +170,10 @@ export default defineComponent({
           label="所属命名空间"
           name="ModelRenameBlock"
           layout="vertical"
-          :rules="[{ required: true, message: '请输入模块名称' }]"
+          :rules="[{ required: true, message: '请选择模块' }]"
         >
           <el-select
-            v-model="formState.ModelRenameBlock"
+            v-model="formState.namespaceName"
             class="m-2"
             placeholder="Select"
           >
@@ -158,28 +188,33 @@ export default defineComponent({
       </el-form>
 
       <el-table :data="tableData" style="width: 100%; font-size: 12px" border>
-        <el-table-column fixed prop="name" label="名称" align="center">
+        <el-table-column fixed prop="fieldName" label="名称" align="center">
           <template #default="scope">
             <el-input
-              v-model="scope.row.name"
+              v-model="scope.row.fieldName"
               placeholder="请输入名称"
               style="font-size: 12px"
             />
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="标题" align="center">
+        <el-table-column prop="label" label="标题" align="center">
           <template #default="scope">
             <el-input
-              v-model="scope.row.title"
+              v-model="scope.row.label"
               placeholder="请输入标题"
               style="font-size: 12px"
             />
           </template>
         </el-table-column>
-        <el-table-column prop="types" label="类型" align="center" width="160px">
+        <el-table-column
+          prop="selfType"
+          label="类型"
+          align="center"
+          width="160px"
+        >
           <template #default="scope">
             <el-select
-              v-model="scope.row.types"
+              v-model="scope.row.selfType"
               style="width: 70%; margin-right: 15px"
             >
               <el-option
@@ -202,12 +237,9 @@ export default defineComponent({
           align="center"
         >
           <template #default="scope">
-            <el-checkbox-group
-              v-model="scope.row.checks"
-              style="font-size: 12px"
-            >
-              <el-checkbox label="主键" />
-              <el-checkbox label="唯一" />
+            <el-checkbox-group style="font-size: 12px">
+              <el-checkbox label="主键" v-model="scope.row.isPrimary" />
+              <el-checkbox label="唯一" v-model="scope.row.isUnique" />
             </el-checkbox-group>
           </template>
         </el-table-column>

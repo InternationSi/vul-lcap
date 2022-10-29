@@ -12,11 +12,11 @@ import useCoulumsPorps from "./useColumsProps";
 import type { ModuleType, ColumType } from "../type";
 
 interface useModuleType {
-  namespaceName: string
-  moduleName: string
+  namespaceName: string;
+  moduleName: string;
 }
 
-const useModule = ({namespaceName, moduleName}:useModuleType) => {
+const useModule = ({ namespaceName, moduleName }: useModuleType) => {
   const moduleInfo = ref<ModuleType>();
   const columsInfo = ref<ColumType[]>([]);
 
@@ -28,7 +28,7 @@ const useModule = ({namespaceName, moduleName}:useModuleType) => {
   });
   return {
     moduleInfo,
-    columsInfo,
+    columsInfo
   };
 };
 

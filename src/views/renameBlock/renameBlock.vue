@@ -160,7 +160,14 @@ export default defineComponent({
         <a-form-item
           label="Names"
           name="namespacesName"
-          :rules="[{ required: true, message: '请填写名称' }]"
+          :rules="[
+            {
+              required: true,
+              message: '只能输入字母!',
+              pattern: /^[a-z]+$/,
+              trigger: 'blur'
+            }
+          ]"
         >
           <a-input
             v-model:value="formState.namespacesName"
