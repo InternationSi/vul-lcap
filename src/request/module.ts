@@ -9,7 +9,10 @@
 
 import Api from "../api";
 import { API_URL } from "@/api/env";
-import type { Moduletype } from "../views/moduleEditor/moduleEdit.type";
+import type {
+  Moduletype,
+  moduleField
+} from "../views/moduleEditor/moduleEdit.type";
 
 /**
  * @name: 查询单个模型的信息
@@ -28,7 +31,7 @@ export const moduleFind = async (
   });
   return res;
 };
-//
+
 //添加一个模块
 export const addModule = async (
   namespaceName: string,
@@ -38,6 +41,20 @@ export const addModule = async (
   const res = await Api.request({
     method: "post",
     url: `${API_URL}/${namespaceName}/module/${moduleName}`,
+    data: params
+  });
+  return res;
+};
+//添加模块表格中的数据
+export const addModuleField = async (
+  namespaceName: string,
+  moduleName: string,
+  fieldName: string,
+  params: moduleField
+): Promise<any> => {
+  const res = await Api.request({
+    method: "post",
+    url: `${API_URL}/${namespaceName}/module/${moduleName}/field/${fieldName}`,
     data: params
   });
   return res;
