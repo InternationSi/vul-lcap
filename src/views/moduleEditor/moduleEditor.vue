@@ -2,8 +2,9 @@
 import { defineComponent, ref, reactive, onMounted } from "vue";
 import { getNameSpaces } from "../../request/namespaces";
 import type { NsType } from "../renameBlock/renameBlock.type";
+import { ElMessage } from "element-plus";
 // import type { Moduletype } from "../moduleEditor/moduleEdit.type";
-import { addModule, addModuleField } from "@/request/module";
+import { addModule, addModuleField, getModuleList } from "@/request/module";
 interface FormState {
   label: string;
   moduleName: string;
@@ -33,12 +34,19 @@ export default defineComponent({
     //模块信息 命名空间下拉框值
     const renameBlockSelectList = ref<NsType[]>([]);
     onMounted(async () => {
+      //模块信息 命名空间下拉框值
       const res = await getNameSpaces();
       if (res.sucess) {
         console.log(res.data, "00000");
         renameBlockSelectList.value = res.data;
         // dataList.value = res.data;
       }
+      // //查询模型所有属性
+      // const moduleList = await getModuleList(
+      //   formState.moduleName, //模型英文名
+      //   formState.namespaceName
+      // );
+      // console.log(moduleList, "22222");
     });
     //定义表格数据
     const tableData = ref<Data[]>([
@@ -88,17 +96,54 @@ export default defineComponent({
     const save = async () => {
       console.log(formState.moduleName, "111");
       console.log(formState.namespaceName, "2222");
-      //保存模块
-      // const saveModule = await addModule(
-      //   formState.moduleName, //模型英文名
-      //   formState.namespaceName,
-      //   {
-      //     category: formState.category, //类型
-      //     label: formState.label, //模型中文名
-      //     meta: {},
-      //     updateUser: ""
-      //   }
-      // );
+      tableData.value.forEach(async (item) => {
+        //先判断模型信息是否为空
+        if (formState.moduleName && formState.namespaceName) {
+          //保存模块信息
+          const saveModule = await addModule(
+            formState.moduleName,
+            formState.namespaceName,
+            {
+              category: formState.category,
+              label: formState.label,
+              meta: {},
+              updateUser: ""
+            }
+          );
+          console.log(saveModule, "保存模块信息是否成功");
+          //判断模型属性是否为空
+          if (item.fieldName || item.label) {
+            //查询模型属性所有数据
+            const modelList = await getModuleList(
+              formState.moduleName,
+              formState.namespaceName
+            );
+            console.log(modelList, "4444");
+            modelList.forEach((model: any) => {
+              if (item.fieldName == model.fieldName) {
+                //已经保存过 调用更新接口
+              } else {
+                //未保存  调用保存接口
+              }
+            });
+          } else {
+            ElMessage({
+              message: "不能保存空数据,请填写模型属性",
+              type: "warning"
+            });
+          }
+        } else {
+          ElMessage({
+            message: "模块数据不能为空",
+            type: "warning"
+          });
+        }
+      });
+
+      //校验是否有模型数据
+
+      //保存时先调查询接口，查询所有数据   获得表格中所有数据  循环数据  对比spaceNames  是否存在于所有数据中   存在就调更新接口  不存在调保存接口
+
       //保存表格中数据
       // const saveModuleField = addModuleField(
       //   formState.namespaceName,
@@ -237,10 +282,8 @@ export default defineComponent({
           align="center"
         >
           <template #default="scope">
-            <el-checkbox-group style="font-size: 12px">
-              <el-checkbox label="主键" v-model="scope.row.isPrimary" />
-              <el-checkbox label="唯一" v-model="scope.row.isUnique" />
-            </el-checkbox-group>
+            <el-checkbox label="主键" v-model="scope.row.isPrimary" />
+            <el-checkbox label="唯一" v-model="scope.row.isUnique" />
           </template>
         </el-table-column>
         <el-table-column

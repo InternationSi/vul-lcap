@@ -11,7 +11,8 @@ import Api from "../api";
 import { API_URL } from "@/api/env";
 import type {
   Moduletype,
-  moduleField
+  moduleField,
+  updateModule
 } from "../views/moduleEditor/moduleEdit.type";
 
 /**
@@ -39,9 +40,20 @@ export const addModule = async (
   params: Moduletype
 ): Promise<any> => {
   const res = await Api.request({
-    method: "post",
+    method: "get",
     url: `${API_URL}/${namespaceName}/module/${moduleName}`,
     data: params
+  });
+  return res;
+};
+//查询模型中所有数据
+export const getModuleList = async (
+  namespaceName: string,
+  moduleName: string
+): Promise<any> => {
+  const res = await Api.request({
+    method: "get",
+    url: `${API_URL}/${namespaceName}/module/${moduleName}/field`
   });
   return res;
 };
@@ -54,6 +66,21 @@ export const addModuleField = async (
 ): Promise<any> => {
   const res = await Api.request({
     method: "post",
+    url: `${API_URL}/${namespaceName}/module/${moduleName}/field/${fieldName}`,
+    data: params
+  });
+  return res;
+};
+//更新模块表格中属性
+//localhost:3001/metaData/{namespaceName}/module/{moduleName}/field/{fieldName}
+export const updateModuleField = async (
+  namespaceName: string,
+  moduleName: string,
+  fieldName: string,
+  params: updateModule
+): Promise<any> => {
+  const res = await Api.request({
+    method: "put",
     url: `${API_URL}/${namespaceName}/module/${moduleName}/field/${fieldName}`,
     data: params
   });
