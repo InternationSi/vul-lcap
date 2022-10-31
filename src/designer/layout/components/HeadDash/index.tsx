@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-30 13:44:34
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-30 13:49:07
+ * @LastEditTime: 2022-10-31 22:36:10
  * @FilePath: /vulture/src/designer/layout/components/HeadDash/index.tsx
  * @Description: update here
  */
@@ -17,24 +17,36 @@
 import { defineComponent, ref } from "vue";
 import vulLogo from "@/components/vulLogo";
 import { createUseStyles } from "vue-jss";
+import { useRouter } from "vue-router";
 
 const useStyles = createUseStyles({
   hedBox: {
     width: "100%",
     height: "100%",
     display: "flex",
+    justifyContent: "space-between",
     alignItems: "center"
-  },
-  logo: {}
+  }
 });
 
 export default defineComponent({
   components: { vulLogo },
   setup() {
+    const router = useRouter();
     const classesRef = useStyles();
+
+    const setRender = () => {
+      router.push("/render");
+    };
+
     return () => (
       <div class={classesRef.value.hedBox}>
-        <vulLogo class={classesRef.value.logo} />
+        <vulLogo />
+        <div>
+          <el-icon size={30}>
+            <video-play onClick={setRender} />
+          </el-icon>
+        </div>
       </div>
     );
   }

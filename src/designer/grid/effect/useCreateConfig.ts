@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-24 23:01:50
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-27 22:30:36
+ * @LastEditTime: 2022-10-31 22:58:37
  * @FilePath: /vulture/src/designer/grid/effect/useCreateConfig.ts
  * @Description: update here
  */
@@ -19,7 +19,8 @@ interface UseCreateConfigType {
     y: number, 
     w: number,
     h: number,
-    i: string
+    i: string,
+    type?: string
   };
 }
 

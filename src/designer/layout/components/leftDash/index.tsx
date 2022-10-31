@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-22 22:24:41
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-29 22:51:55
+ * @LastEditTime: 2022-10-30 23:13:10
  * @FilePath: /vulture/src/designer/layout/components/leftDash/index.tsx
  * @Description: update here
  */
@@ -13,6 +13,7 @@ import useDrawVisi from "./effect/useDrawVisi";
 import MaterialPanel from "../MaterialPanel";
 import useEditorVisi from "./effect/useEditorVisi";
 import Editor from "./components/Editor";
+import { useSchemaStore } from "@/store/gridSchema";
 
 const toJson = (params: any) => {
   return JSON.stringify(params, null, 2); // 保留格式的json转换
@@ -33,6 +34,8 @@ const useStyles = createUseStyles({
 export default defineComponent({
   components: { Drawer, MaterialPanel },
   setup() {
+    const schemaStore = useSchemaStore();
+
     const { drawerShow, openDrawer, closeDrawer } = useDrawVisi();
     const { editDrawerShow, openEditDrawer, closeEditDrawer } = useEditorVisi();
 
@@ -41,13 +44,18 @@ export default defineComponent({
       // 当在页面修改了code后会触发
       let schema: any;
       try {
-        schema = JSON.parse(code); // 转换回来
-      } catch (e) {
-        console.error("解析json失败");
-      }
+        schema = eval(code); // 转换回来
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
       schemaRef.value = schema; // 转换回来
     };
 
+    schemaStore.$subscribe(
+      (mutation, state) => {
+        schemaRef.value = state.schema;
+      },
+      { detached: true }
+    );
     const classesRef = useStyles(); // 初始化
 
     return () => {

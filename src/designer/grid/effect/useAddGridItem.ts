@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-24 22:12:39
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-24 23:11:54
+ * @LastEditTime: 2022-10-30 23:15:08
  * @FilePath: /vulture/src/designer/grid/effect/useAddGridItem.ts
  * @Description: update here
  */
@@ -16,7 +16,9 @@ const useAddGridItem = () => {
   const itemInfo = ref<any>('')
 
   onMounted(() => {
-    panelSubject$.subscribe({
+    console.log(panelSubject$, 'panelSubject$');
+    
+    panelSubject$?.subscribe({
       next: (value) => {
         itemInfo.value = value
       },
@@ -25,7 +27,8 @@ const useAddGridItem = () => {
   })
 
   onUnmounted(() => {
-    panelSubject$.unsubscribe()
+    console.log(panelSubject$, 'panelSubject$');
+    panelSubject$?.unsubscribe()
   })
 
   return {

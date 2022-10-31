@@ -12,6 +12,7 @@ import * as Monaco from "monaco-editor";
 
 import type { PropType, Ref } from "vue";
 import { createUseStyles } from "vue-jss";
+import { useSchemaStore } from "@/store/gridSchema";
 
 const useStyles = createUseStyles({
   container: {
@@ -47,7 +48,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+
+  setup(props, ctx) {
     // must be shallowRef, if not, editor.getValue() won't work
     const editorRef = shallowRef();
 
@@ -61,7 +63,7 @@ export default defineComponent({
         containerRef.value,
         {
           value: props.code,
-          language: "json",
+          language: "javascript",
           theme: "vs",
           automaticLayout: true,
           foldingStrategy: "indentation",
@@ -73,7 +75,6 @@ export default defineComponent({
           }
         }
       ));
-      console.log(editor.getValue(), "editor.getValue()");
 
       _subscription = editor.onDidChangeModelContent((event) => {
         console.log("--------->", __prevent_trigger_change_event);

@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-30 12:24:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-30 13:42:02
+ * @LastEditTime: 2022-10-30 14:33:58
  * @FilePath: /vulture/src/components/vulLogo/index.tsx
  * @Description: update here
  */
@@ -25,7 +25,6 @@ export default defineComponent({
       return (
         <>
           <svg
-            class="icon"
             viewBox="0 0 1024 1024"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
