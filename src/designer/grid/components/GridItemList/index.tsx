@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-25 22:32:47
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 23:51:07
+ * @LastEditTime: 2022-10-31 23:54:34
  * @FilePath: /vulture/src/designer/grid/components/GridItemList/index.tsx
  * @Description: update here
  */
@@ -17,23 +17,21 @@ export default defineComponent({
       require: true
     },
     itemIndex: {
-      type: Number as any,
-      require: true
+      type: Number as any
     },
     handleDelete: {
-      type: Function as any,
-      required: true
+      type: Function as any
     },
     handleEdit: {
-      type: Function as any,
-      required: true
+      type: Function as any
     }
   },
   setup(props) {
+    // eslint-disable-next-line vue/no-setup-props-destructure
     const { config, itemIndex } = props;
 
     const renderComponents = () => {
-      if (config.type === "container") {
+      if (config?.type === "container") {
         return <TabContainer />;
       } else {
         return <Spacing />;
