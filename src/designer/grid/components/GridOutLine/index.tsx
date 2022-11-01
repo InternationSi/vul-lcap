@@ -2,14 +2,14 @@
  * @Author: sfy
  * @Date: 2022-10-31 22:06:00
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 23:12:41
+ * @LastEditTime: 2022-11-01 22:47:41
  * @FilePath: /vulture/src/designer/grid/components/GridOutLine/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";
 import useCreateConfig from "../../effect/useCreateConfig";
 import GridItemList from "../GridItemList";
-import "../../index.moduel.less";
+import "../../index.less";
 
 export default defineComponent({
   props: {

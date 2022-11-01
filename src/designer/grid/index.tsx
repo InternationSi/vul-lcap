@@ -2,23 +2,27 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 23:52:12
+ * @LastEditTime: 2022-11-01 23:04:03
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
 import GridItemList from "./components/GridItemList";
 import { useSchemaStore } from "@/store/gridSchema";
-import "./index.moduel.less";
 import { defineComponent, ref, reactive, watch, onUnmounted } from "vue";
 import useAddGridItem from "./effect/useAddGridItem";
 import useCreateConfig from "./effect/useCreateConfig";
-import { nanoid } from "nanoid";
-import "./index.moduel.less";
+import useTabOptions from "./effect/useTabOptions";
+import useCreateTab from "./effect/useCreateTab";
+import "./index.less";
+import GridOutLine from "./components/GridOutLine";
 
 export default defineComponent({
+  components: { GridOutLine },
   setup() {
     const schemaStore = useSchemaStore();
     const { itemInfo } = useAddGridItem();
+    const { editableTabsValue, editableTabs } = useTabOptions();
+
     const layout = ref<any[]>([
       {
         x: 0,
@@ -68,42 +72,63 @@ export default defineComponent({
       () => layout.value,
       (value) => {
         schemaStore.changeGridScheme(value);
+        useCreateTab({
+          schemaValue: value
+        });
       },
       { deep: true }
     );
 
+    const gridSchemaChange = (value: any[]) => {
+      console.log(value, "valuevalue");
+    };
+
     return () => (
-      <grid-layout
-        layout={layout.value}
-        col-num={12}
-        row-height={30}
-        is-draggable={true}
-        is-resizable={true}
-        vertical-compact={true}
-        use-css-transforms={true}
-      >
-        {layout.value.map((item: any, index: number) => {
-          return (
-            <grid-item
-              key={index}
-              static={item.static}
-              x={item.x}
-              y={item.y}
-              w={item.w}
-              h={item.h}
-              i={item.i}
+      <>
+        <el-tabs v-model={editableTabsValue.value} type="card">
+          <el-tab-pane label="工作台" name="main">
+            <grid-layout
+              layout={layout.value}
+              col-num={12}
+              row-height={30}
+              is-draggable={true}
+              is-resizable={true}
+              vertical-compact={true}
+              use-css-transforms={true}
             >
-              <GridItemList
-                config={item}
-                itemIndex={index}
-                handleDelete={deleteItem}
-                handleEdit={(value: boolean) => {
-                  dialogVisible.value = value;
-                }}
-              />
-            </grid-item>
-          );
-        })}
+              {layout.value.map((item: any, index: number) => {
+                return (
+                  <grid-item
+                    key={index}
+                    static={item.static}
+                    x={item.x}
+                    y={item.y}
+                    w={item.w}
+                    h={item.h}
+                    i={item.i}
+                  >
+                    <GridItemList
+                      config={item}
+                      itemIndex={index}
+                      handleDelete={deleteItem}
+                      handleEdit={(value: boolean) => {
+                        dialogVisible.value = value;
+                      }}
+                    />
+                  </grid-item>
+                );
+              })}
+            </grid-layout>
+          </el-tab-pane>
+          {editableTabs.value.map((item) => {
+            return (
+              <el-tab-pane label={item.title} name={item.name}>
+                <GridOutLine onChange={gridSchemaChange} />
+              </el-tab-pane>
+            );
+          })}
+        </el-tabs>
+
         <el-dialog v-model={dialogVisible.value} title="编辑单位" width="30%">
           <el-form model={form}>
             <el-form-item label="x:">
@@ -135,7 +160,7 @@ export default defineComponent({
             </el-button>
           </span>
         </el-dialog>
-      </grid-layout>
+      </>
     );
   }
 });
