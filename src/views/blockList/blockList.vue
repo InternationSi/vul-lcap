@@ -1,0 +1,192 @@
+<script lang="ts">
+import { defineComponent, ref, reactive, onMounted } from "vue";
+// import { any, number } from "vue-types";
+import type { FormInstance } from "ant-design-vue";
+// import type { Rule } from "ant-design-vue/es/form";
+import { message } from "ant-design-vue";
+import {
+  getNameSpaces,
+  addNameSpaces,
+  editNameSpaces,
+  deletNameSpaces
+} from "../../request/namespaces";
+import _ from "lodash";
+// import type { NsType } from "./renameBlock.type";
+export default defineComponent({
+  setup() {
+    // const dataList = ref<NsType[]>([]);
+    // onMounted(async () => {
+    //   const res = await getNameSpaces();
+    //   if (res.sucess) {
+    //     dataList.value = res.data;
+    //   }
+    // });
+    // const formRef = ref<FormInstance>();
+    // const formState = reactive<NsType>({
+    //   namespacesName: "",
+    //   label: "",
+    //   describe: ""
+    // });
+    // const editIndex = ref<boolean>(false);
+    // const visible = ref<boolean>(false);
+    // const add = () => {
+    //   (formState.namespacesName = ""),
+    //     (formState.label = ""),
+    //     (formState.describe = ""),
+    //     (visible.value = true);
+    //   editIndex.value = false;
+    // };
+
+    const add = () => {
+      //   editIndex.value = true;
+      //   visible.value = true;
+      //   formState.namespacesName = dataList.value[index].namespacesName;
+      //   formState.label = dataList.value[index].label;
+      //   formState.describe = dataList.value[index].describe;
+    };
+
+    return {
+      add
+    };
+  }
+});
+</script>
+<template>
+  <div class="warp">
+    <h2>模型列表</h2>
+    <a-button type="primary" @click="add()" class="btn">新增</a-button>
+    <!-- <ul
+      class="content"
+      v-for="(item, index) in dataList"
+      :key="index"
+      style="padding-right: 30px"
+    >
+      <li>
+        <div>
+          <span class="header" style="font-size: 14px">{{ item.label }}</span>
+          <a-tag color="blue" style="margin-left: 20px; font-size: 12px">{{
+            item.namespacesName
+          }}</a-tag>
+          <p style="color: rgba(117, 117, 117, 1); font-size: 12px">
+            {{ item.describe }}
+          </p>
+        </div>
+        <div>
+          <a-button type="link" @click="edit(index)" style="font-size: 14px"
+            >编辑</a-button
+          >
+          <a-popconfirm
+            title="是否确定删除此项目?"
+            ok-text="Yes"
+            cancel-text="No"
+            @confirm="confirm(index)"
+            @cancel="cancelPop"
+          >
+            <a href="#" style="font-size: 14px">删除</a>
+          </a-popconfirm>
+        </div>
+      </li>
+    </ul> -->
+    <!-- <a-modal
+      :visible="visible"
+      :title="editIndex == true ? '编辑' : '新增'"
+      @ok="handleOk"
+      @cancel="cancel"
+      cancelText="取消"
+      okText="确定"
+      style="min-height: 330px"
+    >
+      <a-form
+        ref="formRef"
+        name="custom-validation"
+        :model="formState"
+        :labelCol="{ span: 3 }"
+      >
+        <a-form-item
+          label="Names"
+          name="namespacesName"
+          :rules="[
+            {
+              required: true,
+              message: '只能输入字母!',
+              pattern: /^[a-z]+$/,
+              trigger: 'blur'
+            }
+          ]"
+        >
+          <a-input
+            v-model:value="formState.namespacesName"
+            :disabled="editIndex"
+          />
+        </a-form-item>
+        <a-form-item
+          label="标签"
+          name="label"
+          :rules="[{ required: true, message: '请填写标签' }]"
+        >
+          <a-input v-model:value="formState.label" />
+        </a-form-item>
+        <a-form-item label="介绍" name="describe">
+          <a-textarea v-model:value="formState.describe" />
+        </a-form-item>
+      </a-form>
+    </a-modal> -->
+  </div>
+</template>
+<style scoped lang="less">
+.warp {
+  background: rgba(250, 250, 250, 1);
+  margin-bottom: 2px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  opacity: 1;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 6px 15px NaNpx rgba(0, 0, 0, 0.05);
+
+  .top {
+    font-size: 35px;
+    opacity: 1;
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    line-height: 42px;
+    color: rgba(34, 34, 38, 1);
+    text-align: left;
+    padding-top: 10px;
+    margin-left: 30px;
+  }
+
+  .btn {
+    // margin-left: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .content {
+    list-style: none;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(238, 238, 238, 1);
+
+      li div .header {
+        font-size: 25px;
+        font-weight: 400;
+        letter-spacing: 0px;
+        line-height: 20px;
+        color: rgba(34, 34, 38, 1);
+      }
+
+      li div p {
+        font-weight: 400;
+        letter-spacing: 0px;
+        line-height: 17px;
+        color: rgba(117, 117, 117, 1);
+      }
+    }
+  }
+}
+</style>

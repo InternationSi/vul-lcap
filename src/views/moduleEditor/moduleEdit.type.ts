@@ -14,7 +14,6 @@ export interface moduleField {
 }
 //更新数据
 export interface updateModule {
-  id: number;
   label: string;
   fieldName: string;
   selfType: string;

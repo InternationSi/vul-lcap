@@ -33,6 +33,10 @@ export default defineComponent({
     const rename = () => {
       router.push({ path: "/renameBlock" });
     };
+
+    const blockList = () => {
+      router.push({ path: "/blockList" });
+    };
     const openDesign = () => {
       router.push("/grid");
     };
@@ -43,6 +47,7 @@ export default defineComponent({
       loginOut,
       block,
       rename,
+      blockList,
       openDesign
     };
   }
@@ -121,6 +126,7 @@ export default defineComponent({
           </template>
           <a-menu-item key="1" @click="rename">命名空间</a-menu-item>
           <a-menu-item key="2" @click="block">编辑模块</a-menu-item>
+          <a-menu-item key="3" @click="blockList">模型列表</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>

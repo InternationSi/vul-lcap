@@ -40,7 +40,7 @@ export const addModule = async (
   params: Moduletype
 ): Promise<any> => {
   const res = await Api.request({
-    method: "get",
+    method: "post",
     url: `${API_URL}/${namespaceName}/module/${moduleName}`,
     data: params
   });
@@ -57,7 +57,7 @@ export const getModuleList = async (
   });
   return res;
 };
-//添加模块表格中的数据
+//添加模块属性
 export const addModuleField = async (
   namespaceName: string,
   moduleName: string,

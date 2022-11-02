@@ -15,6 +15,7 @@ import register from "../views/register/register.vue";
 import eamil from "../views/email/email.vue";
 import moduleEditor from "../views/moduleEditor/moduleEditor.vue";
 import renameBlock from "../views/renameBlock/renameBlock.vue";
+import blockList from "../views/blockList/blockList.vue";
 import grid from "../designer/layout";
 import gridRender from "@/designer/render";
 import test from "../views/test/test.vue";
@@ -24,7 +25,8 @@ const routes = [
     component: home,
     children: [
       { path: "/renameBlock", component: renameBlock },
-      { path: "/moduleEditor", component: moduleEditor }
+      { path: "/moduleEditor", component: moduleEditor },
+      { path: "/blockList", component: blockList }
     ]
   },
   { path: "/login", component: login },

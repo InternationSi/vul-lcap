@@ -106,8 +106,8 @@ export default defineComponent({
         if (formState.moduleName && formState.namespaceName) {
           //保存模块信息
           const saveModule = await addModule(
-            formState.moduleName,
             formState.namespaceName,
+            formState.moduleName,
             {
               category: formState.category,
               label: formState.label,
@@ -120,46 +120,64 @@ export default defineComponent({
           if (item.fieldName || item.label) {
             //查询模型属性所有数据
             const modelList = await getModuleList(
-              formState.moduleName,
-              formState.namespaceName
+              formState.namespaceName,
+              formState.moduleName
             );
             console.log(modelList.data, "4444");
-            modelList.data.forEach(async (model: any) => {
-              if (item.fieldName == model.fieldName) {
-                //已经保存过 调用更新接口
-                const updata = await updateModuleField(
-                  formState.moduleName,
-                  formState.namespaceName,
-                  tableData.value[tableIndex].fieldName,
-                  {
-                    id: 6,
-                    label: item.label,
-                    fieldName: item.fieldName,
-                    selfType: item.selfType,
-                    isPrimary: item.isPrimary,
-                    isUnique: item.isUnique,
-                    moduleName: formState.moduleName
-                  }
-                );
-                console.log(updata, "更新接口");
-              } else {
-                //未保存  调用保存接口
-                const saveModel = await addModuleField(
-                  formState.namespaceName,
-                  formState.moduleName,
-                  tableData.value[tableIndex].fieldName,
-                  {
-                    label: item.label,
-                    fieldName: item.fieldName,
-                    selfType: item.selfType,
-                    isPrimary: item.isPrimary,
-                    isUnique: item.isUnique,
-                    moduleName: formState.moduleName
-                  }
-                );
-                console.log(saveModel, "保存接口");
-              }
-            });
+            //判断是否已经有属性数据
+            if (modelList.data.length != 0) {
+              modelList.data.forEach(async (model: any) => {
+                if (item.fieldName == model.fieldName) {
+                  //已经保存过 调用更新接口
+                  const updata = await updateModuleField(
+                    formState.namespaceName,
+                    formState.moduleName,
+                    tableData.value[tableIndex].fieldName,
+                    {
+                      label: item.label,
+                      fieldName: item.fieldName,
+                      selfType: item.selfType,
+                      isPrimary: item.isPrimary,
+                      isUnique: item.isUnique,
+                      moduleName: formState.moduleName
+                    }
+                  );
+                  console.log(updata, "更新接口");
+                } else {
+                  //未保存  调用保存接口
+                  const saveModel = await addModuleField(
+                    formState.namespaceName,
+                    formState.moduleName,
+                    tableData.value[tableIndex].fieldName,
+                    {
+                      label: item.label,
+                      fieldName: item.fieldName,
+                      selfType: item.selfType,
+                      isPrimary: item.isPrimary,
+                      isUnique: item.isUnique,
+                      moduleName: formState.moduleName
+                    }
+                  );
+                  console.log(saveModel, "保存接口");
+                }
+              });
+            } else {
+              //没有属性数据时  调用保存接口
+              const saveModel = await addModuleField(
+                formState.namespaceName,
+                formState.moduleName,
+                tableData.value[tableIndex].fieldName,
+                {
+                  label: item.label,
+                  fieldName: item.fieldName,
+                  selfType: item.selfType,
+                  isPrimary: item.isPrimary,
+                  isUnique: item.isUnique,
+                  moduleName: formState.moduleName
+                }
+              );
+              console.log(saveModel, "保存接口");
+            }
           } else {
             ElMessage({
               message: "不能保存空数据,请填写模型属性",
@@ -177,14 +195,6 @@ export default defineComponent({
       //校验是否有模型数据
 
       //保存时先调查询接口，查询所有数据   获得表格中所有数据  循环数据  对比spaceNames  是否存在于所有数据中   存在就调更新接口  不存在调保存接口
-
-      //保存表格中数据
-      // const saveModuleField = addModuleField(
-      //   formState.namespaceName,
-      //   formState.moduleName,
-      //   tableData.value.fieldName,
-      //   {}
-      // );
     };
     return {
       value: ref({ value: "string" }),
