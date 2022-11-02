@@ -10,6 +10,7 @@ export interface moduleField {
   selfType: string; //表格类型
   isPrimary: boolean; //表格是否主键
   isUnique: boolean; //表格是否唯一
+  moduleName: string;
 }
 //更新数据
 export interface updateModule {
