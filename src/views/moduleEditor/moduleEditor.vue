@@ -4,7 +4,12 @@ import { getNameSpaces } from "../../request/namespaces";
 import type { NsType } from "../renameBlock/renameBlock.type";
 import { ElMessage } from "element-plus";
 // import type { Moduletype } from "../moduleEditor/moduleEdit.type";
-import { addModule, addModuleField, getModuleList } from "@/request/module";
+import {
+  addModule,
+  addModuleField,
+  getModuleList,
+  updateModuleField
+} from "@/request/module";
 interface FormState {
   label: string;
   moduleName: string;
@@ -96,7 +101,7 @@ export default defineComponent({
     const save = async () => {
       console.log(formState.moduleName, "111");
       console.log(formState.namespaceName, "2222");
-      tableData.value.forEach(async (item) => {
+      tableData.value.forEach(async (item, tableIndex) => {
         //先判断模型信息是否为空
         if (formState.moduleName && formState.namespaceName) {
           //保存模块信息
@@ -118,12 +123,41 @@ export default defineComponent({
               formState.moduleName,
               formState.namespaceName
             );
-            console.log(modelList, "4444");
-            modelList.forEach((model: any) => {
+            console.log(modelList.data, "4444");
+            modelList.data.forEach(async (model: any) => {
               if (item.fieldName == model.fieldName) {
                 //已经保存过 调用更新接口
+                const updata = await updateModuleField(
+                  formState.moduleName,
+                  formState.namespaceName,
+                  tableData.value[tableIndex].fieldName,
+                  {
+                    id: 6,
+                    label: item.label,
+                    fieldName: item.fieldName,
+                    selfType: item.selfType,
+                    isPrimary: item.isPrimary,
+                    isUnique: item.isUnique,
+                    moduleName: formState.moduleName
+                  }
+                );
+                console.log(updata, "更新接口");
               } else {
                 //未保存  调用保存接口
+                const saveModel = await addModuleField(
+                  formState.namespaceName,
+                  formState.moduleName,
+                  tableData.value[tableIndex].fieldName,
+                  {
+                    label: item.label,
+                    fieldName: item.fieldName,
+                    selfType: item.selfType,
+                    isPrimary: item.isPrimary,
+                    isUnique: item.isUnique,
+                    moduleName: formState.moduleName
+                  }
+                );
+                console.log(saveModel, "保存接口");
               }
             });
           } else {
