@@ -2,35 +2,27 @@
  * @Author: sfy
  * @Date: 2022-11-01 22:22:48
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-01 22:58:10
+ * @LastEditTime: 2022-11-02 23:25:07
  * @FilePath: /vulture/src/designer/grid/effect/useTabOptions.ts
  * @Description: update here
  */
 import { ref, onMounted, onUnmounted } from "vue";
 
-
+export interface TabType {
+  title:string,
+  name:string,
+}
 
 const useTabOptions = () => {
-let tabIndex = 2
 const editableTabsValue = ref('main')
-const editableTabs = ref([
-  {
-    title: 'Tab 2',
-    name: '2',
-  },
-  {
-    title: 'Tab 3',
-    name: '3',
-  },
-])
+const editableTabs = ref<TabType[]>([])
 
-const addTab = (targetName: string) => {
-  const newTabName = `${++tabIndex}`
+const addTab = (info:TabType) => {
+  const {title, name} = info
   editableTabs.value.push({
-    title: 'New Tab',
-    name: newTabName,
+    title,
+    name,
   })
-  editableTabsValue.value = newTabName
 }
 
 

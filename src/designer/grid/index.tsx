@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-01 23:04:03
+ * @LastEditTime: 2022-11-02 23:30:28
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -21,7 +21,7 @@ export default defineComponent({
   setup() {
     const schemaStore = useSchemaStore();
     const { itemInfo } = useAddGridItem();
-    const { editableTabsValue, editableTabs } = useTabOptions();
+    const { editableTabsValue, editableTabs, addTab } = useTabOptions();
 
     const layout = ref<any[]>([
       {
@@ -62,7 +62,7 @@ export default defineComponent({
       (value) => {
         layout.value.push(
           useCreateConfig({
-            type: value
+            type: value.type
           })
         );
       }
@@ -72,15 +72,17 @@ export default defineComponent({
       () => layout.value,
       (value) => {
         schemaStore.changeGridScheme(value);
+        editableTabs.value = [];
         useCreateTab({
-          schemaValue: value
+          schemaValue: value,
+          addTab
         });
       },
       { deep: true }
     );
 
-    const gridSchemaChange = (value: any[]) => {
-      console.log(value, "valuevalue");
+    const gridSchemaChange = ({ key, values }: any) => {
+      console.log(key, values, "valuevalue");
     };
 
     return () => (
@@ -123,7 +125,7 @@ export default defineComponent({
           {editableTabs.value.map((item) => {
             return (
               <el-tab-pane label={item.title} name={item.name}>
-                <GridOutLine onChange={gridSchemaChange} />
+                <GridOutLine tabConfig={item} onChange={gridSchemaChange} />
               </el-tab-pane>
             );
           })}
