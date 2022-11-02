@@ -2,17 +2,18 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-30 23:13:37
+ * @LastEditTime: 2022-11-02 22:29:40
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref } from "vue";
 import styles from "./index.module.less";
-import { Subject } from "rxjs";
-export const panelSubject$ = new Subject();
+import { nanoid } from "nanoid";
+import { useCommunicationStore } from "@/store/transport";
 
 export default defineComponent({
   setup(props) {
+    const store = useCommunicationStore();
     const activeTab = ref("graph");
 
     const block = () => {
@@ -20,7 +21,12 @@ export default defineComponent({
         <div
           class={styles.block}
           onClick={() => {
-            panelSubject$.next("spacing");
+            console.log(store, "===store");
+
+            store.setCommunication({
+              type: "spacing",
+              randomId: nanoid()
+            });
           }}
         >
           <el-icon>
@@ -35,7 +41,10 @@ export default defineComponent({
         <div
           class={styles.block}
           onClick={() => {
-            panelSubject$.next("container");
+            store.setCommunication({
+              type: "container",
+              randomId: nanoid()
+            });
           }}
         >
           <el-icon>

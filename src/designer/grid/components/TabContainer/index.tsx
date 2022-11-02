@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-27 22:20:21
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 23:38:10
+ * @LastEditTime: 2022-11-02 22:40:18
  * @FilePath: /vulture/src/designer/grid/components/TabContainer/index.tsx
  * @Description: update here
  */
@@ -18,9 +18,8 @@ export default defineComponent({
   setup() {
     const activeTab = ref("first");
     const renderScheme = ref<any[]>([]);
-    const containerDrawVis = ref(false);
     const setComDraw = () => {
-      containerDrawVis.value = true;
+      console.log("22");
     };
 
     const confirmClick = () => {
@@ -39,14 +38,14 @@ export default defineComponent({
           <el-tab-pane label="Config" name="second" />
         </el-tabs>
         <div class={styles.tabConBox} onClick={setComDraw}>
-          {/* <div class={styles.imageSlot}>
+          <div class={styles.imageSlot}>
             <el-icon>
-              <plus  />
+              <plus />
             </el-icon>
-          </div> */}
-          <Render v-model={renderScheme.value} />
+          </div>
+          {/* <Render v-model={renderScheme.value} /> */}
         </div>
-        <el-drawer
+        {/* <el-drawer
           v-model={containerDrawVis.value}
           with-header={false}
           append-to-body={true}
@@ -67,7 +66,7 @@ export default defineComponent({
               );
             }
           }}
-        </el-drawer>
+        </el-drawer> */}
       </div>
     );
   }

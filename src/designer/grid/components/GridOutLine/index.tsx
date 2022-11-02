@@ -2,17 +2,22 @@
  * @Author: sfy
  * @Date: 2022-10-31 22:06:00
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-01 22:47:41
+ * @LastEditTime: 2022-11-02 23:31:20
  * @FilePath: /vulture/src/designer/grid/components/GridOutLine/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";
 import useCreateConfig from "../../effect/useCreateConfig";
+import type { TabType } from "../../effect/useTabOptions";
+
 import GridItemList from "../GridItemList";
 import "../../index.less";
 
 export default defineComponent({
   props: {
+    tabConfig: {
+      type: Object as PropType<TabType>
+    },
     onChange: {
       type: Function as PropType<(value: any[]) => void>,
       required: true
@@ -36,7 +41,10 @@ export default defineComponent({
     watch(
       () => layout.value,
       (value) => {
-        props.onChange(value);
+        props.onChange({
+          key: props.tabConfig?.name,
+          values: value
+        } as any);
       },
       { deep: true }
     );

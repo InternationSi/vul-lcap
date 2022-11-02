@@ -2,34 +2,40 @@
  * @Author: sfy
  * @Date: 2022-10-24 22:12:39
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-30 23:15:08
+ * @LastEditTime: 2022-11-02 22:34:11
  * @FilePath: /vulture/src/designer/grid/effect/useAddGridItem.ts
  * @Description: update here
  */
 
+import { useCommunicationStore } from "@/store/transport";
+import type {CommunicationInfoType} from '@/store/transport'
 import { ref, onMounted, onUnmounted } from "vue";
 
-import { panelSubject$ } from '../../layout/components/MaterialPanel'
-
-
 const useAddGridItem = () => {
-  const itemInfo = ref<any>('')
+  const store = useCommunicationStore();
+  const itemInfo = ref<CommunicationInfoType>({
+    type: '',
+    randomId: ''
+  })
+  store.$subscribe((mutation, state) => {
+    itemInfo.value = state.communication
+  })
 
-  onMounted(() => {
-    console.log(panelSubject$, 'panelSubject$');
+  // onMounted(() => {
+  //   console.log(panelSubject$, 'panelSubject$');
     
-    panelSubject$?.subscribe({
-      next: (value) => {
-        itemInfo.value = value
-      },
-      error: err => console.error(' error: ' + err),
-    })
-  })
+  //   panelSubject$?.subscribe({
+  //     next: (value) => {
+  //       
+  //     },
+  //     error: err => console.error(' error: ' + err),
+  //   })
+  // })
 
-  onUnmounted(() => {
-    console.log(panelSubject$, 'panelSubject$');
-    panelSubject$?.unsubscribe()
-  })
+  // onUnmounted(() => {
+  //   console.log(panelSubject$, 'panelSubject$');
+  //   panelSubject$?.unsubscribe()
+  // })
 
   return {
     itemInfo
