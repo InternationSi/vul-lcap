@@ -16,10 +16,7 @@ interface FormState {
   category: string;
   namespaceName: string;
 }
-// interface Obj {
-//   value: string;
-//   label: string;
-// }
+
 interface Data {
   fieldName: string; //表格名称
   label: string; //表格标题
@@ -44,14 +41,7 @@ export default defineComponent({
       if (res.sucess) {
         console.log(res.data, "00000");
         renameBlockSelectList.value = res.data;
-        // dataList.value = res.data;
       }
-      // //查询模型所有属性
-      // const moduleList = await getModuleList(
-      //   formState.moduleName, //模型英文名
-      //   formState.namespaceName
-      // );
-      // console.log(moduleList, "22222");
     });
     //定义表格数据
     const tableData = ref<Data[]>([
@@ -269,7 +259,7 @@ export default defineComponent({
             <el-option
               v-for="item in renameBlockSelectList"
               :key="item.describe"
-              :label="item.namespacesName"
+              :label="item.label"
               :value="item.namespacesName"
             />
           </el-select>
