@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-02 22:29:40
+ * @LastEditTime: 2022-11-07 22:42:41
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
@@ -42,7 +42,7 @@ export default defineComponent({
           class={styles.block}
           onClick={() => {
             store.setCommunication({
-              type: "container",
+              type: "container-tab",
               randomId: nanoid()
             });
           }}

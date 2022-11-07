@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-02 23:30:28
+ * @LastEditTime: 2022-11-07 23:16:16
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -29,8 +29,7 @@ export default defineComponent({
         y: 0,
         w: 4,
         h: 6,
-        i: "jRq-eA8hLx6-vW5e1rJ8M",
-        type: "container"
+        i: "jRq-eA8hLx6-vW5e1rJ8M"
       }
     ]);
 
@@ -57,6 +56,8 @@ export default defineComponent({
       layout.value[index.value].i = form.i;
       dialogVisible.value = false;
     };
+
+    // 监听物料，加入物料
     watch(
       () => itemInfo.value,
       (value) => {
@@ -68,6 +69,7 @@ export default defineComponent({
       }
     );
 
+    // 监听shcema的变化，有tab需要创建tab页
     watch(
       () => layout.value,
       (value) => {
@@ -81,8 +83,12 @@ export default defineComponent({
       { deep: true }
     );
 
+    // 监听到tab页有变化后加到主页面
     const gridSchemaChange = ({ key, values }: any) => {
       console.log(key, values, "valuevalue");
+      const changeIndex = layout.value.findIndex((item) => item.i == key);
+      console.log(layout.value[changeIndex], "changeIndex");
+      layout.value[changeIndex].config.tabList[0].gridInfo = values;
     };
 
     return () => (

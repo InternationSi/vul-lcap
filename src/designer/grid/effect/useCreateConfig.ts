@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-24 23:01:50
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 22:58:37
+ * @LastEditTime: 2022-11-07 22:55:59
  * @FilePath: /vulture/src/designer/grid/effect/useCreateConfig.ts
  * @Description: update here
  */
@@ -28,6 +28,24 @@ const useCreateConfig:UseCreateConfigType = ({
   type
 }) => {
 
+  const config:any = {}
+
+  if(type == 'container-tab') {
+    config.tabList = [
+      {
+        title: "test1",
+        name: "test1",
+        gridInfo: []
+      },
+      {
+        title: "test2",
+        name: "test2",
+        gridInfo: []
+      }
+    ]
+  }
+  console.log(config, 'configconfig');
+  
 
   return {
     x: 6,
@@ -36,9 +54,7 @@ const useCreateConfig:UseCreateConfigType = ({
     h: 6,
     i: nanoid(),
     type, 
-    config: {
-    
-    }
+    config
   };
 }
 export default useCreateConfig

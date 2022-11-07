@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-25 22:32:47
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 23:54:34
+ * @LastEditTime: 2022-11-07 22:53:46
  * @FilePath: /vulture/src/designer/grid/components/GridItemList/index.tsx
  * @Description: update here
  */
@@ -31,8 +31,8 @@ export default defineComponent({
     const { config, itemIndex } = props;
 
     const renderComponents = () => {
-      if (config?.type === "container") {
-        return <TabContainer />;
+      if (config?.type === "container-tab") {
+        return <TabContainer gItem={config} />;
       } else {
         return <Spacing />;
       }
