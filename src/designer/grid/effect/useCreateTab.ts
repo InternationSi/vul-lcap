@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-01 23:02:29
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-07 22:43:02
+ * @LastEditTime: 2022-11-08 23:06:19
  * @FilePath: /vulture/src/designer/grid/effect/useCreateTab.ts
  * @Description: update here
  */
@@ -17,7 +17,6 @@ interface useCreateTabType {
 }
 
 const useCreateTab:useCreateTabType = ({schemaValue, addTab}) => {
-  console.log(schemaValue, 'schemaValue');
   schemaValue.forEach(item => {
     if(item.type == "container-tab") {
       const info =  {

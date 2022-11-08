@@ -2,11 +2,11 @@
  * @Author: sfy
  * @Date: 2022-10-27 22:20:21
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-07 23:18:51
+ * @LastEditTime: 2022-11-08 23:29:10
  * @FilePath: /vulture/src/designer/grid/components/TabContainer/index.tsx
  * @Description: update here
  */
-import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";
+import { defineComponent, ref, watch, onUnmounted, PropType, computed } from "vue";
 import GridOutLine from "../GridOutLine";
 import Render from "@/designer/render";
 import styles from "./index.module.less";
@@ -21,7 +21,8 @@ export default defineComponent({
     }
   },
   components: { GridOutLine, Render },
-  setup({ gItem }) {
+  setup(props) {
+    const {gItem} = props
     const activeTab = ref<string>(gItem.config.tabList[0].name);
     const renderScheme = ref<any[]>(gItem.config.tabList[0].gridInfo);
     const setComDraw = () => {
@@ -29,17 +30,23 @@ export default defineComponent({
     };
 
     watch(
-      () => activeTab.value,
-      (value) => {
-        renderScheme.value =
-          gItem.config?.tabList?.find((tab: any) => tab.name === value) || [];
-      }
-    );
+        () => gItem,
+        (value) => {
+          renderScheme.value =
+          gItem.config?.tabList?.find((tab: any) => tab.name === activeTab.value)?.gridInfo
+          || [];
 
-    const confirmClick = () => {
-      renderScheme.value = schema;
-      console.log(renderScheme.value);
-    };
+        console.log(renderScheme.value, 'renderScheme');
+        },
+        {
+          deep: true
+        }
+      )
+
+    // const confirmClick = () => {
+    //   renderScheme.value = schema;
+    //   console.log(renderScheme.value);
+    // };
 
     const gridSchemaChange = (value: any[]) => {
       schema = value;
@@ -63,28 +70,6 @@ export default defineComponent({
         ) : (
           <Render v-model={renderScheme.value} />
         )}
-        {/* <el-drawer
-          v-model={containerDrawVis.value}
-          with-header={false}
-          append-to-body={true}
-          size={600}
-        >
-          {{
-            default: () => <GridOutLine onChange={gridSchemaChange} />,
-            footer: () => {
-              return (
-                <div style={{ flex: "auto" }}>
-                  <el-button onClick={() => (containerDrawVis.value = false)}>
-                    取消
-                  </el-button>
-                  <el-button type="primary" onClick={confirmClick}>
-                    确定
-                  </el-button>
-                </div>
-              );
-            }
-          }}
-        </el-drawer> */}
       </div>
     );
   }

@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-31 22:21:37
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 23:41:02
+ * @LastEditTime: 2022-11-08 23:29:45
  * @FilePath: /vulture/src/designer/render/index.tsx
  * @Description: update here
  */
@@ -34,10 +34,12 @@ export default defineComponent({
     watch(
       () => props.modelValue,
       (newValue) => {
-        console.log(newValue, "valuevalue");
         if (newValue) {
           layout.value = newValue;
         }
+      },
+      {
+        deep: true
       }
     );
 
