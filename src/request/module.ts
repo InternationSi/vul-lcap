@@ -21,6 +21,13 @@ import type {
  * @moduleName 模型名称
  * @return {*}
  */
+export const getModule = async (namespaceName: string): Promise<any> => {
+  const res = await Api.request({
+    method: "get",
+    url: `${API_URL}/${namespaceName}/module`
+  });
+  return res;
+};
 
 export const moduleFind = async (
   namespaceName: string,

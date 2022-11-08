@@ -89,8 +89,6 @@ export default defineComponent({
     };
     //底部保存按钮
     const save = async () => {
-      console.log(formState.moduleName, "111");
-      console.log(formState.namespaceName, "2222");
       tableData.value.forEach(async (item, tableIndex) => {
         //先判断模型信息是否为空
         if (formState.moduleName && formState.namespaceName) {

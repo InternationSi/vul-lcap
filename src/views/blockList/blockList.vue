@@ -1,20 +1,14 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
-// import { any, number } from "vue-types";
 import type { selectItem } from "./blockList.type";
-// import type { Rule } from "ant-design-vue/es/form";
-import { message } from "ant-design-vue";
-import {
-  getNameSpaces,
-  addNameSpaces,
-  editNameSpaces,
-  deletNameSpaces
-} from "../../request/namespaces";
+import { getNameSpaces } from "../../request/namespaces";
+import { getModule } from "../../request/module";
 import _ from "lodash";
 export default defineComponent({
   setup() {
     const value = ref("");
     const options = ref<selectItem[]>([]);
+    const moduleList = ref<selectItem[]>([]);
     onMounted(async () => {
       //模块信息 命名空间下拉框值
       const res = await getNameSpaces();
@@ -23,10 +17,18 @@ export default defineComponent({
         options.value = res.data;
       }
     });
-
+    const onChange = async () => {
+      console.log("触发change事件");
+      console.log(value.value, "6666");
+      const res = await getModule(value.value);
+      console.log(res.data, "rrr");
+      moduleList.value = res.data;
+    };
     return {
       value,
-      options
+      options,
+      onChange,
+      moduleList
     };
   }
 });
@@ -34,15 +36,25 @@ export default defineComponent({
 <template>
   <div class="warp">
     <div class="left">
-      <el-select v-model="value" class="m-2" placeholder="请选择命名空间">
+      <el-select
+        v-model="value"
+        class="m-2"
+        placeholder="请选择命名空间"
+        @change="onChange"
+      >
         <el-option
           v-for="item in options"
-          :key="item.value"
+          :key="item.namespacesName"
           :label="item.label"
-          :value="item.value"
+          :value="item.namespacesName"
           size="small"
         />
       </el-select>
+      <ul>
+        <li v-for="(item, index) in moduleList" :key="index">
+          {{ item.label }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -52,13 +64,14 @@ export default defineComponent({
   margin-bottom: 2px;
   padding-left: 20px;
   padding-right: 20px;
-  padding-top: 10px;
+  padding-top: 20px;
   opacity: 1;
   border-radius: 5px;
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 6px 15px NaNpx rgba(0, 0, 0, 0.05);
 
   .left {
+    margin-left: 0;
     width: 200px;
     height: 100vh;
     background: rgba(250, 250, 250, 1);
