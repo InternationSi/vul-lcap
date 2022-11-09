@@ -8,7 +8,7 @@ export default defineComponent({
   setup() {
     const value = ref("");
     const options = ref<selectItem[]>([]);
-    const moduleList = ref<selectItem[]>([]);
+    // const moduleList = ref<selectItem[]>([]);
     onMounted(async () => {
       //模块信息 命名空间下拉框值
       const res = await getNameSpaces();
@@ -17,18 +17,30 @@ export default defineComponent({
         options.value = res.data;
       }
     });
+    const data = ref<selectItem[]>([]);
+
+    const handleNodeClick = (data: selectItem) => {
+      console.log(data, "4444");
+    };
+    const defaultProps = {
+      label: "label"
+    };
+
     const onChange = async () => {
       console.log("触发change事件");
       console.log(value.value, "6666");
       const res = await getModule(value.value);
       console.log(res.data, "rrr");
-      moduleList.value = res.data;
+      data.value = res.data;
     };
+
     return {
       value,
       options,
       onChange,
-      moduleList
+      handleNodeClick,
+      data,
+      defaultProps
     };
   }
 });
@@ -50,11 +62,30 @@ export default defineComponent({
           size="small"
         />
       </el-select>
-      <ul>
-        <li v-for="(item, index) in moduleList" :key="index">
-          {{ item.label }}
-        </li>
-      </ul>
+      <el-tree
+        :data="data"
+        icon="ArrowLeft"
+        :props="defaultProps"
+        @node-click="handleNodeClick"
+      />
+      <!-- <div class="nameList">
+        <p v-for="(item, index) in moduleList" :key="index">
+          <el-link>{{ item.label }}</el-link>
+        </p>
+      </div> -->
+
+      <!-- <el-descriptions title="" :column="0" border>
+        <el-descriptions-item
+          v-for="(item, index) in moduleList"
+          :key="index"
+          label-align="right"
+          align="center"
+          label-class-name="my-label"
+          class-name="my-content"
+          width="200px"
+          >{{ item.label }}</el-descriptions-item
+        >
+      </el-descriptions> -->
     </div>
   </div>
 </template>
@@ -76,5 +107,11 @@ export default defineComponent({
     height: 100vh;
     background: rgba(250, 250, 250, 1);
   }
+  // .nameList {
+  //   margin: 10px;
+  //   background: rgba(255, 255, 255, 1);
+
+  //   box-shadow: 0px 6px 15px 2px rgba(0, 0, 0, 0.05);
+  // }
 }
 </style>
