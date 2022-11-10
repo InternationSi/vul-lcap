@@ -13,17 +13,16 @@ import type { NsType } from "../views/renameBlock/renameBlock.type";
 export const getNameSpaces = async () => {
   const res: any = await Api.request({
     method: "get",
-    url: `${API_URL}/namespaces`,
+    url: `${API_URL}/business/namespace`
   });
 
   return res;
 };
 
-export const addNameSpaces = async (params: NsType) => {
+export const addNameSpaces = async () => {
   const res: any = await Api.request({
     method: "post",
-    url: `${API_URL}/namespaces`,
-    data: params,
+    url: `${API_URL}/business/namespace`
   });
 
   return res;
@@ -33,7 +32,7 @@ export const editNameSpaces = async (params: NsType) => {
   const res: any = await Api.request({
     method: "put",
     url: `${API_URL}/namespaces`,
-    data: params,
+    data: params
   });
 
   return res;
@@ -44,8 +43,8 @@ export const deletNameSpaces = async (namespacesName: string) => {
     method: "delete",
     url: `${API_URL}/namespaces`,
     params: {
-      namespacesName,
-    },
+      namespacesName
+    }
   });
 
   return res;

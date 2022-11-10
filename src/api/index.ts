@@ -52,7 +52,7 @@ class Api {
 }
 
 export default new Api({
-  baseURL: BASE_URL,
+  baseURL: BASE_URL
   // timeout: TIME_OUT,
 
   // 不同的实例可能有不同的拦截器

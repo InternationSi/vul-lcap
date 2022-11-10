@@ -54,7 +54,7 @@ export default defineComponent({
       if (!editIndex.value) {
         let deep = _.cloneDeep(formState);
         console.log(deep, "77777");
-        const res = await addNameSpaces(deep);
+        const res = await addNameSpaces();
         console.log(res, "222");
         message.success(res.msg);
         const resList = await getNameSpaces();

@@ -10,6 +10,6 @@
 // 将配置和调用解耦，如果需要修改，直接修改常量的值即可
 export const TIME_OUT = 5000;
 // export const BASE_URL = "http://localhost:3001";
-export const BASE_URL = "http://192.168.1.5:3001";
-export const API_URL = "/metaData";
+export const BASE_URL = "";
+export const API_URL = "/api";
 // export const BASE_URL = "/api";
