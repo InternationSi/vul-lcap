@@ -2,11 +2,11 @@
  * @Author: sfy
  * @Date: 2022-10-31 22:06:00
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-11 23:45:52
+ * @LastEditTime: 2022-11-12 00:01:49
  * @FilePath: /vulture/src/designer/grid/components/GridOutLine/index.tsx
  * @Description: update here
  */
-import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";
+import { defineComponent, ref, watch, onMounted, PropType } from "vue";
 import useCreateConfig from "../../effect/useCreateConfig";
 import type { TabType } from "../../effect/useTabOptions";
 
@@ -27,21 +27,25 @@ export default defineComponent({
   setup(props) {
     console.log(props.tabConfig, "props.tabConfig");
 
-    const layout = ref([{ x: 0, y: 0, w: 2, h: 3, i: "0" }]);
+    const layout = ref<any[]>([]);
     const tabNow = ref(props?.tabConfig?.tabKeys[0].name)
+
+    onMounted(() => {
+      if(props?.tabConfig?.tabKeys) {
+        layout.value = props?.tabConfig?.tabKeys[0].tabLayout || []
+      }
+    })
+
     watch(
       () => tabNow.value,
       (value) => {
-        console.log(value, 'tabNowtabNow');
-        
+        layout.value = props?.tabConfig?.tabKeys?.find(tab => tab.name === value)?.tabLayout || []
       }
     );
 
     watch(
       () => layout.value,
       (value) => {
-        console.log(value, "valuevalue--");
-
         props.onChange({
           key: props.tabConfig?.name,
           values: value

@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-01 22:22:48
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-11 23:36:12
+ * @LastEditTime: 2022-11-11 23:54:04
  * @FilePath: /vulture/src/designer/grid/effect/useTabOptions.ts
  * @Description: update here
  */
@@ -13,6 +13,7 @@ export interface TabType {
   name:string,
   tabKeys: {
     name:string
+    tabLayout: any[]
   }[]
 }
 

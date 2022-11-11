@@ -2,11 +2,11 @@
  * @Author: sfy
  * @Date: 2022-10-27 22:20:21
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-11 23:14:04
+ * @LastEditTime: 2022-11-11 23:56:14
  * @FilePath: /vulture/src/designer/grid/components/TabContainer/index.tsx
  * @Description: update here
  */
-import { defineComponent, ref, watch, onUnmounted, PropType, computed } from "vue";
+import { defineComponent, ref, watch, onMounted, PropType, computed } from "vue";
 import GridOutLine from "../GridOutLine";
 import Render from "@/designer/render";
 import styles from "./index.module.less";
@@ -25,6 +25,8 @@ export default defineComponent({
     const {gItem} = props
     const activeTab = ref<string>(gItem.config.tabList[0].name);
     const renderScheme = ref<any[]>(gItem.config.tabList[0].gridInfo);
+
+    
     const setComDraw = () => {
       console.log("22");
     };
