@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-08 23:07:29
+ * @LastEditTime: 2022-11-11 23:17:37
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -21,6 +21,7 @@ export default defineComponent({
   setup() {
     const schemaStore = useSchemaStore();
     const { itemInfo } = useAddGridItem();
+    // 创建tab
     const { editableTabsValue, editableTabs, addTab } = useTabOptions();
 
     const layout = ref<any[]>([

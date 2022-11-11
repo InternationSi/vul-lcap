@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-27 22:20:21
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-08 23:29:10
+ * @LastEditTime: 2022-11-11 23:14:04
  * @FilePath: /vulture/src/designer/grid/components/TabContainer/index.tsx
  * @Description: update here
  */
@@ -36,7 +36,6 @@ export default defineComponent({
           gItem.config?.tabList?.find((tab: any) => tab.name === activeTab.value)?.gridInfo
           || [];
 
-        console.log(renderScheme.value, 'renderScheme');
         },
         {
           deep: true
