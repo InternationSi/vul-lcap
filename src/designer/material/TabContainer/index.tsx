@@ -2,8 +2,8 @@
  * @Author: sfy
  * @Date: 2022-10-27 22:20:21
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-12 13:59:47
- * @FilePath: /vulture/src/designer/grid/components/TabContainer/index.tsx
+ * @LastEditTime: 2022-11-12 23:46:42
+ * @FilePath: /vulture/src/designer/material/TabContainer/index.tsx
  * @Description: update here
  */
 import {
@@ -14,10 +14,9 @@ import {
   PropType,
   computed,
 } from "vue";
-import GridOutLine from "../GridOutLine";
+import GridOutLine from "../../grid/components/GridOutLine";
 import Render from "@/designer/render";
 import styles from "./index.module.less";
-const schema: any[] = [];
 
 export default defineComponent({
   name: "TabContainer",
