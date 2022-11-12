@@ -1,5 +1,5 @@
 export interface NsType {
-  namespacesName: string;
-  label: string;
+  namespace_name: string;
+  namespace_label: string;
   describe: string;
 }
