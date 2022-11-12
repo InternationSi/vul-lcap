@@ -19,7 +19,7 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       '/api': { // 匹配所有以'/api1'开头的请求路径
-        target: "http://112.124.8.236:8888/", // 代理目标的基础路径
+        target: "http://112.124.8.236:8888", // 代理目标的基础路径
         changeOrigin: true, // 用于控制请求头中的host值，默认也为true，可以不设置
         // pathRewrite: {'^/api':'/'}  
       }

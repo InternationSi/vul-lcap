@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-24 23:01:50
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-07 22:55:59
+ * @LastEditTime: 2022-11-11 23:24:21
  * @FilePath: /vulture/src/designer/grid/effect/useCreateConfig.ts
  * @Description: update here
  */
@@ -44,8 +44,6 @@ const useCreateConfig:UseCreateConfigType = ({
       }
     ]
   }
-  console.log(config, 'configconfig');
-  
 
   return {
     x: 6,

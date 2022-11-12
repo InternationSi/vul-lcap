@@ -2,15 +2,15 @@
  * @Author: sfy
  * @Date: 2022-10-17 22:03:19
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-18 22:40:38
- * @FilePath: /vulture/packages/vul-admin/src/request/record.ts
+ * @LastEditTime: 2022-11-12 22:58:07
+ * @FilePath: /vulture/src/request/record.ts
  * @Description: update here
  */
 import Api from "@/api";
 import { API_URL } from "@/api/env";
-import type { SaveRecordType } from "@/components/vulTable/type/record.type";
 
-export const recordCreate = async (params: SaveRecordType) => {
+
+export const recordCreate = async (params: any) => {
   const res = await Api.request({
     method: "post",
     url: `${API_URL}/module/{moduleName}/record`,
