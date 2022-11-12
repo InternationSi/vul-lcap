@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-11 23:17:37
+ * @LastEditTime: 2022-11-12 14:22:10
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -85,9 +85,13 @@ export default defineComponent({
     );
 
     // 监听到tab页有变化后加到主页面
-    const gridSchemaChange = ({ key, values }: any) => {
+    const gridSchemaChange = ({ key, tabKey, type, values }: any) => {
+      
       const changeIndex = layout.value.findIndex((item) => item.i == key);
-      layout.value[changeIndex].config.tabList[0].gridInfo = values;
+      if(type ==  'container-tab') {
+        layout.value[changeIndex].config.tabList.find((tab:any) => tab.name == tabKey).gridInfo = values;
+      }
+
     };
 
     return () => (

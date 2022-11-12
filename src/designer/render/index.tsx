@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-31 22:21:37
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-08 23:29:45
+ * @LastEditTime: 2022-11-12 14:22:35
  * @FilePath: /vulture/src/designer/render/index.tsx
  * @Description: update here
  */
@@ -29,7 +29,6 @@ export default defineComponent({
   },
   setup(props) {
     const layout = ref<any[]>([{ x: 0, y: 0, w: 2, h: 3, i: "0" }]);
-    console.log(props.modelValue);
 
     watch(
       () => props.modelValue,

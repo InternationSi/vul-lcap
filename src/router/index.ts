@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 22:35:07
+ * @LastEditTime: 2022-11-12 22:57:32
  * @FilePath: /vulture/src/router/index.ts
  * @Description: update here
  */
@@ -18,7 +18,6 @@ import renameBlock from "../views/renameBlock/renameBlock.vue";
 import blockList from "../views/blockList/blockList.vue";
 import grid from "../designer/layout";
 import gridRender from "@/designer/render";
-import test from "../views/test/test.vue";
 const routes = [
   {
     path: "/",
@@ -34,7 +33,6 @@ const routes = [
   { path: "/email", component: eamil },
   { path: "/grid", component: grid },
   { path: "/render", component: gridRender },
-  { path: "/test", component: test },
   { path: "", redirect: "/renameBlock" }
 ];
 
