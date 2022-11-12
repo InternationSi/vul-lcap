@@ -1,7 +1,8 @@
-import axios from "axios";
-import type { AxiosInstance, AxiosRequestConfig } from "axios";
-import type { Config } from "./type";
-import { BASE_URL, TIME_OUT } from "./env";
+import axios from 'axios';
+import type { AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { Config } from './type';
+import { BASE_URL, TIME_OUT } from './env';
+import qs from 'qs';
 
 // 导出的属性和方法比较多 所以使用类来进行封装
 // 因为类具有比较好的封装性
@@ -13,6 +14,18 @@ class Api {
     // axios.create可以返回一个axios实例
     // 这样保证我们可以使用不同的配置创建多个axios实例
     this.instance = axios.create(config);
+    this.instance.defaults.transformRequest = [
+      function (data, headers) {
+        if (headers) {
+          const contentType: any =
+            headers['Content-Type'] || headers['content-type'];
+          if (contentType.indexOf('application/x-www-form-urlencoded') >= 0) {
+            return qs.stringify(data);
+          }
+        }
+      },
+      // Do whatever you want to transform the data
+    ];
 
     // 如果存在实例级别的拦截器 就使用拦截器
     // 这是针对于每一个请求特有的拦截器 --- 实例拦截
@@ -52,7 +65,7 @@ class Api {
 }
 
 export default new Api({
-  baseURL: BASE_URL
+  baseURL: BASE_URL,
   // timeout: TIME_OUT,
 
   // 不同的实例可能有不同的拦截器

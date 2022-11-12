@@ -1,17 +1,18 @@
 <script lang="ts">
 import { defineComponent, ref, watch, reactive } from "vue";
 import { useRouter } from "vue-router";
-import { handleLogin } from "@/request/index";
+import { useLoginStore } from '@/store/login'
 import { message } from 'ant-design-vue';
 
 
 export default defineComponent({
   setup() {
+    const store = useLoginStore()
     const router = useRouter();
-    const activeKey = ref("1");
+    const activeKey = ref("3");
     let formUser = reactive({
-      password: '',
-      userName: ''
+      password: 'admin',
+      username: 'superadmin'
     })
     let formPhone = reactive({
       phoneValue: '',
@@ -43,17 +44,10 @@ export default defineComponent({
     };
     //登录
     const Login = async () => {
-      // if (formData.hasOwnProperty("phoneValue")) {
-      //   !reg_tel.test(formData.phoneValue)
-      // }
-      const res = await handleLogin(formData)
-      if (res.code == 200) {
-        message.success(res.msg);
-        router.push('/')
-        sessionStorage.setItem('login', JSON.stringify(res.data))
-      } else {
-        message.error(res.msg);
-      }
+      const res = await store.login(formData)
+      if (res) {
+        message.success('登录成功');
+        router.push('/')}
     }
     //倒计时
     const getCode = () => {
@@ -74,13 +68,16 @@ export default defineComponent({
     }
     watch(activeKey, (newVal) => {
       if (newVal == '1') {
+        console.log('1111')
         formData = formPhone
       } else if (newVal == '2') {
+        console.log('2222')
         formData = formEmail
       } else {
+        console.log('3333')
         formData = formUser
       }
-    })
+    },{immediate:true})
     return {
       //变量
       activeKey,
@@ -96,6 +93,7 @@ export default defineComponent({
       checked,
       router,
       boxShow,
+      store,
       //函数
       changeBox,
       Login,
@@ -136,7 +134,7 @@ export default defineComponent({
                   <a-input class="code" v-model:value="formEmail.codeEmail" placeholder="请输入验证码" />
                 </a-tab-pane>
                 <a-tab-pane key="3" tab="账号密码">
-                  <a-input style="width:288px" v-model:value="formUser.userName" placeholder="请输入用户名" />
+                  <a-input style="width:288px" v-model:value="formUser.username" placeholder="请输入用户名" />
                   <a-input class="code" v-model:value="formUser.password" placeholder="请输入密码" />
                   <p style="margin-bottom: -5px;float: right;">没有账号？<span
                       style="color: skyblue;font-size: 12px;cursor: pointer;" @click="toRegister">请注册</span> </p>
@@ -144,7 +142,7 @@ export default defineComponent({
               </a-tabs>
 
               <a-button class="nextBtn" @click="Login">下一步</a-button>
-              <div class="agreement">
+              <div class="agreement" :class="activeKey==String(3)?'agreement1':''">
                 <a-checkbox v-model:checked="checked">我已阅读并同意 <a href=""> 服务协议 </a> 和
                   <a href=""> 隐私政策 </a>
                 </a-checkbox>
@@ -178,7 +176,7 @@ export default defineComponent({
   position: relative;
 
   .loginBox {
-    height: calc(100% - 40px);
+    height: 70%;
     margin-top: 40px;
     position: absolute;
     top: 0;
@@ -188,7 +186,7 @@ export default defineComponent({
     z-index: 1;
 
     .centerBox {
-      height: 80%;
+      height: 100%;
       // box-shadow: 0px 20px 80px 0px rgb(0 0 0 / 30%);
       display: flex;
 
@@ -244,7 +242,7 @@ export default defineComponent({
           }
 
           .ant-tabs {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
 
             .ant-input {
               width: 175px;
@@ -273,6 +271,9 @@ export default defineComponent({
           .agreement {
             position: absolute;
             bottom: 100px;
+          }
+          .agreement1{
+
           }
 
           .foot {
