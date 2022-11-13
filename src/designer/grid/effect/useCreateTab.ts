@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-01 23:02:29
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-12 14:19:23
+ * @LastEditTime: 2022-11-13 22:01:33
  * @FilePath: /vulture/src/designer/grid/effect/useCreateTab.ts
  * @Description: update here
  */
@@ -22,7 +22,7 @@ const useCreateTab:useCreateTabType = ({schemaValue, addTab}) => {
     // 如果为tab容器，则需要判断是否需要初始化
     if(item.type == "container-tab") {
       const info =  {
-        title: "容器",
+        title: "tab-容器",
         name: item.i,
         type: item.type,
         tabKeys: item.config?.tabList?.map((tab:any) => {

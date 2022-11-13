@@ -1,17 +1,9 @@
 /*
  * @Author: sfy
- * @Date: 2022-10-31 22:21:37
- * @LastEditors: sfy
- * @LastEditTime: 2022-11-12 14:22:35
- * @FilePath: /vulture/src/designer/render/index.tsx
- * @Description: update here
- */
-/*
- * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-31 21:45:43
- * @FilePath: /vulture/src/designer/grid/index.tsx
+ * @LastEditTime: 2022-11-13 21:25:16
+ * @FilePath: /vulture/src/designer/render/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";

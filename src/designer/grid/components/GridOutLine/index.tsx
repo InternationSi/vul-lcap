@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-31 22:06:00
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-12 14:20:26
+ * @LastEditTime: 2022-11-13 23:03:57
  * @FilePath: /vulture/src/designer/grid/components/GridOutLine/index.tsx
  * @Description: update here
  */
@@ -37,6 +37,7 @@ export default defineComponent({
     watch(
       () => tabNow.value,
       (value) => {
+        
         layout.value = props?.tabConfig?.tabKeys?.find(tab => tab.name === value)?.tabLayout || []
       }
     );
@@ -47,6 +48,7 @@ export default defineComponent({
         props.onChange({
           key: props.tabConfig?.name,
           type: props.tabConfig?.type,
+          tabNow: tabNow.value,
           tabKey: tabNow.value,
           values: value
         } as any);
@@ -54,10 +56,6 @@ export default defineComponent({
       { deep: true }
     );
 
-    const choiceTab = (ref:any) => {
-      console.log(ref, 'refref');
-      
-    }
 
     return () => (
       <>
