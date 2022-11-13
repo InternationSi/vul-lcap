@@ -257,8 +257,8 @@ export default defineComponent({
             <el-option
               v-for="item in renameBlockSelectList"
               :key="item.describe"
-              :label="item.label"
-              :value="item.namespacesName"
+              :label="item.namespace_label"
+              :value="item.namespace_name"
             />
           </el-select>
         </el-form-item>

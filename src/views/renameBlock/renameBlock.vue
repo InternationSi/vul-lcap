@@ -12,26 +12,29 @@ import {
 } from "../../request/namespaces";
 import _ from "lodash";
 import type { NsType } from "./renameBlock.type";
+
 export default defineComponent({
   setup() {
     const dataList = ref<NsType[]>([]);
     onMounted(async () => {
       const res = await getNameSpaces();
-      if (res.sucess) {
-        dataList.value = res.data;
-      }
+      console.log(res, "5555");
+      dataList.value = res;
+      // if (res.sucess) {
+      //   dataList.value = res.data;
+      // }
     });
     const formRef = ref<FormInstance>();
     const formState = reactive<NsType>({
-      namespacesName: "",
-      label: "",
+      namespace_name: "",
+      namespace_label: "",
       describe: ""
     });
     const editIndex = ref<boolean>(false);
     const visible = ref<boolean>(false);
     const add = () => {
-      (formState.namespacesName = ""),
-        (formState.label = ""),
+      (formState.namespace_name = ""),
+        (formState.namespace_label = ""),
         (formState.describe = ""),
         (visible.value = true);
       editIndex.value = false;
@@ -40,15 +43,15 @@ export default defineComponent({
     const edit = (index: number) => {
       editIndex.value = true;
       visible.value = true;
-      formState.namespacesName = dataList.value[index].namespacesName;
-      formState.label = dataList.value[index].label;
+      formState.namespace_name = dataList.value[index].namespace_name;
+      formState.namespace_label = dataList.value[index].namespace_label;
       formState.describe = dataList.value[index].describe;
     };
     const cancel = () => {
       visible.value = false;
     };
     const handleOk = async (e: MouseEvent) => {
-      console.log(formState.label, "11111");
+      console.log(formState.namespace_label, "11111");
       const res = await formRef.value?.validateFields();
       console.log(res, "===");
       if (!editIndex.value) {
@@ -71,7 +74,7 @@ export default defineComponent({
       visible.value = false;
     };
     const confirm = async (index: number) => {
-      var name = _.cloneDeep(dataList.value[index].namespacesName);
+      var name = _.cloneDeep(dataList.value[index].namespace_name);
       const res = await deletNameSpaces(name);
       if (res.sucess) {
         message.success(res.msg);
@@ -118,46 +121,53 @@ export default defineComponent({
     >
       <li>
         <div>
-          <span class="header" style="font-size: 14px">{{ item.label }}</span>
-          <a-tag color="blue" style="margin-left: 20px; font-size: 12px">{{
-            item.namespacesName
-          }}</a-tag>
-          <p style="color: rgba(117, 117, 117, 1); font-size: 12px">
+          <span class="header" style="font-size: 14px">{{
+            item.namespace_label
+          }}</span>
+          <el-tag style="margin-left: 20px">{{ item.namespace_name }}</el-tag>
+          <p
+            style="color: rgba(117, 117, 117, 1); font-size: 12px; height: 55px"
+          >
             {{ item.describe }}
           </p>
+          <p style="color: rgba(117, 117, 117, 1); font-size: 12px"></p>
         </div>
         <div>
-          <a-button type="link" @click="edit(index)" style="font-size: 14px"
-            >编辑</a-button
+          <el-button
+            type="primary"
+            text
+            @click="edit(index)"
+            style="font-size: 14px"
+            >编辑</el-button
           >
-          <a-popconfirm
+          <el-popconfirm
             title="是否确定删除此项目?"
             ok-text="Yes"
             cancel-text="No"
             @confirm="confirm(index)"
             @cancel="cancelPop"
           >
-            <a href="#" style="font-size: 14px">删除</a>
-          </a-popconfirm>
+            <template #reference>
+              <el-button text type="primary" style="font-size: 14px"
+                >删除</el-button
+              >
+            </template>
+          </el-popconfirm>
         </div>
       </li>
     </ul>
-    <a-modal
-      :visible="visible"
+    <el-dialog
+      v-model="visible"
       :title="editIndex == true ? '编辑' : '新增'"
-      @ok="handleOk"
-      @cancel="cancel"
-      cancelText="取消"
-      okText="确定"
       style="min-height: 330px"
     >
-      <a-form
+      <el-form
         ref="formRef"
         name="custom-validation"
         :model="formState"
         :labelCol="{ span: 3 }"
       >
-        <a-form-item
+        <el-form-item
           label="Names"
           name="namespacesName"
           :rules="[
@@ -169,23 +179,25 @@ export default defineComponent({
             }
           ]"
         >
-          <a-input
-            v-model:value="formState.namespacesName"
+          <el-input
+            v-model:value="formState.namespace_name"
             :disabled="editIndex"
           />
-        </a-form-item>
-        <a-form-item
+        </el-form-item>
+        <el-form-item
           label="标签"
           name="label"
           :rules="[{ required: true, message: '请填写标签' }]"
         >
-          <a-input v-model:value="formState.label" />
-        </a-form-item>
-        <a-form-item label="介绍" name="describe">
-          <a-textarea v-model:value="formState.describe" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
+          <el-input v-model:value="formState.namespace_label" />
+        </el-form-item>
+        <el-form-item label="介绍" name="describe">
+          <el-input type="textarea" v-model:value="formState.describe" />
+        </el-form-item>
+      </el-form>
+      <el-button @click="cancel" style="margin-left: 280px">取消</el-button>
+      <el-button type="primary" @click="handleOk"> 确定 </el-button>
+    </el-dialog>
   </div>
 </template>
 <style scoped lang="less">
@@ -236,6 +248,7 @@ export default defineComponent({
       }
 
       li div p {
+        height: 55px;
         font-weight: 400;
         letter-spacing: 0px;
         line-height: 17px;

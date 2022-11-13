@@ -1,3 +1,11 @@
+/*
+ * @Author: sfy
+ * @Date: 2022-11-12 23:32:25
+ * @LastEditors: sfy
+ * @LastEditTime: 2022-11-13 15:35:20
+ * @FilePath: /vulture/src/api/index.ts
+ * @Description: update here
+ */
 import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {permissionService} from '@/utils/permissionService'
@@ -20,7 +28,7 @@ class Api {
         if (headers) {
           const contentType: any =
             headers['Content-Type'] || headers['content-type'];
-          if (contentType.indexOf('application/x-www-form-urlencoded') >= 0) {
+          if (contentType?.indexOf('application/x-www-form-urlencoded') >= 0) {
             return qs.stringify(data);
           }
         }

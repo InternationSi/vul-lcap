@@ -68,24 +68,6 @@ export default defineComponent({
         :props="defaultProps"
         @node-click="handleNodeClick"
       />
-      <!-- <div class="nameList">
-        <p v-for="(item, index) in moduleList" :key="index">
-          <el-link>{{ item.label }}</el-link>
-        </p>
-      </div> -->
-
-      <!-- <el-descriptions title="" :column="0" border>
-        <el-descriptions-item
-          v-for="(item, index) in moduleList"
-          :key="index"
-          label-align="right"
-          align="center"
-          label-class-name="my-label"
-          class-name="my-content"
-          width="200px"
-          >{{ item.label }}</el-descriptions-item
-        >
-      </el-descriptions> -->
     </div>
   </div>
 </template>
