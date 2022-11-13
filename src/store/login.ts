@@ -1,6 +1,8 @@
 import { defineStore } from "pinia"
 import { ref,reactive } from "vue"
-import { handleLogin } from "@/request"
+import { handleLogin} from "@/request"
+import {tokenService} from '@/utils/tokenService'
+import {userService} from '@/utils/userService'
 import {permissionService} from '@/utils/permissionService'
 interface userInfoType {
   username: string,
@@ -11,7 +13,7 @@ interface userInfoType {
 }
 
 export const useLoginStore = defineStore('login', () => {
-  // const token = ref<string>(localStorage.getItem('token')||'')
+  const token = ref<string>(tokenService.getTokenInfo())
   let userInfo = reactive<userInfoType>({
     username: "",
     realname: "",
@@ -26,7 +28,7 @@ export const useLoginStore = defineStore('login', () => {
       .then(data => {
           //session方式登录，其实不需要token，这里为了JWT登录预留，用username代替。
           //通过Token是否为空判断本地有没有登录过，方便后续处理。
-          // updateToken(data.principal.username);
+          updateToken(data.principal.username);
           const newUserInfo = {
             username: data.principal.username,
             realname: data.principal.realname || data.principal.username,
@@ -53,12 +55,14 @@ export const useLoginStore = defineStore('login', () => {
   });
   }
 
-  // function updateToken(tokenValue: string) {
-  //   token.value = tokenValue
-  // }
+  function updateToken(tokenValue: string) {
+    token.value = tokenValue
+    tokenService.setTokenInfo(token.value)
+  }
   function updateUserInfo(userInfoValue: userInfoType) {
     userInfo = userInfoValue
+    userService.setUserInfo(userInfo)
   }
 
-  return { login }
+  return { login,userInfo }
 })

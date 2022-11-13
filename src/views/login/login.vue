@@ -1,41 +1,39 @@
 <script lang="ts">
-import { defineComponent, ref, watch, reactive } from "vue";
-import { useRouter } from "vue-router";
-import { useLoginStore } from '@/store/login'
+import { defineComponent, ref, watch, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { useLoginStore } from '@/store/login';
 import { message } from 'ant-design-vue';
-
-
 export default defineComponent({
   setup() {
-    const store = useLoginStore()
+    const store = useLoginStore();
     const router = useRouter();
-    const activeKey = ref("3");
+    const activeKey = ref('3');
     let formUser = reactive({
       password: 'admin',
-      username: 'superadmin'
-    })
+      username: 'superadmin',
+    });
     let formPhone = reactive({
       phoneValue: '',
-      codePhone: ''
-    })
+      codePhone: '',
+    });
     let formEmail = reactive({
       emailValue: '',
-      codeEmail: ''
-    })
-    let formData = reactive({
-    })
+      codeEmail: '',
+    });
+    let formData = reactive({});
     //判断按钮状态
-    const show = ref(true)
+    const show = ref(true);
     //倒计时
-    const count = ref(60)
+    const count = ref(60);
     //定时器
-    const timer = ref('')
+    const timer = ref('');
     //11位手机号码正则
-    const reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
+    const reg_tel =
+      /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
     //邮箱正则
     const reg_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-    let checked = ref("");
-    let codeShow = ref(false)
+    let checked = ref('');
+    let codeShow = ref(false);
     //判断密码登录还是扫码登录
     let boxShow = ref(true);
     //切换登录方式
@@ -44,11 +42,16 @@ export default defineComponent({
     };
     //登录
     const Login = async () => {
-      const res = await store.login(formData)
-      if (res) {
-        message.success('登录成功');
-        router.push('/')}
-    }
+      await store
+        .login(formData)
+        .then(() => {
+          message.success('登录成功');
+          router.push('/');
+        })
+        .catch(() => {
+          message.error('登录失败,请稍后再试');
+        });
+    };
     //倒计时
     const getCode = () => {
       show.value = false;
@@ -58,26 +61,27 @@ export default defineComponent({
         } else {
           show.value = true;
           clearInterval(Timer);
-          count.value = 60
+          count.value = 60;
         }
-      }, 1000)
+      }, 1000);
     };
     //跳转至注册页
     const toRegister = () => {
-      router.push('/register')
-    }
-    watch(activeKey, (newVal) => {
-      if (newVal == '1') {
-        console.log('1111')
-        formData = formPhone
-      } else if (newVal == '2') {
-        console.log('2222')
-        formData = formEmail
-      } else {
-        console.log('3333')
-        formData = formUser
-      }
-    },{immediate:true})
+      router.push('/register');
+    };
+    watch(
+      activeKey,
+      (newVal) => {
+        if (newVal == '1') {
+          formData = formPhone;
+        } else if (newVal == '2') {
+          formData = formEmail;
+        } else {
+          formData = formUser;
+        }
+      },
+      { immediate: true }
+    );
     return {
       //变量
       activeKey,
@@ -114,51 +118,116 @@ export default defineComponent({
         <div class="rightBox">
           <div v-if="boxShow" style="height: 100%">
             <div class="main">
-              <img class="imgPath" src="../../assets/images/qrcode.png" alt="" @click="changeBox" />
+              <img
+                class="imgPath"
+                src="../../assets/images/qrcode.png"
+                alt=""
+                @click="changeBox"
+              />
               <div class="title">欢迎使用~~</div>
-              <a-tabs v-model:activeKey="activeKey">
-                <a-tab-pane key="1" tab="手机号">
-                  <a-input v-model:value="formPhone.phoneValue" placeholder="请输入手机号" />
-                  <a-button @click="getCode">
-                    <span style="width: 70px;display: inline-block;" v-show="show">获取验证码</span>
-                    <span style="width: 70px;display: inline-block;" v-show="!show" class="count">{{count}} s</span>
-                  </a-button>
-                  <a-input class="code" v-model:value="formPhone.codePhone" placeholder="请输入验证码" />
-                </a-tab-pane>
-                <a-tab-pane key="2" tab="邮箱">
-                  <a-input v-model:value="formEmail.emailValue" placeholder="请输入邮箱" />
-                  <a-button @click="getCode">
-                    <span style="width: 70px;display: inline-block;" v-show="show">获取验证码</span>
-                    <span style="width: 70px;display: inline-block;" v-show="!show" class="count">{{count}} s</span>
-                  </a-button>
-                  <a-input class="code" v-model:value="formEmail.codeEmail" placeholder="请输入验证码" />
-                </a-tab-pane>
-                <a-tab-pane key="3" tab="账号密码">
-                  <a-input style="width:288px" v-model:value="formUser.username" placeholder="请输入用户名" />
-                  <a-input class="code" v-model:value="formUser.password" placeholder="请输入密码" />
-                  <p style="margin-bottom: -5px;float: right;">没有账号？<span
-                      style="color: skyblue;font-size: 12px;cursor: pointer;" @click="toRegister">请注册</span> </p>
-                </a-tab-pane>
-              </a-tabs>
+              <el-tabs v-model="activeKey">
+                <el-tab-pane name="1" label="手机号">
+                  <el-input
+                    v-model="formPhone.phoneValue"
+                    placeholder="请输入手机号"
+                  />
+                  <el-button @click="getCode">
+                    <span
+                      style="width: 70px; display: inline-block"
+                      v-show="show"
+                      >获取验证码</span
+                    >
+                    <span
+                      style="width: 70px; display: inline-block"
+                      v-show="!show"
+                      class="count"
+                      >{{ count }} s</span
+                    >
+                  </el-button>
+                  <el-input
+                    class="code"
+                    v-model="formPhone.codePhone"
+                    placeholder="请输入验证码"
+                  />
+                </el-tab-pane>
+                <el-tab-pane name="2" label="邮箱">
+                  <el-input
+                    v-model="formEmail.emailValue"
+                    placeholder="请输入邮箱"
+                  />
+                  <el-button @click="getCode">
+                    <span
+                      style="width: 70px; display: inline-block"
+                      v-show="show"
+                      >获取验证码</span
+                    >
+                    <span
+                      style="width: 70px; display: inline-block"
+                      v-show="!show"
+                      class="count"
+                      >{{ count }} s</span
+                    >
+                  </el-button>
+                  <el-input
+                    class="code"
+                    v-model="formEmail.codeEmail"
+                    placeholder="请输入验证码"
+                  />
+                </el-tab-pane>
+                <el-tab-pane name="3" label="账号密码">
+                  <el-input
+                    style="width: 288px"
+                    v-model="formUser.username"
+                    placeholder="请输入用户名"
+                  />
+                  <el-input
+                    class="code"
+                    v-model="formUser.password"
+                    placeholder="请输入密码"
+                    type="password"
+                    show-password
+                  />
+                  <p style="margin-bottom: -5px; float: right">
+                    没有账号？<span
+                      style="color: skyblue; font-size: 12px; cursor: pointer"
+                      @click="toRegister"
+                      >请注册</span
+                    >
+                  </p>
+                </el-tab-pane>
+              </el-tabs>
 
-              <a-button class="nextBtn" @click="Login">下一步</a-button>
-              <div class="agreement" :class="activeKey==String(3)?'agreement1':''">
-                <a-checkbox v-model:checked="checked">我已阅读并同意 <a href=""> 服务协议 </a> 和
+              <el-button class="nextBtn" @click="Login">下一步</el-button>
+              <div
+                class="agreement"
+                :class="activeKey == String(3) ? 'agreement1' : ''"
+              >
+                <el-checkbox v-model:checked="checked"
+                  >我已阅读并同意 <a href=""> 服务协议 </a> 和
                   <a href=""> 隐私政策 </a>
-                </a-checkbox>
+                </el-checkbox>
               </div>
               <div class="foot">
                 <div class="line"></div>
                 <div class="text">更多</div>
                 <div class="line"></div>
               </div>
-              <a-button class="footBtn">sso登录</a-button>
+              <el-button class="footBtn">sso登录</el-button>
             </div>
           </div>
           <div v-else style="height: 100%">
             <div class="main">
-              <img class="imgPath" src="../../assets/images/pc.png" alt="" @click="changeBox" />
-              <img class="imgQrCode" src="../../assets/images/laijiaw.png" alt="" />
+              <img
+                class="imgPath"
+                src="../../assets/images/pc.png"
+                alt=""
+                @click="changeBox"
+              />
+              <img
+                class="imgQrCode"
+                src="../../assets/images/laijiaw.png"
+                alt=""
+              />
               <h2 style="font-weight: bold">来加我</h2>
             </div>
           </div>
@@ -192,7 +261,7 @@ export default defineComponent({
 
       .leftBox {
         width: 50%;
-        background-image: url("../../assets/images/tujiu.jpeg");
+        background-image: url('../../assets/images/tujiu.jpeg');
         // background-repeat: no-repeat;
         // background-size: 170%;
         font-size: 18px;
@@ -216,7 +285,7 @@ export default defineComponent({
           border-radius: 10px;
           padding: 30px;
 
-          .ant-input {
+          .el-input {
             border-radius: 5px;
             border: 1px solid rgb(171, 171, 171);
           }
@@ -241,10 +310,10 @@ export default defineComponent({
             font-size: 22px;
           }
 
-          .ant-tabs {
+          .el-tabs {
             margin-bottom: 15px;
 
-            .ant-input {
+            .el-input {
               width: 175px;
               margin-right: 10px;
             }
@@ -254,7 +323,7 @@ export default defineComponent({
               margin-top: 20px;
             }
 
-            .ant-btn {
+            .el-btn {
               border-radius: 5px;
               border: 1px solid rgb(171, 171, 171);
             }
@@ -272,8 +341,7 @@ export default defineComponent({
             position: absolute;
             bottom: 100px;
           }
-          .agreement1{
-
+          .agreement1 {
           }
 
           .foot {

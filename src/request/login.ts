@@ -13,4 +13,4 @@ export const handleLogin = async (
           }
     });
     return res;
-};
+}

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig } from 'axios';
+import {permissionService} from '@/utils/permissionService'
 import type { Config } from './type';
 import { BASE_URL, TIME_OUT } from './env';
 import qs from 'qs';
@@ -50,8 +51,20 @@ class Api {
   // 如果存在多个拦截器，那么多个拦截器都会被执行
   registerGlobalInterceptor(option: Config) {
     this.instance.interceptors.request.use(
-      (config) => config,
-      (err) => err
+      function (config): AxiosRequestConfig<any> {
+        if (config && !permissionService.check(config)) {
+          throw {
+            message: '403 forbidden',
+          };
+        }
+        return config;
+      },
+      function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      }
+      // (config) => config,
+      // (err:any) => err
     );
     this.instance.interceptors.response.use(
       (res) => res.data,
