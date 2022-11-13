@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-12 14:22:10
+ * @LastEditTime: 2022-11-13 22:43:18
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -22,7 +22,8 @@ export default defineComponent({
     const schemaStore = useSchemaStore();
     const { itemInfo } = useAddGridItem();
     // 创建tab
-    const { editableTabsValue, editableTabs, addTab } = useTabOptions();
+    const {tabContainerName, editableTabsValue, editableTabs, addTab } = useTabOptions();
+
 
     const layout = ref<any[]>([
       {
@@ -35,13 +36,6 @@ export default defineComponent({
     ]);
 
     const dialogVisible = ref(false);
-    const form = reactive({
-      x: "",
-      y: "",
-      w: "",
-      h: "",
-      i: ""
-    });
     const index = ref(0);
     const deleteItem = (value: number) => {
       index.value = value;
@@ -49,24 +43,26 @@ export default defineComponent({
         return index !== value;
       });
     };
-    const editItem = () => {
-      layout.value[index.value].x = Number(form.x);
-      layout.value[index.value].y = Number(form.y);
-      layout.value[index.value].w = Number(form.w);
-      layout.value[index.value].h = Number(form.h);
-      layout.value[index.value].i = form.i;
-      dialogVisible.value = false;
-    };
 
     // 监听物料，加入物料
     watch(
       () => itemInfo.value,
       (value) => {
-        layout.value.push(
-          useCreateConfig({
-            type: value.type
-          })
-        );
+        const layItem = useCreateConfig({
+          type: value.type
+        })
+        
+        if(editableTabsValue.value === 'main') {
+          layout.value.push(layItem);
+          return
+        }
+        const findTab = editableTabs.value.find(item => item.name === editableTabsValue.value) 
+        if(findTab?.type === 'container-tab') {
+          const result = findTab.tabKeys.find(cTa =>  cTa.name === tabContainerName.value)
+          console.log(result?.tabLayout);
+          result?.tabLayout.push(layItem)
+        }
+
       }
     );
 
@@ -85,8 +81,8 @@ export default defineComponent({
     );
 
     // 监听到tab页有变化后加到主页面
-    const gridSchemaChange = ({ key, tabKey, type, values }: any) => {
-      
+    const gridSchemaChange = ({ key, tabKey, type, values, tabNow }: any) => {
+      tabContainerName.value = tabNow
       const changeIndex = layout.value.findIndex((item) => item.i == key);
       if(type ==  'container-tab') {
         layout.value[changeIndex].config.tabList.find((tab:any) => tab.name == tabKey).gridInfo = values;
@@ -139,38 +135,6 @@ export default defineComponent({
             );
           })}
         </el-tabs>
-
-        <el-dialog v-model={dialogVisible.value} title="编辑单位" width="30%">
-          <el-form model={form}>
-            <el-form-item label="x:">
-              <el-input v-model={form.x} />
-            </el-form-item>
-            <el-form-item label="y:">
-              <el-input v-model={form.y} />
-            </el-form-item>
-            <el-form-item label="w:">
-              <el-input v-model={form.w} />
-            </el-form-item>
-            <el-form-item label="h:">
-              <el-input v-model={form.h} />
-            </el-form-item>
-            <el-form-item label="i:">
-              <el-input v-model={form.i} />
-            </el-form-item>
-          </el-form>
-          <span class="dialog-footer">
-            <el-button
-              onClick={() => {
-                dialogVisible.value = false;
-              }}
-            >
-              取消
-            </el-button>
-            <el-button type="primary" onClick={editItem}>
-              保存
-            </el-button>
-          </span>
-        </el-dialog>
       </>
     );
   }

@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-07 22:22:36
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-13 17:29:01
+ * @LastEditTime: 2022-11-13 20:40:16
  * @FilePath: /vulture/src/views/layout/layout.vue
  * @Description: update here
 -->
@@ -19,12 +19,8 @@ export default defineComponent({
       sessionStorage.clear();
       router.push({ path: "/login" });
     };
-    const openDesign = () => {
-      router.push("/grid");
-    };
     return {
-      loginOut,
-      openDesign
+      loginOut
     };
   }
 });
@@ -43,7 +39,7 @@ export default defineComponent({
               :size="30"
               src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
             />
-            sam
+            我的
           </template>
           <el-menu-item index="user-center">个人中心</el-menu-item>
           <el-menu-item index="loginout" @click="loginOut"
@@ -53,9 +49,9 @@ export default defineComponent({
       </el-menu>
     </el-header>
     <el-container>
-      <el-aside width="250px">
-        <el-menu default-active="1">
-          <el-sub-menu index="1">
+      <el-aside width="200px">
+        <el-menu default-active="module">
+          <el-sub-menu index="module">
             <template #title>
               <el-icon><location /></el-icon>
               <span>模块管理</span>
@@ -74,6 +70,20 @@ export default defineComponent({
               index="blockList"
               @click="$router.push({ path: '/blockList' })"
               >模型列表</el-menu-item
+            >
+          </el-sub-menu>
+          <el-sub-menu index="page">
+            <template #title>
+              <el-icon><location /></el-icon>
+              <span>业务编排</span>
+            </template>
+            <el-menu-item index="grid" @click="$router.push({ path: '/grid' })"
+              >页面配置</el-menu-item
+            >
+            <el-menu-item
+              index="comsCreate"
+              @click="$router.push({ path: '/comsCreate' })"
+              >组件配置</el-menu-item
             >
           </el-sub-menu>
         </el-menu>

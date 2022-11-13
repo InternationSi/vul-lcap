@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-12 22:57:32
+ * @LastEditTime: 2022-11-13 20:39:25
  * @FilePath: /vulture/src/router/index.ts
  * @Description: update here
  */
@@ -18,6 +18,7 @@ import blockList from '../views/blockList/blockList.vue';
 import grid from '../designer/layout';
 import gridRender from '@/designer/render';
 import { tokenService } from '@/utils/tokenService';
+import comsCreate from '../views/comsCreate/comsCreate.vue'
 // import { useLoginStore } from '@/store/login';
 const routes = [
   {
@@ -27,6 +28,7 @@ const routes = [
       { path: '/renameBlock', component: renameBlock },
       { path: '/moduleEditor', component: moduleEditor },
       { path: '/blockList', component: blockList },
+      { path: '/comsCreate', component: comsCreate },
     ],
   },
   { path: '/login', component: login },
