@@ -112,7 +112,7 @@ export default defineComponent({
 <template>
   <div class="warp">
     <h2>命名空间</h2>
-    <a-button type="primary" @click="add()" class="btn">新增</a-button>
+    <el-button type="primary" @click="add()" class="btn">新增</el-button>
     <ul
       class="content"
       v-for="(item, index) in dataList"

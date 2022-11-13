@@ -203,7 +203,7 @@ export default defineComponent({
   <div class="block">
     <div class="top">
       <h2 class="title">编辑模块</h2>
-      <a-button class="btn" @click="exportMessage">导出</a-button>
+      <el-button class="btn" @click="exportMessage">导出</el-button>
     </div>
 
     <div class="message">
@@ -215,14 +215,14 @@ export default defineComponent({
           layout="vertical"
           :rules="[{ required: true, message: '请输入模块英文名称' }]"
         >
-          <a-input v-model:value="formState.moduleName" />
+          <el-input v-model:value="formState.moduleName" />
         </el-form-item>
         <el-form-item
           label="模型名称"
           name="label"
           :rules="[{ required: true, message: '请输入模块中文名称' }]"
         >
-          <a-input v-model:value="formState.label" />
+          <el-input v-model:value="formState.label" />
         </el-form-item>
         <el-form-item
           label="类型"
@@ -349,10 +349,10 @@ export default defineComponent({
 
   <div class="saveBtn">
     <div class="bottom">
-      <a-radio-button value="default" class="saveClose"
-        >保存并关闭</a-radio-button
+      <el-radio-button value="default" class="saveClose"
+        >保存并关闭</el-radio-button
       >
-      <a-button type="primary" @click="save">保存</a-button>
+      <el-button type="primary" @click="save">保存</el-button>
     </div>
   </div>
 </template>

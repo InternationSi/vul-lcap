@@ -2,20 +2,19 @@
  * @Author: sfy
  * @Date: 2022-11-07 22:22:36
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-13 15:33:17
+ * @LastEditTime: 2022-11-13 17:29:01
  * @FilePath: /vulture/src/views/layout/layout.vue
  * @Description: update here
 -->
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+import vulLogo from "@/components/vulLogo";
 export default defineComponent({
   name: "layout-admin",
+  components: { vulLogo },
   setup() {
     const router = useRouter();
-    const Email = () => {
-      router.push({ path: "/email" });
-    };
     const loginOut = () => {
       sessionStorage.clear();
       router.push({ path: "/login" });
@@ -24,7 +23,6 @@ export default defineComponent({
       router.push("/grid");
     };
     return {
-      Email,
       loginOut,
       openDesign
     };
@@ -35,10 +33,18 @@ export default defineComponent({
   <el-container>
     <el-header>
       <el-menu mode="horizontal" :ellipsis="false">
-        <el-menu-item index="logo">LOGO</el-menu-item>
+        <div style="margin: 10px 20px">
+          <vulLogo />
+        </div>
         <div class="flex-grow"></div>
         <el-sub-menu index="user">
-          <template #title>sam</template>
+          <template #title>
+            <el-avatar
+              :size="30"
+              src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+            />
+            sam
+          </template>
           <el-menu-item index="user-center">个人中心</el-menu-item>
           <el-menu-item index="loginout" @click="loginOut"
             >退出登陆</el-menu-item
