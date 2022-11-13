@@ -1,25 +1,18 @@
+<!--
+ * @Author: sfy
+ * @Date: 2022-11-07 22:22:36
+ * @LastEditors: sfy
+ * @LastEditTime: 2022-11-13 15:33:17
+ * @FilePath: /vulture/src/views/layout/layout.vue
+ * @Description: update here
+-->
 <script lang="ts">
-import {
-  UserOutlined,
-  MenuOutlined,
-  BellOutlined,
-  AppstoreOutlined,
-  CloudOutlined
-} from "@ant-design/icons-vue";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 export default defineComponent({
-  name: "home",
-  components: {
-    UserOutlined,
-    MenuOutlined,
-    BellOutlined,
-    AppstoreOutlined,
-    CloudOutlined
-  },
+  name: "layout-admin",
   setup() {
     const router = useRouter();
-    const selectedKeys = ref<string[]>(["1"]);
     const Email = () => {
       router.push({ path: "/email" });
     };
@@ -27,154 +20,77 @@ export default defineComponent({
       sessionStorage.clear();
       router.push({ path: "/login" });
     };
-    const block = () => {
-      router.push({ path: "/moduleEditor" });
-    };
-    const rename = () => {
-      router.push({ path: "/renameBlock" });
-    };
-
-    const blockList = () => {
-      router.push({ path: "/blockList" });
-    };
     const openDesign = () => {
       router.push("/grid");
     };
     return {
-      selectedKeys: ref<string[]>(["1"]),
-      collapsed: ref<boolean>(false),
       Email,
       loginOut,
-      block,
-      rename,
-      blockList,
       openDesign
     };
   }
 });
 </script>
 <template>
-  <a-layout-header ref="header" class="header">
-    <div>
-      <a-button class="headBtn" @click="rename">
-        <template #icon>
-          <AppstoreOutlined />
-        </template>
-        应用中心
-      </a-button>
-      <a-button class="headBtn" @click="openDesign">
-        <template #icon>
-          <CloudOutlined />
-        </template>
-        页面中心
-      </a-button>
-    </div>
-    <div style="display: flex; align-items: center">
-      <a-dropdown :trigger="['hover']">
-        <div>
-          <bell-outlined class="bell" />
-        </div>
-        <template #overlay>
-          <a-menu class="dropMenu">
-            <a-menu-item key="1">个人中心</a-menu-item>
-            <a-menu-item key="2">设置</a-menu-item>
-            <a-menu-item key="3" @click="loginOut">退出登陆</a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
-      <mail-outlined class="mail" @click="Email" />
-    </div>
-  </a-layout-header>
-  <a-layout>
-    <a-layout-sider
-      v-model:collapsed="collapsed"
-      :trigger="null"
-      collapsible
-      style="
-        background: #ffff;
-        height: calc(100vh - 80px);
-        width: 250px;
-        border-left: 1px solid rgba(0, 0, 0, 0.1);
-      "
-    >
-      <div style="height: 30px">
-        <menu-outlined
-          v-if="collapsed"
-          style="font-size: 14px; margin-left: 32px; padding-top: 10px"
-          class="trigger"
-          @click="() => (collapsed = !collapsed)"
-        />
-        <menu-outlined
-          v-else
-          class="trigger"
-          @click="() => (collapsed = !collapsed)"
-          style="font-size: 14px; margin-left: 24px; padding-top: 10px"
-        />
-      </div>
-      <a-menu
-        v-model:selectedKeys="selectedKeys"
-        theme="light"
-        mode="inline"
-        style="height: 100%"
-      >
-        <a-sub-menu key="sub1">
-          <template #title>
-            <span>
-              <user-outlined />
+  <el-container>
+    <el-header>
+      <el-menu mode="horizontal" :ellipsis="false">
+        <el-menu-item index="logo">LOGO</el-menu-item>
+        <div class="flex-grow"></div>
+        <el-sub-menu index="user">
+          <template #title>sam</template>
+          <el-menu-item index="user-center">个人中心</el-menu-item>
+          <el-menu-item index="loginout" @click="loginOut"
+            >退出登陆</el-menu-item
+          >
+        </el-sub-menu>
+      </el-menu>
+    </el-header>
+    <el-container>
+      <el-aside width="250px">
+        <el-menu default-active="1">
+          <el-sub-menu index="1">
+            <template #title>
+              <el-icon><location /></el-icon>
               <span>模块管理</span>
-            </span>
-          </template>
-          <a-menu-item key="1" @click="rename">命名空间</a-menu-item>
-          <a-menu-item key="2" @click="block">编辑模块</a-menu-item>
-          <a-menu-item key="3" @click="blockList">模型列表</a-menu-item>
-        </a-sub-menu>
-      </a-menu>
-    </a-layout-sider>
-    <a-layout-content class="content">
-      <router-view> </router-view>
-    </a-layout-content>
-  </a-layout>
+            </template>
+            <el-menu-item
+              index="renameBlock"
+              @click="$router.push({ path: '/renameBlock' })"
+              >命名空间</el-menu-item
+            >
+            <el-menu-item
+              index="moduleEditor"
+              @click="$router.push({ path: '/moduleEditor' })"
+              >编辑模块</el-menu-item
+            >
+            <el-menu-item
+              index="blockList"
+              @click="$router.push({ path: '/blockList' })"
+              >模型列表</el-menu-item
+            >
+          </el-sub-menu>
+        </el-menu>
+      </el-aside>
+      <el-main>
+        <router-view> </router-view>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <style scoped>
-.content {
-  padding: 12px;
-  height: calc(100vh - 50px);
+.el-header {
+  padding: 0px;
+}
+.el-container {
+  height: 100vh;
   overflow: auto;
 }
-
-.site-layout .site-layout-background {
-  background: #fff;
+.el-main {
+  margin: 0px;
 }
-
-.header {
-  background: #fff;
-  padding: 0px 20px 0px 200px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  display: flex;
-  height: 50px;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.bell {
-  font-size: 14px;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
-.mail {
-  font-size: 14px;
-}
-
-.dropMenu {
-  width: 200px;
-  height: auto;
-  float: right;
-  margin-top: 50px;
-}
-
-.headBtn {
-  margin-right: 10px;
+.flex-grow {
+  flex-grow: 1;
 }
 </style>
