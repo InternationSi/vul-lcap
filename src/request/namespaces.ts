@@ -18,34 +18,30 @@ export const getNameSpaces = async () => {
 
   return res;
 };
-
-export const addNameSpaces = async () => {
+//添加
+export const addNameSpaces = async (params: NsType) => {
   const res: any = await Api.request({
     method: "post",
-    url: `${API_URL}/business/namespace`
-  });
-
-  return res;
-};
-
-export const editNameSpaces = async (params: NsType) => {
-  const res: any = await Api.request({
-    method: "put",
-    url: `${API_URL}/namespaces`,
+    url: `${API_URL}/business/namespace`,
     data: params
   });
 
   return res;
 };
 
-export const deletNameSpaces = async (namespacesName: string) => {
+export const editNameSpaces = async (id: string) => {
   const res: any = await Api.request({
-    method: "delete",
-    url: `${API_URL}/namespaces`,
-    params: {
-      namespacesName
-    }
+    method: "put",
+    url: `${API_URL}/namespaces/${id}`
   });
 
+  return res;
+};
+
+export const deletNameSpaces = async (id: string) => {
+  const res: any = await Api.request({
+    method: "delete",
+    url: `${API_URL}/business/namespace/${id}`
+  });
   return res;
 };

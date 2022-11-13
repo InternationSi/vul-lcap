@@ -1,8 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
-// import { any, number } from "vue-types";
+import { ElMessage } from "element-plus";
 import type { FormInstance } from "ant-design-vue";
-// import type { Rule } from "ant-design-vue/es/form";
 import { message } from "ant-design-vue";
 import {
   getNameSpaces,
@@ -18,17 +17,14 @@ export default defineComponent({
     const dataList = ref<NsType[]>([]);
     onMounted(async () => {
       const res = await getNameSpaces();
-      console.log(res, "5555");
       dataList.value = res;
-      // if (res.sucess) {
-      //   dataList.value = res.data;
-      // }
     });
     const formRef = ref<FormInstance>();
     const formState = reactive<NsType>({
       namespace_name: "",
       namespace_label: "",
-      describe: ""
+      describe: "",
+      id: ""
     });
     const editIndex = ref<boolean>(false);
     const visible = ref<boolean>(false);
@@ -52,41 +48,47 @@ export default defineComponent({
     };
     const handleOk = async (e: MouseEvent) => {
       console.log(formState.namespace_label, "11111");
-      const res = await formRef.value?.validateFields();
-      console.log(res, "===");
+      // const res = await formRef.value?.validateFields();
+      // console.log(res, "===");
       if (!editIndex.value) {
         let deep = _.cloneDeep(formState);
         console.log(deep, "77777");
-        const res = await addNameSpaces();
+        const res = await addNameSpaces(deep);
+        ElMessage({
+          message: "添加数据成功",
+          type: "success"
+        });
         console.log(res, "222");
-        message.success(res.msg);
+        //查询接口
         const resList = await getNameSpaces();
-        dataList.value = resList.data;
+        dataList.value = resList;
       } else {
         var deep1 = _.cloneDeep(formState);
-        const resList = await editNameSpaces(deep1);
-        message.success(resList.msg);
-        if (resList.sucess) {
-          const resList = await getNameSpaces();
-          dataList.value = resList.data;
-        }
+        const editList = await editNameSpaces(deep1);
+        ElMessage({
+          message: "修改数据成功",
+          type: "success"
+        });
+        const resList = await getNameSpaces();
+        dataList.value = resList;
       }
       visible.value = false;
     };
     const confirm = async (index: number) => {
-      var name = _.cloneDeep(dataList.value[index].namespace_name);
-      const res = await deletNameSpaces(name);
-      if (res.sucess) {
-        message.success(res.msg);
-        const res2 = await getNameSpaces();
-        if (res2.sucess) {
-          dataList.value = res2.data;
-        }
-      }
+      var deleteId = _.cloneDeep(dataList.value[index].id);
+      const res = await deletNameSpaces(deleteId);
+      ElMessage({
+        message: "删除成功",
+        type: "success"
+      });
+      const res2 = await getNameSpaces();
+
+      dataList.value = res2;
     };
     const cancelPop = (e: MouseEvent) => {
       console.log(e);
     };
+    const labelPosition = ref("right");
     const layout = reactive({
       labelCol: { span: 3 }
     });
@@ -104,7 +106,8 @@ export default defineComponent({
       formState,
       confirm,
       cancelPop,
-      layout
+      layout,
+      labelPosition
     };
   }
 });
@@ -163,13 +166,13 @@ export default defineComponent({
     >
       <el-form
         ref="formRef"
-        name="custom-validation"
+        :label-position="labelPosition"
         :model="formState"
         :labelCol="{ span: 3 }"
       >
         <el-form-item
           label="Names"
-          name="namespacesName"
+          label-width="70px"
           :rules="[
             {
               required: true,
@@ -179,20 +182,17 @@ export default defineComponent({
             }
           ]"
         >
-          <el-input
-            v-model:value="formState.namespace_name"
-            :disabled="editIndex"
-          />
+          <el-input v-model="formState.namespace_name" :disabled="editIndex" />
         </el-form-item>
         <el-form-item
           label="标签"
-          name="label"
+          label-width="70px"
           :rules="[{ required: true, message: '请填写标签' }]"
         >
-          <el-input v-model:value="formState.namespace_label" />
+          <el-input v-model="formState.namespace_label" />
         </el-form-item>
-        <el-form-item label="介绍" name="describe">
-          <el-input type="textarea" v-model:value="formState.describe" />
+        <el-form-item label="介绍" label-width="70px">
+          <el-input type="textarea" v-model="formState.describe" />
         </el-form-item>
       </el-form>
       <el-button @click="cancel" style="margin-left: 280px">取消</el-button>
