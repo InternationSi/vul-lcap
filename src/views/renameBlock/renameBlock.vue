@@ -42,12 +42,12 @@ export default defineComponent({
       formState.namespace_name = dataList.value[index].namespace_name;
       formState.namespace_label = dataList.value[index].namespace_label;
       formState.describe = dataList.value[index].describe;
+      formState.id = dataList.value[index].id;
     };
     const cancel = () => {
       visible.value = false;
     };
     const handleOk = async (e: MouseEvent) => {
-      console.log(formState.namespace_label, "11111");
       // const res = await formRef.value?.validateFields();
       // console.log(res, "===");
       if (!editIndex.value) {
@@ -64,7 +64,7 @@ export default defineComponent({
         dataList.value = resList;
       } else {
         var deep1 = _.cloneDeep(formState);
-        const editList = await editNameSpaces(deep1);
+        const editList = await editNameSpaces(deep1, formState.id);
         ElMessage({
           message: "修改数据成功",
           type: "success"
@@ -76,6 +76,8 @@ export default defineComponent({
     };
     const confirm = async (index: number) => {
       var deleteId = _.cloneDeep(dataList.value[index].id);
+      console.log(deleteId, "hhhh");
+
       const res = await deletNameSpaces(deleteId);
       ElMessage({
         message: "删除成功",
@@ -124,12 +126,14 @@ export default defineComponent({
     >
       <li>
         <div>
-          <span class="header" style="font-size: 14px">{{
-            item.namespace_label
-          }}</span>
-          <el-tag style="margin-left: 20px">{{ item.namespace_name }}</el-tag>
+          <div style="margin-top: 10px">
+            <span class="header" style="font-size: 14px">{{
+              item.namespace_label
+            }}</span>
+            <el-tag style="margin-left: 20px">{{ item.namespace_name }}</el-tag>
+          </div>
           <p
-            style="color: rgba(117, 117, 117, 1); font-size: 12px; height: 55px"
+            style="color: rgba(117, 117, 117, 1); font-size: 12px; height: 30px"
           >
             {{ item.describe }}
           </p>

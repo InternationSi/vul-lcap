@@ -29,10 +29,11 @@ export const addNameSpaces = async (params: NsType) => {
   return res;
 };
 
-export const editNameSpaces = async (id: string) => {
+export const editNameSpaces = async (params: NsType, id: string) => {
   const res: any = await Api.request({
-    method: "put",
-    url: `${API_URL}/namespaces/${id}`
+    method: "patch",
+    url: `${API_URL}/business/namespaces/${id}`,
+    data: params
   });
 
   return res;
