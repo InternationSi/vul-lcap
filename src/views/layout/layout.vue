@@ -16,7 +16,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const loginOut = () => {
-      sessionStorage.clear();
+      localStorage.clear();
       router.push({ path: "/login" });
     };
     return {

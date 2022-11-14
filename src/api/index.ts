@@ -11,7 +11,7 @@ import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import { permissionService } from "@/utils/permissionService";
 import type { Config } from "./type";
 import { BASE_URL, TIME_OUT } from "./env";
-import qs from "qs";
+
 
 // 导出的属性和方法比较多 所以使用类来进行封装
 // 因为类具有比较好的封装性
