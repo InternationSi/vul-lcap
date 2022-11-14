@@ -64,7 +64,7 @@ export default defineComponent({
         dataList.value = resList;
       } else {
         var deep1 = _.cloneDeep(formState);
-        const editList = await editNameSpaces(deep1);
+        const editList:any = await editNameSpaces(deep1.id);
         ElMessage({
           message: "修改数据成功",
           type: "success"

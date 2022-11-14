@@ -7,7 +7,7 @@
  * @Description: update here
  */
 import { createRouter, createWebHistory } from 'vue-router';
-import { message } from 'ant-design-vue';
+import { ElMessage } from 'element-plus';
 import home from '../views/layout/layout.vue';
 import login from '../views/login/login.vue';
 import register from '../views/register/register.vue';
@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     if (pathList.indexOf(to.path) == -1) {
-      message.warning('请先登录');
+      ElMessage.error('用户未登录,请先登录')
       next('/login');
     }
     next()

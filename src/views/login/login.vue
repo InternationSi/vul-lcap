@@ -2,7 +2,8 @@
 import { defineComponent, ref, watch, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '@/store/login';
-import { message } from 'ant-design-vue';
+import { ElMessage } from 'element-plus';
+import qs from 'qs';
 export default defineComponent({
   setup() {
     const store = useLoginStore();
@@ -43,13 +44,16 @@ export default defineComponent({
     //登录
     const Login = async () => {
       await store
-        .login(formData)
+        .login(qs.stringify(formData))
         .then(() => {
-          message.success('登录成功');
+          ElMessage({
+            message: '登录成功',
+            type: 'success',
+          });
           router.push('/');
         })
         .catch(() => {
-          message.error('登录失败,请稍后再试');
+          ElMessage.error('登录失败,请稍后再试')
         });
     };
     //倒计时
@@ -102,7 +106,7 @@ export default defineComponent({
       changeBox,
       Login,
       getCode,
-      toRegister
+      toRegister,
     };
   },
 });
