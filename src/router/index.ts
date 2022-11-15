@@ -11,7 +11,7 @@ import { ElMessage } from 'element-plus';
 import home from '../views/layout/layout.vue';
 import login from '../views/login/login.vue';
 import register from '../views/register/register.vue';
-import eamil from '../views/email/email.vue';
+import email from '../views/email/email.vue';
 import moduleEditor from '../views/moduleEditor/moduleEditor.vue';
 import renameBlock from '../views/renameBlock/renameBlock.vue';
 import blockList from '../views/blockList/blockList.vue';
@@ -19,6 +19,7 @@ import grid from '../designer/layout';
 import gridRender from '@/designer/render';
 import { tokenService } from '@/utils/tokenService';
 import comsCreate from '../views/comsCreate/comsCreate.vue'
+import personalCenter from '../views/personalCenter'
 // import { useLoginStore } from '@/store/login';
 const routes = [
   {
@@ -33,10 +34,11 @@ const routes = [
   },
   { path: '/login', component: login },
   { path: '/register', component: register },
-  { path: '/email', component: eamil },
+  { path: '/email', component: email },
   { path: '/grid', component: grid },
   { path: '/render', component: gridRender },
   { path: '', redirect: '/renameBlock' },
+  { path: '/personalCenter', component: personalCenter },
 ];
 
 const router = createRouter({

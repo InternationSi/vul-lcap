@@ -19,8 +19,12 @@ export default defineComponent({
       localStorage.clear();
       router.push({ path: "/login" });
     };
+    const toPersonalCenter = ()=>{
+      router.push({ path: "/personalCenter" })
+    };
     return {
-      loginOut
+      loginOut,
+      toPersonalCenter
     };
   }
 });
@@ -41,7 +45,7 @@ export default defineComponent({
             />
             我的
           </template>
-          <el-menu-item index="user-center">个人中心</el-menu-item>
+          <el-menu-item index="user-center" @click="toPersonalCenter">个人中心</el-menu-item>
           <el-menu-item index="loginout" @click="loginOut"
             >退出登陆</el-menu-item
           >
