@@ -18,7 +18,6 @@ export default defineComponent({
       }
     });
     const data = ref<selectItem[]>([]);
-
     const handleNodeClick = (data: selectItem) => {
       console.log(data, "4444");
     };
@@ -33,6 +32,10 @@ export default defineComponent({
       console.log(res.data, "rrr");
       data.value = res.data;
     };
+    // const addNameSpace = async () =>{
+
+    // };
+    let dialogFormVisible = false;
 
     return {
       value,
@@ -40,7 +43,8 @@ export default defineComponent({
       onChange,
       handleNodeClick,
       data,
-      defaultProps
+      defaultProps,
+      dialogFormVisible
     };
   }
 });
@@ -48,6 +52,13 @@ export default defineComponent({
 <template>
   <div class="warp">
     <div class="left">
+      <el-button
+        type="primary"
+        plain
+        style="margin-bottom: 10px"
+        @click="dialogFormVisible = true"
+        >添加</el-button
+      >
       <el-select
         v-model="value"
         class="m-2"
