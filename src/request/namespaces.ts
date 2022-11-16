@@ -9,7 +9,7 @@
 import Api from "../api";
 import { API_URL } from "@/api/env";
 import type { NsType } from "../views/renameBlock/renameBlock.type";
-
+//查询模块
 export const getNameSpaces = async () => {
   const res: any = await Api.request({
     method: "get",

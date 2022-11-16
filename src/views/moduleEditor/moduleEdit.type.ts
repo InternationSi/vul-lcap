@@ -1,8 +1,8 @@
 export interface Moduletype {
-  label: string;
+  module_key: string;
   category: string;
-  updateUser: string;
-  meta: object;
+  module_name: string;
+  namespace_id: string;
 }
 export interface moduleField {
   fieldName: string; //表格名称

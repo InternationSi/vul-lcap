@@ -1,4 +1,4 @@
 export interface selectItem {
   label: string;
-  namespacesName: string;
+  namespace_name: string;
 }

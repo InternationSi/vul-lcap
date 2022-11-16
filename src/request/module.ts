@@ -41,14 +41,10 @@ export const moduleFind = async (
 };
 
 //添加一个模块
-export const addModule = async (
-  namespaceName: string,
-  moduleName: string,
-  params: Moduletype
-): Promise<any> => {
+export const addModule = async (params: Moduletype): Promise<any> => {
   const res = await Api.request({
     method: "post",
-    url: `${API_URL}/${namespaceName}/module/${moduleName}`,
+    url: `${API_URL}/business/module_meta`,
     data: params
   });
   return res;

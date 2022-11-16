@@ -93,17 +93,17 @@ export default defineComponent({
         //先判断模型信息是否为空
         if (formState.moduleName && formState.namespaceName) {
           //保存模块信息
-          const saveModule = await addModule(
-            formState.namespaceName,
-            formState.moduleName,
-            {
-              category: formState.category,
-              label: formState.label,
-              meta: {},
-              updateUser: ""
-            }
-          );
-          console.log(saveModule, "保存模块信息是否成功");
+          // const saveModule = await addModule(
+          //   formState.namespaceName,
+          //   formState.moduleName,
+          //   {
+          //     category: formState.category,
+          //     label: formState.label,
+          //     meta: {},
+          //     updateUser: ""
+          //   }
+          // );
+          // console.log(saveModule, "保存模块信息是否成功");
           //判断模型属性是否为空
           if (item.fieldName || item.label) {
             //查询模型属性所有数据
