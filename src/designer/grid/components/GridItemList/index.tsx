@@ -2,15 +2,16 @@
  * @Author: sfy
  * @Date: 2022-10-25 22:32:47
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-13 23:01:57
+ * @LastEditTime: 2022-11-16 23:09:17
  * @FilePath: /vulture/src/designer/grid/components/GridItemList/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";
 import Spacing from "../../../material/Spacing";
 import TabContainer from "../../../material/TabContainer";
-import ChartPie from '../../../material/ChartPie'
+import ChartPie from "../../../material/ChartPie";
 import Operation from "../../../../components/Operation";
+import BserContainer from "../../../material/BaseContainer";
 export default defineComponent({
   props: {
     config: {
@@ -29,13 +30,15 @@ export default defineComponent({
   },
   setup(props) {
     // eslint-disable-next-line vue/no-setup-props-destructure
-    const {itemIndex } = props;
-    const renderComponents = (config:any) => {
+    const { itemIndex } = props;
+    const renderComponents = (config: any) => {
       if (config?.type === "container-tab") {
         return <TabContainer gItem={config} />;
       } else if (config?.type === "chart-pie") {
-        return <ChartPie />
-      }else {
+        return <ChartPie />;
+      } else if (config?.type === "container-base") {
+        return <BserContainer gItem={config} />;
+      } else {
         return <Spacing />;
       }
     };

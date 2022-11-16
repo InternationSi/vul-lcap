@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-13 22:43:18
+ * @LastEditTime: 2022-11-16 23:19:11
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -15,6 +15,7 @@ import useTabOptions from "./effect/useTabOptions";
 import useCreateTab from "./effect/useCreateTab";
 import "./index.less";
 import GridOutLine from "./components/GridOutLine";
+import { TABCOMPONENTS } from "./effect/consts";
 
 export default defineComponent({
   components: { GridOutLine },
@@ -22,8 +23,8 @@ export default defineComponent({
     const schemaStore = useSchemaStore();
     const { itemInfo } = useAddGridItem();
     // 创建tab
-    const {tabContainerName, editableTabsValue, editableTabs, addTab } = useTabOptions();
-
+    const { tabContainerName, editableTabsValue, editableTabs, addTab } =
+      useTabOptions();
 
     const layout = ref<any[]>([
       {
@@ -50,19 +51,22 @@ export default defineComponent({
       (value) => {
         const layItem = useCreateConfig({
           type: value.type
-        })
-        
-        if(editableTabsValue.value === 'main') {
-          layout.value.push(layItem);
-          return
-        }
-        const findTab = editableTabs.value.find(item => item.name === editableTabsValue.value) 
-        if(findTab?.type === 'container-tab') {
-          const result = findTab.tabKeys.find(cTa =>  cTa.name === tabContainerName.value)
-          console.log(result?.tabLayout);
-          result?.tabLayout.push(layItem)
-        }
+        });
 
+        if (editableTabsValue.value === "main") {
+          layout.value.push(layItem);
+          return;
+        }
+        const findTab = editableTabs.value.find(
+          (item) => item.name === editableTabsValue.value
+        );
+        if (findTab?.type === "container-tab") {
+          const result = findTab.tabKeys.find(
+            (cTa) => cTa.name === tabContainerName.value
+          );
+          console.log(result?.tabLayout);
+          result?.tabLayout.push(layItem);
+        }
       }
     );
 
@@ -82,12 +86,13 @@ export default defineComponent({
 
     // 监听到tab页有变化后加到主页面
     const gridSchemaChange = ({ key, tabKey, type, values, tabNow }: any) => {
-      tabContainerName.value = tabNow
+      tabContainerName.value = tabNow;
       const changeIndex = layout.value.findIndex((item) => item.i == key);
-      if(type ==  'container-tab') {
-        layout.value[changeIndex].config.tabList.find((tab:any) => tab.name == tabKey).gridInfo = values;
+      if (TABCOMPONENTS.includes(type)) {
+        layout.value[changeIndex].config.tabList.find(
+          (tab: any) => tab.name == tabKey
+        ).gridInfo = values;
       }
-
     };
 
     return () => (

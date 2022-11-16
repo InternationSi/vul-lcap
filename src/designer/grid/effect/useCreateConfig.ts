@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-24 23:01:50
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-11 23:24:21
+ * @LastEditTime: 2022-11-16 23:12:28
  * @FilePath: /vulture/src/designer/grid/effect/useCreateConfig.ts
  * @Description: update here
  */
@@ -42,6 +42,15 @@ const useCreateConfig:UseCreateConfigType = ({
         name: "test2",
         gridInfo: []
       }
+    ]
+  }
+  if(type == 'container-base') {
+    config.tabList = [
+      {
+        title: "display-none",
+        name: "display-none",
+        gridInfo: []
+      },
     ]
   }
 
