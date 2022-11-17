@@ -2,7 +2,6 @@
 import { defineComponent, ref, reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance } from "ant-design-vue";
-import { message } from "ant-design-vue";
 import {
   getNameSpaces,
   addNameSpaces,
@@ -99,7 +98,6 @@ export default defineComponent({
       formRef,
       add,
       dataList,
-      // deleteBtn,
       visible,
       edit,
       cancel,

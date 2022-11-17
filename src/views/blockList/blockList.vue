@@ -1,17 +1,19 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
-import type { selectItem } from "./blockList.type";
+import type { selectItem, moduleName } from "./blockList.type";
 import { getNameSpaces } from "../../request/namespaces";
 import { getModule } from "../../request/module";
 import type { NsType } from "../renameBlock/renameBlock.type";
+import type { FormInstance, ElMessage, FormRules } from "element-plus";
 import _ from "lodash";
 import {
-  addModule
+  addModule,
   // addModuleField,
-  // getModuleList,
+  getModuleList
   // updateModuleField
 } from "@/request/module";
-interface FormState {
+
+interface DialogForm {
   module_key: string;
   module_name: string;
   category: string;
@@ -30,15 +32,13 @@ export default defineComponent({
       console.log(res, "44444");
       options.value = res;
       renameBlockSelectList.value = res;
+      //查询所有模型名称
+      const moduleList = await getModuleList();
+      moduleNameList.value = moduleList;
     });
+    //  所有模型名称数据
+    const moduleNameList = ref<moduleName[]>([]);
     const data = ref<selectItem[]>([]);
-    const handleNodeClick = (data: selectItem) => {
-      console.log(data, "4444");
-    };
-    const defaultProps = {
-      label: "label"
-    };
-
     const onChange = async () => {
       console.log("触发change事件");
       console.log(value.value, "6666");
@@ -48,7 +48,7 @@ export default defineComponent({
     };
     const dialogTableVisible = ref(false); // 对话框是否关闭
     const dialogFormVisible = ref(false);
-    const formState = reactive<FormState>({
+    const formState = reactive<DialogForm>({
       module_key: "",
       namespace_id: "",
       category: "",
@@ -65,24 +65,47 @@ export default defineComponent({
         label: "select"
       }
     ];
-    const dialogConfirm = async () => {
-      //弹框关闭
-      dialogFormVisible.value = false;
-    };
+    //添加一条模块数据
+    const dialogConfirm = async (formEl: FormInstance | undefined) => {
+      console.log(formEl, "rrrrr");
+      if (!formEl) return;
+      await formEl.validate((valid, fields) => {
+        if (valid) {
+          const res = addModule(formState);
+          console.log(res, "添加数据成功");
 
+          //弹框关闭
+          dialogFormVisible.value = false;
+        } else {
+          console.log("提交失败!", fields);
+        }
+      });
+      console.log(formState, "ttttt");
+    };
+    //校验表单
+    const rules = reactive<FormRules>({
+      module_key: [
+        { required: true, message: "请输入模块英文名称", trigger: "blur" }
+      ],
+      module_name: [
+        { required: true, message: "请选择模块类型", trigger: "blur" }
+      ]
+    });
+    const ruleFormRef = ref<FormInstance>();
     return {
       value,
       options,
       onChange,
-      handleNodeClick,
       data,
-      defaultProps,
       dialogFormVisible,
       dialogTableVisible,
       formState,
       typeOptions,
       renameBlockSelectList,
-      dialogConfirm
+      dialogConfirm,
+      ruleFormRef,
+      rules,
+      moduleNameList
     };
   }
 });
@@ -98,35 +121,38 @@ export default defineComponent({
         >添加</el-button
       >
       <el-dialog v-model="dialogFormVisible">
-        <el-form class="flex" :model="formState" layout="vertical">
+        <el-form
+          class="flex"
+          :model="formState"
+          ref="ruleFormRef"
+          :rules="rules"
+          layout="vertical"
+        >
           <el-form-item
             label="moduleName"
-            name="moduleName"
             layout="vertical"
             label-width="110px"
-            :rules="[{ required: true, message: '请输入模块英文名称' }]"
+            :rules="[
+              { required: true, message: '请输入模块英文名称', trigger: 'blur' }
+            ]"
           >
-            <el-input v-model:value="formState.module_key" />
+            <el-input v-model="formState.module_key" />
           </el-form-item>
           <el-form-item
             label="模型名称"
-            name="label"
             label-width="110px"
-            :rules="[{ required: true, message: '请输入模块中文名称' }]"
+            :rules="[
+              { required: true, message: '请输入模块英文名称', trigger: 'blur' }
+            ]"
           >
-            <el-input v-model:value="formState.module_key" />
+            <el-input v-model="formState.module_name" />
           </el-form-item>
-          <el-form-item
-            label-width="110px"
-            label="类型"
-            name="category"
-            layout="vertical"
-            :rules="[{ required: true, message: '请选择模块类型' }]"
-          >
+          <el-form-item label-width="110px" label="类型" layout="vertical">
             <el-select
               v-model="formState.category"
               class="m-2"
-              placeholder="Select"
+              placeholder="请选择类型"
+              style="width: 100%"
             >
               <el-option
                 v-for="item in typeOptions"
@@ -139,20 +165,22 @@ export default defineComponent({
           <el-form-item
             label-width="110px"
             label="所属命名空间"
-            name="ModelRenameBlock"
             layout="vertical"
-            :rules="[{ required: true, message: '请选择模块' }]"
+            :rules="[
+              { required: true, message: '请选择模块', trigger: 'blur' }
+            ]"
           >
             <el-select
               v-model="formState.namespace_id"
               class="m-2"
-              placeholder="Select"
+              placeholder="请选择所属命名空间"
+              style="width: 100%"
             >
               <el-option
                 v-for="item in renameBlockSelectList"
                 :key="item.describe"
                 :label="item.namespace_label"
-                :value="item.namespace_name"
+                :value="item.id"
               />
             </el-select>
           </el-form-item>
@@ -160,7 +188,7 @@ export default defineComponent({
         <template #footer>
           <span class="dialog-footer">
             <el-button @click="dialogFormVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="dialogConfirm()">
+            <el-button type="primary" @click="dialogConfirm(ruleFormRef)">
               Confirm
             </el-button>
           </span>
@@ -174,18 +202,15 @@ export default defineComponent({
       >
         <el-option
           v-for="item in options"
-          :key="item.namespace_name"
-          :label="item.label"
+          :key="item.namespace_label"
+          :label="item.namespace_label"
           :value="item.namespace_name"
           size="small"
         />
       </el-select>
-      <el-tree
-        :data="data"
-        icon="ArrowLeft"
-        :props="defaultProps"
-        @node-click="handleNodeClick"
-      />
+      <div v-for="(item, index) in moduleNameList" :key="index" class="module">
+        <el-link :underline="false">{{ item.module_name }}</el-link>
+      </div>
     </div>
   </div>
 </template>
@@ -218,5 +243,12 @@ export default defineComponent({
 
   //   box-shadow: 0px 6px 15px 2px rgba(0, 0, 0, 0.05);
   // }
+  .module {
+    margin-top: 10px;
+    margin-left: 20px;
+    line-height: 20px;
+    width: 100%;
+    text-align: left;
+  }
 }
 </style>

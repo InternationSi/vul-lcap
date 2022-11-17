@@ -49,14 +49,12 @@ export const addModule = async (params: Moduletype): Promise<any> => {
   });
   return res;
 };
+
 //查询模型中所有数据
-export const getModuleList = async (
-  namespaceName: string,
-  moduleName: string
-): Promise<any> => {
+export const getModuleList = async (): Promise<any> => {
   const res = await Api.request({
     method: "get",
-    url: `${API_URL}/${namespaceName}/module/${moduleName}/field`
+    url: `${API_URL}/business/module_meta`
   });
   return res;
 };
