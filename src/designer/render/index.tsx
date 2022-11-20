@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-13 21:25:16
+ * @LastEditTime: 2022-11-20 16:20:59
  * @FilePath: /vulture/src/designer/render/index.tsx
  * @Description: update here
  */
@@ -55,7 +55,7 @@ export default defineComponent({
               h={item.h}
               i={item.i}
             >
-              <GridItemList config={item} />
+              <GridItemList config={item} isDesign={false} />
             </grid-item>
           );
         })}

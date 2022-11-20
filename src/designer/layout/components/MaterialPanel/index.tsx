@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-16 22:43:04
+ * @LastEditTime: 2022-11-20 16:57:17
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
@@ -89,6 +89,8 @@ export default defineComponent({
                             <div
                               class={styles.block}
                               onClick={() => {
+                                console.log(card.type, "card.type");
+
                                 store.setCommunication({
                                   type: card.type,
                                   randomId: nanoid()

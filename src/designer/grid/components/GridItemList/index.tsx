@@ -2,16 +2,18 @@
  * @Author: sfy
  * @Date: 2022-10-25 22:32:47
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-16 23:09:17
+ * @LastEditTime: 2022-11-20 16:20:46
  * @FilePath: /vulture/src/designer/grid/components/GridItemList/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";
-import Spacing from "../../../material/Spacing";
-import TabContainer from "../../../material/TabContainer";
-import ChartPie from "../../../material/ChartPie";
 import Operation from "../../../../components/Operation";
-import BserContainer from "../../../material/BaseContainer";
+import {
+  Spacing,
+  TabContainer,
+  ChartPie,
+  BaseContainer
+} from "@/designer/material";
 export default defineComponent({
   props: {
     config: {
@@ -19,13 +21,17 @@ export default defineComponent({
       require: true
     },
     itemIndex: {
-      type: Number as any
+      type: Number as PropType<number>
     },
     handleDelete: {
-      type: Function as any
+      type: Function as PropType<(val: number) => void>
     },
     handleEdit: {
-      type: Function as any
+      type: Function as PropType<(val: boolean) => void>
+    },
+    isDesign: {
+      type: Boolean,
+      default: true
     }
   },
   setup(props) {
@@ -37,26 +43,28 @@ export default defineComponent({
       } else if (config?.type === "chart-pie") {
         return <ChartPie />;
       } else if (config?.type === "container-base") {
-        return <BserContainer gItem={config} />;
+        return <BaseContainer gItem={config} />;
       } else {
         return <Spacing />;
       }
     };
     const deleteItem = (value: number) => {
-      props.handleDelete(value);
+      props.handleDelete && props.handleDelete(value);
     };
     const editItem = (value: any) => {
-      props.handleEdit(value);
+      props.handleEdit && props.handleEdit(value);
     };
 
     return () => (
       <>
         {renderComponents(props.config)}
-        <Operation
-          itemIndex={itemIndex}
-          handleDelete={deleteItem}
-          handleEdit={editItem}
-        />
+        {props?.isDesign && (
+          <Operation
+            itemIndex={itemIndex}
+            handleDelete={deleteItem}
+            handleEdit={editItem}
+          />
+        )}
       </>
     );
   }

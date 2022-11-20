@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-16 23:19:11
+ * @LastEditTime: 2022-11-20 22:56:44
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -16,6 +16,7 @@ import useCreateTab from "./effect/useCreateTab";
 import "./index.less";
 import GridOutLine from "./components/GridOutLine";
 import { TABCOMPONENTS } from "./effect/consts";
+import Setter from "../setter";
 
 export default defineComponent({
   components: { GridOutLine },
@@ -36,7 +37,7 @@ export default defineComponent({
       }
     ]);
 
-    const dialogVisible = ref(false);
+    const setterConfigVisible = ref(false);
     const index = ref(0);
     const deleteItem = (value: number) => {
       index.value = value;
@@ -60,7 +61,7 @@ export default defineComponent({
         const findTab = editableTabs.value.find(
           (item) => item.name === editableTabsValue.value
         );
-        if (findTab?.type === "container-tab") {
+        if (findTab && TABCOMPONENTS.includes(findTab.type)) {
           const result = findTab.tabKeys.find(
             (cTa) => cTa.name === tabContainerName.value
           );
@@ -124,7 +125,7 @@ export default defineComponent({
                       itemIndex={index}
                       handleDelete={deleteItem}
                       handleEdit={(value: boolean) => {
-                        dialogVisible.value = value;
+                        setterConfigVisible.value = value;
                       }}
                     />
                   </grid-item>
@@ -140,6 +141,21 @@ export default defineComponent({
             );
           })}
         </el-tabs>
+        <el-dialog v-model={setterConfigVisible.value} title="编辑" width="80%">
+          {{
+            default: () => {
+              return [<Setter />];
+            },
+            footer: () => {
+              return [
+                <el-button onClick={() => (setterConfigVisible.value = false)}>
+                  取消
+                </el-button>,
+                <el-button type="primary">确定</el-button>
+              ];
+            }
+          }}
+        </el-dialog>
       </>
     );
   }
