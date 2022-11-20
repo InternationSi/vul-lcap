@@ -47,8 +47,6 @@ export default defineComponent({
       visible.value = false;
     };
     const handleOk = async (e: MouseEvent) => {
-      // const res = await formRef.value?.validateFields();
-      // console.log(res, "===");
       if (!editIndex.value) {
         let deep = _.cloneDeep(formState);
         console.log(deep, "77777");

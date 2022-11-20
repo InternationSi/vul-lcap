@@ -58,6 +58,15 @@ export const getModuleList = async (): Promise<any> => {
   });
   return res;
 };
+//编辑模型数据
+export const editModuleList = async (id: string): Promise<any> => {
+  const res = await Api.request({
+    method: "patch",
+    url: `${API_URL}/business/module_meta/${id}`
+  });
+  return res;
+};
+
 //添加模块属性
 export const addModuleField = async (
   namespaceName: string,
@@ -73,7 +82,6 @@ export const addModuleField = async (
   return res;
 };
 //更新模块表格中属性
-//localhost:3001/metaData/{namespaceName}/module/{moduleName}/field/{fieldName}
 export const updateModuleField = async (
   namespaceName: string,
   moduleName: string,

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
-import type { selectItem, moduleName } from "./blockList.type";
+import type { selectItem, ModuleName } from "./blockList.type";
 import { getNameSpaces } from "../../request/namespaces";
 import { getModule } from "../../request/module";
 import type { NsType } from "../renameBlock/renameBlock.type";
@@ -9,6 +9,7 @@ import _ from "lodash";
 import {
   addModule,
   // addModuleField,
+  editModuleList,
   getModuleList
   // updateModuleField
 } from "@/request/module";
@@ -18,6 +19,13 @@ interface DialogForm {
   module_name: string;
   category: string;
   namespace_id: string;
+}
+interface Data {
+  fieldName: string; //表格名称
+  label: string; //表格标题
+  selfType: string; //表格类型
+  isPrimary: boolean; //表格是否主键
+  isUnique: boolean; //表格是否唯一
 }
 export default defineComponent({
   setup() {
@@ -29,21 +37,20 @@ export default defineComponent({
     onMounted(async () => {
       //模块信息 命名空间下拉框值
       const res = await getNameSpaces();
-      console.log(res, "44444");
       options.value = res;
       renameBlockSelectList.value = res;
       //查询所有模型名称
       const moduleList = await getModuleList();
       moduleNameList.value = moduleList;
+      console.log(moduleNameList.value, "tttttt");
     });
     //  所有模型名称数据
-    const moduleNameList = ref<moduleName[]>([]);
+    const moduleNameList = ref<ModuleName[]>([]);
     const data = ref<selectItem[]>([]);
     const onChange = async () => {
       console.log("触发change事件");
       console.log(value.value, "6666");
       const res = await getModule(value.value);
-      console.log(res.data, "rrr");
       data.value = res.data;
     };
     const dialogTableVisible = ref(false); // 对话框是否关闭
@@ -65,22 +72,38 @@ export default defineComponent({
         label: "select"
       }
     ];
+    //右侧模块属性框是否展示
+    const isShowBtn = ref(false);
+    //添加属性表格是否展示
+    const isShowTable = ref(false);
+
     //添加一条模块数据
     const dialogConfirm = async (formEl: FormInstance | undefined) => {
-      console.log(formEl, "rrrrr");
-      if (!formEl) return;
-      await formEl.validate((valid, fields) => {
-        if (valid) {
-          const res = addModule(formState);
-          console.log(res, "添加数据成功");
-
-          //弹框关闭
-          dialogFormVisible.value = false;
-        } else {
-          console.log("提交失败!", fields);
-        }
-      });
-      console.log(formState, "ttttt");
+      if (!dialogFormVisible.value) {
+        if (!formEl) return;
+        await formEl.validate((valid, fields) => {
+          if (valid) {
+            const res = addModule(formState);
+            console.log(res, "添加数据成功");
+            //弹框关闭
+            dialogFormVisible.value = false;
+          } else {
+            console.log("提交失败!", fields);
+          }
+        });
+      } else {
+        console.log("更新数据");
+        // const updateModule = await editModuleList(id:)
+        // console.log(updateModule)
+      }
+    };
+    //编辑模块属性
+    const editItem = async () => {
+      dialogFormVisible.value = true;
+    };
+    //删除一条模块属性
+    const deleteItem = async () => {
+      console.log("666");
     };
     //校验表单
     const rules = reactive<FormRules>({
@@ -89,9 +112,54 @@ export default defineComponent({
       ],
       module_name: [
         { required: true, message: "请选择模块类型", trigger: "blur" }
+      ],
+      namespace_id: [
+        { required: true, message: "请选择命名空间", trigger: "blur" }
       ]
     });
     const ruleFormRef = ref<FormInstance>();
+    //定义编辑模型数据id
+    const editModuleId = ref();
+    const modeuleAttribute = async (index: number, id: string) => {
+      console.log(moduleNameList.value, "zzzzz");
+      formState.module_key = moduleNameList.value[index].module_key;
+      formState.module_name = moduleNameList.value[index].module_name;
+      formState.category = moduleNameList.value[index].category;
+      formState.namespace_id = moduleNameList.value[index].namespace_id;
+      isShowBtn.value = true;
+    };
+    //定义表格数据
+    const tableData = ref<Data[]>([
+      {
+        fieldName: "", //表格名称
+        label: "", //表格标题
+        selfType: "", //表格类型
+        isPrimary: false, //表格是否主键
+        isUnique: false
+      } //表格是否唯一
+    ]);
+    //删除一条模块属性
+    const confirmEvent = (index: number) => {
+      console.log(index, "confirm");
+      tableData.value.splice(index, 1);
+    };
+    const cancelEvent = () => {
+      console.log("cancel!");
+    };
+    //新增模块属性
+    const onAddItem = () => {
+      isShowTable.value = true;
+      tableData.value.push({
+        fieldName: "",
+        label: "",
+        selfType: "",
+        isPrimary: false,
+        isUnique: false
+      });
+    };
+    const saveModuleAttribute = () => {
+      console.log("保存或更新模块属性");
+    };
     return {
       value,
       options,
@@ -105,7 +173,17 @@ export default defineComponent({
       dialogConfirm,
       ruleFormRef,
       rules,
-      moduleNameList
+      moduleNameList,
+      modeuleAttribute,
+      tableData,
+      confirmEvent,
+      cancelEvent,
+      onAddItem,
+      editItem,
+      deleteItem,
+      saveModuleAttribute,
+      isShowBtn,
+      isShowTable
     };
   }
 });
@@ -132,19 +210,14 @@ export default defineComponent({
             label="moduleName"
             layout="vertical"
             label-width="110px"
-            :rules="[
-              { required: true, message: '请输入模块英文名称', trigger: 'blur' }
-            ]"
+            prop="module_key"
           >
-            <el-input v-model="formState.module_key" />
+            <el-input
+              v-model="formState.module_key"
+              disabled="!dialogFormVisible"
+            />
           </el-form-item>
-          <el-form-item
-            label="模型名称"
-            label-width="110px"
-            :rules="[
-              { required: true, message: '请输入模块英文名称', trigger: 'blur' }
-            ]"
-          >
+          <el-form-item label="模型名称" label-width="110px" prop="module_name">
             <el-input v-model="formState.module_name" />
           </el-form-item>
           <el-form-item label-width="110px" label="类型" layout="vertical">
@@ -166,9 +239,7 @@ export default defineComponent({
             label-width="110px"
             label="所属命名空间"
             layout="vertical"
-            :rules="[
-              { required: true, message: '请选择模块', trigger: 'blur' }
-            ]"
+            prop="namespace_id"
           >
             <el-select
               v-model="formState.namespace_id"
@@ -199,6 +270,7 @@ export default defineComponent({
         class="m-2"
         placeholder="请选择命名空间"
         @change="onChange"
+        style="margin-left: 10px; margin-right: 10px"
       >
         <el-option
           v-for="item in options"
@@ -209,7 +281,102 @@ export default defineComponent({
         />
       </el-select>
       <div v-for="(item, index) in moduleNameList" :key="index" class="module">
-        <el-link :underline="false">{{ item.module_name }}</el-link>
+        <el-link :underline="false" @click="modeuleAttribute(index, item.id)">{{
+          item.module_name
+        }}</el-link>
+      </div>
+    </div>
+    <div class="right">
+      <div v-if="isShowBtn">
+        <el-button type="primary" plain @click="editItem">编辑</el-button>
+        <el-button type="danger" plain @click="deleteItem">删除</el-button>
+        <el-button type="primary" plain @click="onAddItem">新增</el-button>
+      </div>
+      <div class="table" v-if="isShowTable">
+        <el-table
+          :data="tableData"
+          style="width: 100%; font-size: 12px; margin-top: 10px"
+          border
+        >
+          <el-table-column fixed prop="fieldName" label="名称" align="center">
+            <template #default="scope">
+              <el-input
+                v-model="scope.row.fieldName"
+                placeholder="请输入名称"
+                style="font-size: 12px"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="label" label="标题" align="center">
+            <template #default="scope">
+              <el-input
+                v-model="scope.row.label"
+                placeholder="请输入标题"
+                style="font-size: 12px"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="selfType"
+            label="类型"
+            align="center"
+            width="160px"
+          >
+            <template #default="scope">
+              <el-select
+                v-model="scope.row.selfType"
+                style="width: 70%; margin-right: 15px"
+              >
+                <el-option
+                  v-for="item in typeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  style="font-size: 12px"
+                />
+              </el-select>
+              <span style="background: #f0f2f5">
+                <el-icon style="font-size: 14px"><Share /></el-icon>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="checks"
+            label="属性"
+            width="160px"
+            align="center"
+          >
+            <template #default="scope">
+              <el-checkbox label="主键" v-model="scope.row.isPrimary" />
+              <el-checkbox label="唯一" v-model="scope.row.isUnique" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            type="index"
+            fixed="right"
+            label="操作"
+            width="70px"
+            align="center"
+          >
+            <template #default="scope">
+              <el-popconfirm
+                confirm-button-text="确定"
+                cancel-button-text="取消"
+                icon-color="#626AEF"
+                title="是否确认删除此行?"
+                @confirm="confirmEvent(scope.$index)"
+                @cancel="cancelEvent"
+              >
+                <template #reference>
+                  <el-icon style="color: red"><Delete /></el-icon>
+                </template>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-button type="success" plain @click="saveModuleAttribute"
+          >保存</el-button
+        >
       </div>
     </div>
   </div>
@@ -225,6 +392,7 @@ export default defineComponent({
   border-radius: 5px;
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 6px 15px NaNpx rgba(0, 0, 0, 0.05);
+  display: flex;
 
   .left {
     margin-left: 0;
@@ -237,6 +405,7 @@ export default defineComponent({
       margin-left: 10px;
     }
   }
+
   // .nameList {
   //   margin: 10px;
   //   background: rgba(255, 255, 255, 1);
@@ -249,6 +418,10 @@ export default defineComponent({
     line-height: 20px;
     width: 100%;
     text-align: left;
+  }
+  .right {
+    margin: 20px;
+    width: 100%;
   }
 }
 </style>
