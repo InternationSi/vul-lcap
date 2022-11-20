@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 22:31:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-20 23:55:41
+ * @LastEditTime: 2022-11-21 00:05:11
  * @FilePath: /vulture/src/designer/setter/index.tsx
  * @Description: update here
  */
@@ -40,7 +40,11 @@ export default defineComponent({
   },
   setup(props) {
     const classesRef = useStyles();
-    const setterValue = ref<any>({ x: 10 });
+    const setterValue = ref<any>({});
+
+    baseSetterMeta.forEach((info) => {
+      setterValue.value[info.name] = info.initValue;
+    });
 
     return () => {
       const classes = classesRef.value;
@@ -54,8 +58,6 @@ export default defineComponent({
                 return h(resolveComponent(baseInfo.type), {
                   value: setterValue.value[baseInfo.name],
                   onChange: (val: any) => {
-                    console.log(val, "value");
-
                     setterValue.value[baseInfo.name] = val;
                     console.log(setterValue.value);
                   }
