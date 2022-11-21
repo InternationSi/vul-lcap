@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-13 20:39:25
+ * @LastEditTime: 2022-11-21 22:50:50
  * @FilePath: /vulture/src/router/index.ts
  * @Description: update here
  */
@@ -20,6 +20,7 @@ import gridRender from '@/designer/render';
 import { tokenService } from '@/utils/tokenService';
 import comsCreate from '../views/comsCreate/comsCreate.vue'
 import personalCenter from '../views/personalCenter'
+import blockly from '../views/blockly/index.vue'
 // import { useLoginStore } from '@/store/login';
 const routes = [
   {
@@ -30,6 +31,7 @@ const routes = [
       { path: '/moduleEditor', component: moduleEditor },
       { path: '/blockList', component: blockList },
       { path: '/comsCreate', component: comsCreate },
+      { path: '/blockly', component: blockly },
     ],
   },
   { path: '/login', component: login },

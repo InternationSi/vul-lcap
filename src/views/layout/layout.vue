@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-07 22:22:36
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-13 20:40:16
+ * @LastEditTime: 2022-11-21 22:51:47
  * @FilePath: /vulture/src/views/layout/layout.vue
  * @Description: update here
 -->
@@ -19,8 +19,8 @@ export default defineComponent({
       localStorage.clear();
       router.push({ path: "/login" });
     };
-    const toPersonalCenter = ()=>{
-      router.push({ path: "/personalCenter" })
+    const toPersonalCenter = () => {
+      router.push({ path: "/personalCenter" });
     };
     return {
       loginOut,
@@ -45,7 +45,9 @@ export default defineComponent({
             />
             我的
           </template>
-          <el-menu-item index="user-center" @click="toPersonalCenter">个人中心</el-menu-item>
+          <el-menu-item index="user-center" @click="toPersonalCenter"
+            >个人中心</el-menu-item
+          >
           <el-menu-item index="loginout" @click="loginOut"
             >退出登陆</el-menu-item
           >
@@ -88,6 +90,11 @@ export default defineComponent({
               index="comsCreate"
               @click="$router.push({ path: '/comsCreate' })"
               >组件配置</el-menu-item
+            >
+            <el-menu-item
+              index="blockly"
+              @click="$router.push({ path: '/blockly' })"
+              >事件配置</el-menu-item
             >
           </el-sub-menu>
         </el-menu>
