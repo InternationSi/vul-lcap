@@ -59,10 +59,15 @@ export const getModuleList = async (): Promise<any> => {
   return res;
 };
 //编辑模型数据
-export const editModuleList = async (id: string): Promise<any> => {
+
+export const editModuleList = async (
+  params: Moduletype,
+  id: string
+): Promise<any> => {
   const res = await Api.request({
     method: "patch",
-    url: `${API_URL}/business/module_meta/${id}`
+    url: `${API_URL}/business/module_meta/${id}`,
+    data: params
   });
   return res;
 };

@@ -19,6 +19,7 @@ interface DialogForm {
   module_name: string;
   category: string;
   namespace_id: string;
+  id: string;
 }
 interface Data {
   fieldName: string; //表格名称
@@ -29,7 +30,7 @@ interface Data {
 }
 export default defineComponent({
   setup() {
-    const value = ref("");
+    const nsValue = ref("");
     const options = ref<selectItem[]>([]);
     // const moduleList = ref<selectItem[]>([]);
     //弹框所属命名空间下拉值
@@ -42,24 +43,33 @@ export default defineComponent({
       //查询所有模型名称
       const moduleList = await getModuleList();
       moduleNameList.value = moduleList;
-      console.log(moduleNameList.value, "tttttt");
+      temptyModule.value = moduleList;
     });
+    const isAddModule = ref(false); //编辑还是添加模型数据
+    const dialogFormVisible = ref(false); // 对话框是否关闭
+    //添加模型数据按钮
+    const addItem = async () => {
+      dialogFormVisible.value = true;
+      isAddModule.value = false;
+    };
     //  所有模型名称数据
     const moduleNameList = ref<ModuleName[]>([]);
+    const temptyModule = ref<ModuleName[]>([]);
     const data = ref<selectItem[]>([]);
     const onChange = async () => {
-      console.log("触发change事件");
-      console.log(value.value, "6666");
-      const res = await getModule(value.value);
-      data.value = res.data;
+      console.log(nsValue.value, "选中的id");
+      //根据选择的命名空间筛选模型数据名称
+      temptyModule.value = moduleNameList.value.filter((item) => {
+        return item.namespace_id == nsValue.value;
+      });
     };
-    const dialogTableVisible = ref(false); // 对话框是否关闭
-    const dialogFormVisible = ref(false);
+
     const formState = reactive<DialogForm>({
       module_key: "",
       namespace_id: "",
       category: "",
-      module_name: ""
+      module_name: "",
+      id: ""
     });
     //弹框所属命名空间类型
     const typeOptions = [
@@ -76,30 +86,40 @@ export default defineComponent({
     const isShowBtn = ref(false);
     //添加属性表格是否展示
     const isShowTable = ref(false);
-
+    //添加或编辑模型数据传参
+    const formStateParam = {
+      module_key: "",
+      namespace_id: "",
+      category: "",
+      module_name: ""
+    };
     //添加一条模块数据
     const dialogConfirm = async (formEl: FormInstance | undefined) => {
-      if (!dialogFormVisible.value) {
-        if (!formEl) return;
-        await formEl.validate((valid, fields) => {
-          if (valid) {
-            const res = addModule(formState);
-            console.log(res, "添加数据成功");
-            //弹框关闭
-            dialogFormVisible.value = false;
-          } else {
-            console.log("提交失败!", fields);
-          }
-        });
+      formStateParam.category = formState.category;
+      formStateParam.module_key = formState.module_key;
+      formStateParam.namespace_id = formState.namespace_id;
+      formStateParam.module_name = formState.module_name;
+      if (!isAddModule.value) {
+        const res = await addModule(formStateParam);
+        console.log(res, "添加数据成功");
+        //更新模型数据名称
+        const moduleList = await getModuleList();
+        moduleNameList.value = moduleList;
+        //弹框关闭
+        dialogFormVisible.value = false;
       } else {
-        console.log("更新数据");
-        // const updateModule = await editModuleList(id:)
-        // console.log(updateModule)
+        const updateModule = await editModuleList(formStateParam, formState.id); //报500
+        console.log(updateModule, "更新接口");
+        dialogFormVisible.value = false;
+        //更新模型数据
+        const moduleList = await getModuleList();
+        moduleNameList.value = moduleList;
       }
     };
     //编辑模块属性
     const editItem = async () => {
       dialogFormVisible.value = true;
+      isAddModule.value = true;
     };
     //删除一条模块属性
     const deleteItem = async () => {
@@ -119,13 +139,13 @@ export default defineComponent({
     });
     const ruleFormRef = ref<FormInstance>();
     //定义编辑模型数据id
-    const editModuleId = ref();
-    const modeuleAttribute = async (index: number, id: string) => {
+    const moduleName = async (index: number, id: string) => {
       console.log(moduleNameList.value, "zzzzz");
       formState.module_key = moduleNameList.value[index].module_key;
       formState.module_name = moduleNameList.value[index].module_name;
       formState.category = moduleNameList.value[index].category;
       formState.namespace_id = moduleNameList.value[index].namespace_id;
+      formState.id = moduleNameList.value[index].id;
       isShowBtn.value = true;
     };
     //定义表格数据
@@ -161,12 +181,14 @@ export default defineComponent({
       console.log("保存或更新模块属性");
     };
     return {
-      value,
+      nsValue,
       options,
       onChange,
       data,
+      addItem,
+      formStateParam,
       dialogFormVisible,
-      dialogTableVisible,
+      isAddModule,
       formState,
       typeOptions,
       renameBlockSelectList,
@@ -174,7 +196,8 @@ export default defineComponent({
       ruleFormRef,
       rules,
       moduleNameList,
-      modeuleAttribute,
+      temptyModule,
+      moduleName,
       tableData,
       confirmEvent,
       cancelEvent,
@@ -191,11 +214,7 @@ export default defineComponent({
 <template>
   <div class="warp">
     <div class="left">
-      <el-button
-        class="addBtn"
-        type="primary"
-        plain
-        @click="dialogFormVisible = true"
+      <el-button class="addBtn" type="primary" plain @click="addItem()"
         >添加</el-button
       >
       <el-dialog v-model="dialogFormVisible">
@@ -212,10 +231,7 @@ export default defineComponent({
             label-width="110px"
             prop="module_key"
           >
-            <el-input
-              v-model="formState.module_key"
-              disabled="!dialogFormVisible"
-            />
+            <el-input v-model="formState.module_key" :disabled="isAddModule" />
           </el-form-item>
           <el-form-item label="模型名称" label-width="110px" prop="module_name">
             <el-input v-model="formState.module_name" />
@@ -243,13 +259,13 @@ export default defineComponent({
           >
             <el-select
               v-model="formState.namespace_id"
-              class="m-2"
               placeholder="请选择所属命名空间"
               style="width: 100%"
+              clearable
             >
               <el-option
                 v-for="item in renameBlockSelectList"
-                :key="item.describe"
+                :key="item.id"
                 :label="item.namespace_label"
                 :value="item.id"
               />
@@ -266,22 +282,21 @@ export default defineComponent({
         </template>
       </el-dialog>
       <el-select
-        v-model="value"
-        class="m-2"
+        v-model="nsValue"
         placeholder="请选择命名空间"
         @change="onChange"
         style="margin-left: 10px; margin-right: 10px"
       >
         <el-option
           v-for="item in options"
-          :key="item.namespace_label"
+          :key="item.id"
           :label="item.namespace_label"
-          :value="item.namespace_name"
+          :value="item.id"
           size="small"
         />
       </el-select>
-      <div v-for="(item, index) in moduleNameList" :key="index" class="module">
-        <el-link :underline="false" @click="modeuleAttribute(index, item.id)">{{
+      <div v-for="(item, index) in temptyModule" :key="index" class="module">
+        <el-link :underline="false" @click="moduleName(index, item.id)">{{
           item.module_name
         }}</el-link>
       </div>
@@ -292,6 +307,25 @@ export default defineComponent({
         <el-button type="danger" plain @click="deleteItem">删除</el-button>
         <el-button type="primary" plain @click="onAddItem">新增</el-button>
       </div>
+      <!-- 模型数据描述 -->
+      <el-descriptions
+        title="Vertical list without border"
+        :column="4"
+        direction="vertical"
+      >
+        <el-descriptions-item label="Username"
+          >kooriookami</el-descriptions-item
+        >
+        <el-descriptions-item label="Telephone"
+          >18100000000</el-descriptions-item
+        >
+        <el-descriptions-item label="Place" :span="2"
+          >Suzhou</el-descriptions-item
+        >
+        <el-descriptions-item label="Remarks">
+          <el-tag size="small">School</el-tag>
+        </el-descriptions-item>
+      </el-descriptions>
       <div class="table" v-if="isShowTable">
         <el-table
           :data="tableData"

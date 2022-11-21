@@ -1,6 +1,7 @@
 export interface selectItem {
   namespace_label: string;
   namespace_name: string;
+  id: string;
 }
 export interface ModuleName {
   id: string;
