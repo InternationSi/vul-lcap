@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-20 22:56:44
+ * @LastEditTime: 2022-11-22 23:27:17
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -38,13 +38,20 @@ export default defineComponent({
     ]);
 
     const setterConfigVisible = ref(false);
-    const index = ref(0);
+    // 缓存节点
+    const keepNode = ref({})
+
+    // 删除单个节点
     const deleteItem = (value: number) => {
-      index.value = value;
       layout.value = layout.value.filter((item, index) => {
         return index !== value;
       });
     };
+    // 编辑单个节点
+    const editItem = (value: boolean, nodeInfo:any) => {
+      keepNode.value = nodeInfo
+      setterConfigVisible.value = value;
+    }
 
     // 监听物料，加入物料
     watch(
@@ -124,9 +131,7 @@ export default defineComponent({
                       config={item}
                       itemIndex={index}
                       handleDelete={deleteItem}
-                      handleEdit={(value: boolean) => {
-                        setterConfigVisible.value = value;
-                      }}
+                      handleEdit={(value: boolean) => editItem(value, item)}
                     />
                   </grid-item>
                 );

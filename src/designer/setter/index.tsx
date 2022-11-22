@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 22:31:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-21 00:05:11
+ * @LastEditTime: 2022-11-22 23:15:15
  * @FilePath: /vulture/src/designer/setter/index.tsx
  * @Description: update here
  */
@@ -56,6 +56,7 @@ export default defineComponent({
               {baseSetterMeta.map((baseInfo) => {
                 console.log(baseInfo.type);
                 return h(resolveComponent(baseInfo.type), {
+                  label: baseInfo.label,
                   value: setterValue.value[baseInfo.name],
                   onChange: (val: any) => {
                     setterValue.value[baseInfo.name] = val;

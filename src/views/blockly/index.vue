@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-21 22:42:36
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-21 23:34:53
+ * @LastEditTime: 2022-11-22 22:11:56
  * @FilePath: /vulture/src/views/blockly/index.vue
  * @Description: update here
 -->
@@ -89,8 +89,11 @@ const updateCode = () => {
   console.log(codeValue.value);
 };
 const getSchemaJson = () => {
-  const xml = Blockly.serialization.workspaces.save(workspace.value);
-  console.log(xml, "xml_text");
+  // const xml = Blockly.serialization.workspaces.save(workspace.value);
+  console.log(codeValue.value, "codeValue");
+  const loadJs = new Function("context", codeValue.value);
+  const result = loadJs({});
+  console.log(result, "resultresult");
 };
 
 onMounted(() => {
@@ -102,6 +105,18 @@ onMounted(() => {
   // 为工作区添加修改事件，触发调用 updateCode 函数
   workspace.value.addChangeListener(updateCode);
   Blockly.defineBlocksWithJsonArray(demoList);
+
+  // 以 Location 块为例
+  javascriptGenerator["Luffy"] = function (block: any) {
+    return `const list = [];`;
+  };
+  javascriptGenerator["Location"] = function (block: any) {
+    let argument0 = block.getFieldValue("location");
+    return `list.push('${argument0}');`;
+  };
+  javascriptGenerator["Speak"] = function (block: any) {
+    return `console.log(list);return list;`;
+  };
 });
 </script>
 

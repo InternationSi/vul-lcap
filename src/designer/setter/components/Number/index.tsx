@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 23:03:58
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-20 23:55:28
+ * @LastEditTime: 2022-11-22 23:12:28
  * @FilePath: /vulture/src/designer/setter/components/Number/index.tsx
  * @Description: update here
  */
@@ -12,33 +12,26 @@ import {
   watch,
   onUnmounted,
   PropType,
-  reactive
+  reactive,
 } from "vue";
 import { createUseStyles } from "vue-jss";
-const useStyles = createUseStyles({
-  setterBox: {
-    width: "100%",
-    minHeight: "40vh",
-    display: "flex"
-  },
-  viewBox: {
-    width: "40%"
-  },
-  tabBox: {
-    width: "100%"
-  }
-});
+import LabelSlot from "../LabelSlot";
+const useStyles = createUseStyles({});
 
 export default defineComponent({
   props: {
+    label: {
+      type: String,
+      required: true,
+    },
     value: {
       type: Number,
-      required: true
+      required: true,
     },
     onChange: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const classesRef = useStyles();
@@ -48,15 +41,21 @@ export default defineComponent({
     return () => {
       const classes = classesRef.value;
       return (
-        <el-input-number
-          v-model={num.value}
-          min={0}
-          max={12}
-          onChange={(value: number) => {
-            props.onChange(value);
+        <LabelSlot title={props.label+ ":"}>
+          {{
+            default: () => (
+              <el-input-number  
+                v-model={num.value}
+                min={0}
+                max={12}
+                onChange={(value: number) => {
+                  props.onChange(value);
+                }}
+              />
+            ),
           }}
-        />
+        </LabelSlot>
       );
     };
-  }
+  },
 });
