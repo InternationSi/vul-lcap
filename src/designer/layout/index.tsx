@@ -2,31 +2,47 @@
  * @Author: sfy
  * @Date: 2022-10-22 21:34:52
  * @LastEditors: sfy
- * @LastEditTime: 2022-10-30 13:45:40
+ * @LastEditTime: 2022-11-23 23:08:00
  * @FilePath: /vulture/src/designer/layout/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref } from "vue";
 import Grid from "../grid";
 import leftDash from "./components/leftDash";
-import vulLogo from "@/components/vulLogo";
-import HeadDash from "./components/HeadDash";
 import "./index.less";
+import { useRouter } from "vue-router";
+import { createUseStyles } from "vue-jss";
+
+const useStyles = createUseStyles({
+  renderBox: {
+    position: "absolute",
+    right: "0px",
+    zIndex: '10'
+  }
+});
 
 export default defineComponent({
-  components: { Grid, Notification, leftDash, HeadDash },
+  components: { Grid, Notification, leftDash },
+
   setup() {
+    const router = useRouter();
+    const classesRef = useStyles();
+    const setRender = () => {
+      router.push("/render");
+    };
     return () => (
       <div class="common-layout">
         <el-container>
-          <el-header class="main-head">
-            <HeadDash />
-          </el-header>
           <el-container class="main-layout">
             <el-aside width="70px">
               <leftDash />
             </el-aside>
             <el-main class="main-main">
+              <div class={classesRef.value.renderBox}>
+                <el-icon size={30}>
+                  <video-play onClick={setRender} />
+                </el-icon>
+              </div>
               <Grid />
             </el-main>
           </el-container>

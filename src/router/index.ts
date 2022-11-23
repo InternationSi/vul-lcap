@@ -2,13 +2,14 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-21 22:50:50
+ * @LastEditTime: 2022-11-23 22:53:47
  * @FilePath: /vulture/src/router/index.ts
  * @Description: update here
  */
 import { createRouter, createWebHistory } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import home from '../views/layout/layout.vue';
+import layout from '../views/layout/layout.vue';
+import adminLayout from '../views/layout/admin.vue'
 import login from '../views/login/login.vue';
 import register from '../views/register/register.vue';
 import email from '../views/email/email.vue';
@@ -25,22 +26,31 @@ import blockly from '../views/blockly/index.vue'
 const routes = [
   {
     path: '/',
-    component: home,
+    component: layout,
     children: [
-      { path: '/renameBlock', component: renameBlock },
-      { path: '/moduleEditor', component: moduleEditor },
-      { path: '/blockList', component: blockList },
-      { path: '/comsCreate', component: comsCreate },
-      { path: '/blockly', component: blockly },
+      {
+        path: '/admin',
+        component: adminLayout,
+        children: [
+          { path: '/admin/renameBlock', component: renameBlock },
+          { path: '/admin/moduleEditor', component: moduleEditor },
+          { path: '/admin/blockList', component: blockList },
+          { path: '/admin/comsCreate', component: comsCreate },
+          { path: '/admin/blockly', component: blockly },
+        ]
+      },
+      {
+        path: '/design',
+        component: grid,
+      }
     ],
   },
   { path: '/login', component: login },
   { path: '/register', component: register },
   { path: '/email', component: email },
-  { path: '/grid', component: grid },
   { path: '/render', component: gridRender },
-  { path: '', redirect: '/renameBlock' },
   { path: '/personalCenter', component: personalCenter },
+  { path: '', redirect: '/admin/renameBlock' },
 ];
 
 const router = createRouter({
