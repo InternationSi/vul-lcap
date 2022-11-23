@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-22 23:27:17
+ * @LastEditTime: 2022-11-23 23:16:41
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -39,7 +39,7 @@ export default defineComponent({
 
     const setterConfigVisible = ref(false);
     // 缓存节点
-    const keepNode = ref({})
+    const keepNode = ref({});
 
     // 删除单个节点
     const deleteItem = (value: number) => {
@@ -48,10 +48,10 @@ export default defineComponent({
       });
     };
     // 编辑单个节点
-    const editItem = (value: boolean, nodeInfo:any) => {
-      keepNode.value = nodeInfo
+    const editItem = (value: boolean, nodeInfo: any) => {
+      keepNode.value = nodeInfo;
       setterConfigVisible.value = value;
-    }
+    };
 
     // 监听物料，加入物料
     watch(
@@ -146,10 +146,15 @@ export default defineComponent({
             );
           })}
         </el-tabs>
-        <el-dialog v-model={setterConfigVisible.value} title="编辑" width="80%">
+        <el-dialog
+          v-model={setterConfigVisible.value}
+          title="编辑"
+          width="80%"
+          destroy-on-close={true}
+        >
           {{
             default: () => {
-              return [<Setter />];
+              return [<Setter value={keepNode.value} />];
             },
             footer: () => {
               return [

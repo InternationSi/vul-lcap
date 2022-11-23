@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 22:31:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-22 23:15:15
+ * @LastEditTime: 2022-11-23 23:24:13
  * @FilePath: /vulture/src/designer/setter/index.tsx
  * @Description: update here
  */
@@ -19,17 +19,19 @@ import {
 import { baseSetterMeta } from "./consts";
 import { createUseStyles } from "vue-jss";
 import NumberSetter from "./components/Number";
+import GridItemList from "../grid/components/GridItemList";
 const useStyles = createUseStyles({
   setterBox: {
     width: "100%",
     minHeight: "40vh",
-    display: "flex"
+    display: "flex",
   },
   viewBox: {
     width: "40%"
   },
   tabBox: {
-    width: "100%"
+    width: "100%",
+    flex: '1'
   }
 });
 
@@ -38,7 +40,17 @@ export default defineComponent({
   components: {
     NumberSetter
   },
+  props:{
+    value:{
+      type: Object as any,
+      required: true
+    }
+  },
   setup(props) {
+
+    console.log(props.value, 'ppp');
+    
+
     const classesRef = useStyles();
     const setterValue = ref<any>({});
 
@@ -50,7 +62,9 @@ export default defineComponent({
       const classes = classesRef.value;
       return (
         <div class={classes.setterBox}>
-          <div class={classes.viewBox}></div>
+          <div class={classes.viewBox}>
+            <GridItemList config={props.value} isDesign={false}/>
+          </div>
           <el-tabs class={classes.tabBox} type="border-card">
             <el-tab-pane label="通用">
               {baseSetterMeta.map((baseInfo) => {
