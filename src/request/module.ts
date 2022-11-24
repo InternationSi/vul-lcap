@@ -10,9 +10,8 @@
 import Api from "../api";
 import { API_URL } from "@/api/env";
 import type {
-  Moduletype,
-  moduleField,
-  updateModule
+  ModuleType,
+  ModuleField
 } from "../views/moduleEditor/moduleEdit.type";
 
 /**
@@ -41,7 +40,7 @@ export const moduleFind = async (
 };
 
 //添加一个模块
-export const addModule = async (params: Moduletype): Promise<any> => {
+export const addModule = async (params: ModuleType): Promise<any> => {
   const res = await Api.request({
     method: "post",
     url: `${API_URL}/business/module_meta`,
@@ -59,9 +58,8 @@ export const getModuleList = async (): Promise<any> => {
   return res;
 };
 //编辑模型数据
-
 export const editModuleList = async (
-  params: Moduletype,
+  params: ModuleType,
   id: string
 ): Promise<any> => {
   const res = await Api.request({
@@ -71,31 +69,52 @@ export const editModuleList = async (
   });
   return res;
 };
-
+//删除模型数据
+export const deleteModule = async (id: string): Promise<any> => {
+  const res = await Api.request({
+    method: "delete",
+    url: `${API_URL}/business/module_meta/${id}`
+  });
+  return res;
+};
+//查询所有模块中属性
+export const getModuleField = async (): Promise<any> => {
+  const res = await Api.request({
+    method: "get",
+    url: `${API_URL}/business/field_meta`
+  });
+  return res;
+};
 //添加模块属性
-export const addModuleField = async (
-  namespaceName: string,
-  moduleName: string,
-  fieldName: string,
-  params: moduleField
-): Promise<any> => {
+export const addModuleField = async (params: ModuleField): Promise<any> => {
   const res = await Api.request({
     method: "post",
-    url: `${API_URL}/${namespaceName}/module/${moduleName}/field/${fieldName}`,
+    url: `${API_URL}/business/field_meta`,
     data: params
   });
   return res;
 };
-//更新模块表格中属性
+//更新模块属性
 export const updateModuleField = async (
-  namespaceName: string,
-  moduleName: string,
-  fieldName: string,
-  params: updateModule
+  params: ModuleField,
+  id: string
 ): Promise<any> => {
   const res = await Api.request({
-    method: "put",
-    url: `${API_URL}/${namespaceName}/module/${moduleName}/field/${fieldName}`,
+    method: "patch",
+    url: `${API_URL}/business/field_meta/${id}`,
+    data: params
+  });
+  return res;
+};
+//删除一条模型属性
+
+export const deleteModuleField = async (
+  params: ModuleField,
+  id: string
+): Promise<any> => {
+  const res = await Api.request({
+    method: "delete",
+    url: `${API_URL}/business/field_meta/${id}`,
     data: params
   });
   return res;
