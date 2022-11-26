@@ -2,13 +2,13 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-23 23:16:41
+ * @LastEditTime: 2022-11-26 22:47:47
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
 import GridItemList from "./components/GridItemList";
 import { useSchemaStore } from "@/store/gridSchema";
-import { defineComponent, ref, reactive, watch, onUnmounted } from "vue";
+import { defineComponent, ref, reactive, watch, onUnmounted, getCurrentInstance } from "vue";
 import useAddGridItem from "./effect/useAddGridItem";
 import useCreateConfig from "./effect/useCreateConfig";
 import useTabOptions from "./effect/useTabOptions";
@@ -21,12 +21,6 @@ import Setter from "../setter";
 export default defineComponent({
   components: { GridOutLine },
   setup() {
-    const schemaStore = useSchemaStore();
-    const { itemInfo } = useAddGridItem();
-    // 创建tab
-    const { tabContainerName, editableTabsValue, editableTabs, addTab } =
-      useTabOptions();
-
     const layout = ref<any[]>([
       {
         x: 0,
@@ -39,7 +33,15 @@ export default defineComponent({
 
     const setterConfigVisible = ref(false);
     // 缓存节点
-    const keepNode = ref({});
+    const keepNode = ref<any>({});
+    // setter的ref
+    const setterRef = ref()
+
+    const schemaStore = useSchemaStore();
+    const { itemInfo } = useAddGridItem();
+    // 创建tab
+    const { tabContainerName, editableTabsValue, editableTabs, addTab } =
+      useTabOptions();
 
     // 删除单个节点
     const deleteItem = (value: number) => {
@@ -103,6 +105,13 @@ export default defineComponent({
       }
     };
 
+    // 弹开setter，确定
+    const setterConfirm = () => {
+      const changeIndex = layout.value.findIndex(item => item.i === keepNode.value.i)
+      layout.value[changeIndex] = {...layout.value[changeIndex],...setterRef.value.setterValue}
+      setterConfigVisible.value = false
+    }
+
     return () => (
       <>
         <el-tabs v-model={editableTabsValue.value} type="card">
@@ -154,14 +163,14 @@ export default defineComponent({
         >
           {{
             default: () => {
-              return [<Setter value={keepNode.value} />];
+              return [<Setter ref={setterRef} value={keepNode.value} />];
             },
             footer: () => {
               return [
                 <el-button onClick={() => (setterConfigVisible.value = false)}>
                   取消
                 </el-button>,
-                <el-button type="primary">确定</el-button>
+                <el-button type="primary" onClick={setterConfirm}>确定</el-button>
               ];
             }
           }}

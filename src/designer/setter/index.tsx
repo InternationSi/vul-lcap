@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 22:31:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-23 23:24:13
+ * @LastEditTime: 2022-11-26 22:31:11
  * @FilePath: /vulture/src/designer/setter/index.tsx
  * @Description: update here
  */
@@ -14,6 +14,7 @@ import {
   PropType,
   reactive,
   h,
+  defineExpose,
   resolveComponent
 } from "vue";
 import { baseSetterMeta } from "./consts";
@@ -46,19 +47,22 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  setup(props, {expose}) {
 
     console.log(props.value, 'ppp');
-    
+    const {value} = props
 
     const classesRef = useStyles();
     const setterValue = ref<any>({});
+    expose({
+      setterValue
+    })
 
     baseSetterMeta.forEach((info) => {
-      setterValue.value[info.name] = info.initValue;
+      setterValue.value[info.name] = value[info.name]
     });
-
     return () => {
+      
       const classes = classesRef.value;
       return (
         <div class={classes.setterBox}>
