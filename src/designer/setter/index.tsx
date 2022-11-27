@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 22:31:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-26 22:31:11
+ * @LastEditTime: 2022-11-27 22:51:29
  * @FilePath: /vulture/src/designer/setter/index.tsx
  * @Description: update here
  */
@@ -19,8 +19,12 @@ import {
 } from "vue";
 import { baseSetterMeta } from "./consts";
 import { createUseStyles } from "vue-jss";
-import NumberSetter from "./components/Number";
 import GridItemList from "../grid/components/GridItemList";
+import {metaComponentsSetter} from '../material'
+import  {
+  NumberSetter,
+  StringSetter
+} from './components'
 const useStyles = createUseStyles({
   setterBox: {
     width: "100%",
@@ -39,7 +43,8 @@ const useStyles = createUseStyles({
 export default defineComponent({
   name: "setter",
   components: {
-    NumberSetter
+    NumberSetter,
+    StringSetter
   },
   props:{
     value:{
@@ -48,8 +53,9 @@ export default defineComponent({
     }
   },
   setup(props, {expose}) {
-
     console.log(props.value, 'ppp');
+    console.log(metaComponentsSetter[(props.value.type)]);
+    
     const {value} = props
 
     const classesRef = useStyles();
@@ -72,7 +78,6 @@ export default defineComponent({
           <el-tabs class={classes.tabBox} type="border-card">
             <el-tab-pane label="通用">
               {baseSetterMeta.map((baseInfo) => {
-                console.log(baseInfo.type);
                 return h(resolveComponent(baseInfo.type), {
                   label: baseInfo.label,
                   value: setterValue.value[baseInfo.name],
@@ -83,7 +88,19 @@ export default defineComponent({
                 });
               })}
             </el-tab-pane>
-            <el-tab-pane label="solo">solo</el-tab-pane>
+            <el-tab-pane label="个性化">{
+              metaComponentsSetter[(props.value.type)]?.map((baseInfo:any) => {
+                return h(resolveComponent(baseInfo.type), {
+                  label: baseInfo.label,
+                  value: setterValue.value[baseInfo.name],
+                  onChange: (val: any) => {
+                    setterValue.value[baseInfo.name] = val;
+                    console.log(setterValue.value);
+                  }
+                });
+              })
+            }</el-tab-pane>
+            <el-tab-pane label="数据源">数据源</el-tab-pane>
             <el-tab-pane label="事件">事件</el-tab-pane>
           </el-tabs>
         </div>

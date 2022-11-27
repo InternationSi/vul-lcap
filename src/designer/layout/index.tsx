@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-22 21:34:52
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-23 23:08:00
+ * @LastEditTime: 2022-11-27 22:53:03
  * @FilePath: /vulture/src/designer/layout/index.tsx
  * @Description: update here
  */
@@ -17,7 +17,7 @@ const useStyles = createUseStyles({
   renderBox: {
     position: "absolute",
     right: "0px",
-    // zIndex: '10'
+    zIndex: '10',
   }
 });
 
