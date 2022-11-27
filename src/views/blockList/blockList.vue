@@ -127,8 +127,9 @@ export default defineComponent({
       formStateParam.module_key = formState.module_key;
       formStateParam.namespace_id = formState.namespace_id;
       formStateParam.module_name = formState.module_name;
-      if (!isAddItem.value) {
-        const res = await addModule(formStateParam);
+      console.log(isAddItem.value, "33333");
+      if (isAddItem.value) {
+        // const res = await addModule(formStateParam);
         ElMessage({
           message: "添加数据成功",
           type: "success"
@@ -139,9 +140,9 @@ export default defineComponent({
         //弹框关闭
         dialogFormVisible.value = false;
       } else {
-        const updateModule = await editModuleList(formStateParam, formState.id);
-        console.log(updateModule, "更新接口");
-        dialogFormVisible.value = false;
+        // const updateModule = await editModuleList(formStateParam, formState.id);
+        // console.log(updateModule, "更新接口");
+        // dialogFormVisible.value = false;
         ElMessage({
           message: "更新数据成功",
           type: "success"
@@ -524,50 +525,16 @@ export default defineComponent({
           style="width: 100%; font-size: 12px; margin-top: 10px"
           border
         >
-          <el-table-column fixed prop="fieldName" label="名称" align="center">
-            <template #default="scope">
-              <el-input
-                v-model="scope.row.field_key"
-                placeholder="请输入名称"
-                style="font-size: 12px"
-                disabled
-              />
-            </template>
+          <el-table-column fixed prop="field_key" label="名称" align="center">
           </el-table-column>
-          <el-table-column prop="label" label="标题" align="center">
-            <template #default="scope">
-              <el-input
-                v-model="scope.row.field_name"
-                placeholder="请输入标题"
-                style="font-size: 12px"
-                disabled
-              />
-            </template>
+          <el-table-column prop="field_name" label="标题" align="center">
           </el-table-column>
           <el-table-column
-            prop="selfType"
+            prop="field_type"
             label="类型"
             align="center"
             width="160px"
           >
-            <template #default="scope">
-              <el-select
-                v-model="scope.row.field_type"
-                style="width: 70%; margin-right: 15px"
-                disabled
-              >
-                <el-option
-                  v-for="item in typeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                  style="font-size: 12px"
-                />
-              </el-select>
-              <span style="background: #f0f2f5">
-                <el-icon style="font-size: 14px"><Share /></el-icon>
-              </span>
-            </template>
           </el-table-column>
           <el-table-column
             prop="checks"
