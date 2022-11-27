@@ -140,9 +140,9 @@ export default defineComponent({
         //弹框关闭
         dialogFormVisible.value = false;
       } else {
-        // const updateModule = await editModuleList(formStateParam, formState.id);
-        // console.log(updateModule, "更新接口");
-        // dialogFormVisible.value = false;
+        const updateModule = await editModuleList(formStateParam, formState.id);
+        console.log(updateModule, "更新接口");
+        dialogFormVisible.value = false;
         ElMessage({
           message: "更新数据成功",
           type: "success"
@@ -156,10 +156,6 @@ export default defineComponent({
     const editItem = async () => {
       dialogFormVisible.value = true;
       isAddItem.value = false;
-      // formState.category = "";
-      // formState.module_key = "";
-      // formState.module_name = "";
-      // formState.namespace_id = "";
     };
 
     //校验表单
@@ -414,22 +410,6 @@ export default defineComponent({
           size="small"
         />
       </el-select>
-      <!-- 侧边栏数据展示 -->
-      <!-- <el-menu
-        default-active="1"
-        class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
-      >
-        <el-sub-menu index="1">
-          <template #title>
-            <span>全部</span>
-          </template>
-
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item two</el-menu-item>
-        </el-sub-menu>
-      </el-menu> -->
       <div v-for="(item, index) in temptyModule" :key="index" class="module">
         <el-link :underline="false" @click="moduleName(index, item)">{{
           item.module_name
@@ -581,13 +561,6 @@ export default defineComponent({
             </template>
           </el-table-column>
         </el-table>
-        <!-- <el-button
-          type="success"
-          plain
-          @click="saveModuleAttribute"
-          style="margin-top: 20px"
-          >保存</el-button -->
-        <!-- > -->
       </div>
     </div>
   </div>
@@ -595,10 +568,7 @@ export default defineComponent({
 <style scoped lang="less">
 .warp {
   background: rgba(250, 250, 250, 1);
-  // margin-bottom: 2px;
-  // padding-left: 20px;
-  // padding-right: 20px;
-  // padding-top: 20px;
+
   opacity: 1;
   border-radius: 5px;
   background: rgba(255, 255, 255, 1);
@@ -616,13 +586,6 @@ export default defineComponent({
       margin-left: 10px;
     }
   }
-
-  // .nameList {
-  //   margin: 10px;
-  //   background: rgba(255, 255, 255, 1);
-
-  //   box-shadow: 0px 6px 15px 2px rgba(0, 0, 0, 0.05);
-  // }
   .module {
     margin-top: 10px;
     margin-left: 20px;
