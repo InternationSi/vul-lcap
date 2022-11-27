@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-26 22:47:47
+ * @LastEditTime: 2022-11-27 21:52:16
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -74,7 +74,6 @@ export default defineComponent({
           const result = findTab.tabKeys.find(
             (cTa) => cTa.name === tabContainerName.value
           );
-          console.log(result?.tabLayout);
           result?.tabLayout.push(layItem);
         }
       }
@@ -114,7 +113,7 @@ export default defineComponent({
 
     return () => (
       <>
-        <el-tabs v-model={editableTabsValue.value} type="card">
+        <el-tabs v-model={editableTabsValue.value} type="card" onTabChange={(name:string) => schemaStore.changeClickTab(name)}>
           <el-tab-pane label="工作台" name="main">
             <grid-layout
               layout={layout.value}

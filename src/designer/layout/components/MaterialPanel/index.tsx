@@ -2,84 +2,44 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-20 16:57:17
+ * @LastEditTime: 2022-11-27 22:18:22
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import styles from "./index.module.less";
 import { nanoid } from "nanoid";
 import { useCommunicationStore } from "@/store/transport";
 import { materialPanelScheme } from "./consts";
+import { useSchemaStore } from "@/store/gridSchema";
 
 export default defineComponent({
   setup(props) {
     const store = useCommunicationStore();
     const activeTab = ref("base");
     const activeCollapse = ref(materialPanelScheme.map((i, index) => index));
+    const schemaStore = useSchemaStore();
+    const collapseList = ref([...materialPanelScheme])
 
-    const block = () => {
-      return (
-        <div
-          class={styles.block}
-          onClick={() => {
-            store.setCommunication({
-              type: "spacing",
-              randomId: nanoid()
-            });
-          }}
-        >
-          <el-icon>
-            <picture-rounded />
-          </el-icon>
-          <span>间距</span>
-        </div>
-      );
-    };
-    const container = () => {
-      return (
-        <div
-          class={styles.block}
-          onClick={() => {
-            store.setCommunication({
-              type: "container-tab",
-              randomId: nanoid()
-            });
-          }}
-        >
-          <el-icon>
-            <picture-rounded />
-          </el-icon>
-          <span>容器</span>
-        </div>
-      );
-    };
 
-    const chartPie = () => {
-      return (
-        <div
-          class={styles.block}
-          onClick={() => {
-            store.setCommunication({
-              type: "chart-pie",
-              randomId: nanoid()
-            });
-          }}
-        >
-          <el-icon>
-            <picture-rounded />
-          </el-icon>
-          <span>pie图</span>
-        </div>
-      );
-    };
+    watch(() => schemaStore.clickNowTab,
+      (name) => {
+        console.log(materialPanelScheme, '99value');
+        if(name !== 'main') {
+          const delIndex = materialPanelScheme.findIndex(item => item.collapseName == 'container-components')
+          collapseList.value.splice(delIndex, 1)
+        } else {
+          collapseList.value = materialPanelScheme
+        } 
+      }
+    )
 
     return () => (
       <>
         <el-tabs v-model={activeTab.value}>
           <el-tab-pane label="基础" name="base">
             <el-collapse v-model={activeCollapse.value}>
-              {materialPanelScheme.map((collapse, index) => {
+              {collapseList.value.map((collapse, index) => {
                 return (
                   <el-collapse-item title={collapse.collapseTitle} name={index}>
                     <el-row gutter={10}>
@@ -89,8 +49,6 @@ export default defineComponent({
                             <div
                               class={styles.block}
                               onClick={() => {
-                                console.log(card.type, "card.type");
-
                                 store.setCommunication({
                                   type: card.type,
                                   randomId: nanoid()

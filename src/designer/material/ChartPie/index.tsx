@@ -2,59 +2,17 @@
  * @Author: sfy
  * @Date: 2022-10-25 22:32:54
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-20 17:01:09
+ * @LastEditTime: 2022-11-27 22:35:07
  * @FilePath: /vulture/src/designer/material/ChartPie/index.tsx
  * @Description: update here
  */
 
 import { defineComponent, ref, watch, onMounted } from "vue";
 import { Rose } from "@antv/g2plot";
+export * from './meta'
 export default defineComponent({
   setup() {
     const chartPieDom = ref();
-    const option = {
-      tooltip: {
-        trigger: "item"
-      },
-      legend: {
-        top: "5%",
-        left: "center"
-      },
-      series: [
-        {
-          name: "Access From",
-          type: "pie",
-          radius: ["40%", "70%"],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: "#fff",
-            borderWidth: 2
-          },
-          label: {
-            show: false,
-            position: "center"
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: "40",
-              fontWeight: "bold"
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: [
-            { value: 1048, name: "Search Engine" },
-            { value: 735, name: "Direct" },
-            { value: 580, name: "Email" },
-            { value: 484, name: "Union Ads" },
-            { value: 300, name: "Video Ads" }
-          ]
-        }
-      ]
-    };
 
     onMounted(() => {
       const data = [
