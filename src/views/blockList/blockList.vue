@@ -419,7 +419,6 @@ export default defineComponent({
     <div class="right">
       <div v-if="isShowBtn">
         <el-button type="primary" plain @click="editItem">编辑</el-button>
-
         <el-popconfirm title="是否确定删除此数据?" @confirm="confirmDelete()">
           <template #reference>
             <el-button type="danger" plain>删除</el-button>
