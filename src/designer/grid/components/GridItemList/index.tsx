@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-25 22:32:47
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-20 16:20:46
+ * @LastEditTime: 2022-11-28 22:15:02
  * @FilePath: /vulture/src/designer/grid/components/GridItemList/index.tsx
  * @Description: update here
  */
@@ -41,7 +41,7 @@ export default defineComponent({
       if (config?.type === "container-tab") {
         return <TabContainer gItem={config} />;
       } else if (config?.type === "chart-pie") {
-        return <ChartPie />;
+        return <ChartPie layout={config}/>;
       } else if (config?.type === "container-base") {
         return <BaseContainer gItem={config} />;
       } else {

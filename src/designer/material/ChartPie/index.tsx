@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-25 22:32:54
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-27 22:35:07
+ * @LastEditTime: 2022-11-28 22:14:57
  * @FilePath: /vulture/src/designer/material/ChartPie/index.tsx
  * @Description: update here
  */
@@ -11,7 +11,16 @@ import { defineComponent, ref, watch, onMounted } from "vue";
 import { Rose } from "@antv/g2plot";
 export * from './meta'
 export default defineComponent({
-  setup() {
+  props:{
+    layout:{
+      type:Object as any,
+      required: true
+    }
+  
+  },
+  setup(props) {
+    console.log(props.layout);
+    
     const chartPieDom = ref();
 
     onMounted(() => {

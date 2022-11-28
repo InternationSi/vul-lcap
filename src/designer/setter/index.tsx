@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 22:31:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-27 22:51:29
+ * @LastEditTime: 2022-11-28 22:59:11
  * @FilePath: /vulture/src/designer/setter/index.tsx
  * @Description: update here
  */
@@ -54,10 +54,8 @@ export default defineComponent({
   },
   setup(props, {expose}) {
     console.log(props.value, 'ppp');
-    console.log(metaComponentsSetter[(props.value.type)]);
     
     const {value} = props
-
     const classesRef = useStyles();
     const setterValue = ref<any>({});
     expose({
@@ -67,6 +65,10 @@ export default defineComponent({
     baseSetterMeta.forEach((info) => {
       setterValue.value[info.name] = value[info.name]
     });
+    metaComponentsSetter[(props.value.type)]?.forEach((info) => {
+      setterValue.value[info.name] = value[info.name]
+    })
+
     return () => {
       
       const classes = classesRef.value;
