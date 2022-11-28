@@ -53,7 +53,7 @@ export default defineComponent({
           >
           <el-menu-item
             index="blockList"
-            @click="$router.push({ path: '/admin/moduleList' })"
+            @click="$router.push({ path: '/admin/moduleNav/moduleList' })"
             >模型列表</el-menu-item
           >
         </el-sub-menu>

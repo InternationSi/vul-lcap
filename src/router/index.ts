@@ -22,7 +22,10 @@ import { tokenService } from "@/utils/tokenService";
 import comsCreate from "../views/comsCreate/comsCreate.vue";
 import personalCenter from "../views/personalCenter";
 import blockly from "../views/blockly/index.vue";
+import moduleNav from "../views/moduleList/moduleNav.vue";
 import moduleList from "../views/moduleList/moduleList.vue";
+import moduleAttribute from "../views/moduleList/moduleAttribute.vue";
+
 // import { useLoginStore } from '@/store/login';
 const routes = [
   {
@@ -38,7 +41,17 @@ const routes = [
           { path: "/admin/blockList", component: blockList },
           { path: "/admin/comsCreate", component: comsCreate },
           { path: "/admin/blockly", component: blockly },
-          { path: "/admin/moduleList", component: moduleList }
+          {
+            path: "/admin/moduleNav",
+            component: moduleNav,
+            children: [
+              { path: "/admin/moduleNav/moduleList", component: moduleList },
+              {
+                path: "/admin/moduleNav/moduleAttribute",
+                component: moduleAttribute
+              }
+            ]
+          }
         ]
       },
       {

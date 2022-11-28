@@ -17,7 +17,7 @@ const useStyles = createUseStyles({
   renderBox: {
     position: "absolute",
     right: "0px",
-    zIndex: '10',
+    zIndex: 10,
   }
 });
 
