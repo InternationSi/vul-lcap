@@ -1,9 +1,9 @@
 /*
  * @Author: sfy
- * @Date: 2022-11-27 22:47:01
+ * @Date: 2022-11-29 23:33:49
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-29 23:19:44
- * @FilePath: /vulture/src/designer/setter/components/String/index.tsx
+ * @LastEditTime: 2022-11-29 23:38:13
+ * @FilePath: /vulture/src/designer/setter/components/Jsons/index.tsx
  * @Description: update here
  */
 import {
@@ -17,6 +17,7 @@ import {
 import { createUseStyles } from "vue-jss";
 import LabelSlot from "../LabelSlot";
 const useStyles = createUseStyles({});
+import JsonEditorVue from 'json-editor-vue'
 
 export default defineComponent({
   props: {
@@ -33,6 +34,9 @@ export default defineComponent({
       required: true,
     },
   },
+  components:{
+    JsonEditorVue
+  },
   setup(props) {
     const classesRef = useStyles();
     const str = ref('');
@@ -44,9 +48,7 @@ export default defineComponent({
         <LabelSlot title={props.label+ ":"}>
           {{
             default: () => (
-              <el-input v-model={str.value} onChange={(value: string) => {
-                props.onChange(value);
-              }} />
+              <JsonEditorVue v-model={str.value} />
             ),
           }}
         </LabelSlot>

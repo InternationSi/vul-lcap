@@ -1,9 +1,9 @@
 /*
  * @Author: sfy
- * @Date: 2022-11-27 22:47:01
+ * @Date: 2022-11-29 23:15:57
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-29 23:19:44
- * @FilePath: /vulture/src/designer/setter/components/String/index.tsx
+ * @LastEditTime: 2022-11-29 23:19:35
+ * @FilePath: /vulture/src/designer/setter/components/Bool/index.tsx
  * @Description: update here
  */
 import {
@@ -25,7 +25,7 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: String,
+      type: Boolean,
       required: true,
     },
     onChange: {
@@ -35,8 +35,8 @@ export default defineComponent({
   },
   setup(props) {
     const classesRef = useStyles();
-    const str = ref('');
-    str.value = props.value;
+    const bl = ref(false);
+    bl.value = props.value;
 
     return () => {
       const classes = classesRef.value;
@@ -44,9 +44,9 @@ export default defineComponent({
         <LabelSlot title={props.label+ ":"}>
           {{
             default: () => (
-              <el-input v-model={str.value} onChange={(value: string) => {
+              <el-switch v-model={bl.value} onChange={(value: boolean) => {
                 props.onChange(value);
-              }} />
+              }}/>
             ),
           }}
         </LabelSlot>

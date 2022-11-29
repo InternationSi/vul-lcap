@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-27 22:26:57
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-28 22:40:39
+ * @LastEditTime: 2022-11-29 23:39:39
  * @FilePath: /vulture/src/designer/material/ChartPie/meta.ts
  * @Description: update here
  */
@@ -14,5 +14,17 @@ export const ChartPieMetaSetter:MetaType[] = [
     label: "标题",
     type: "StringSetter",
     initValue: '饼图',
+  },
+  {
+    name: "testBool",
+    label: "是否",
+    type: "BoolSetter",
+    initValue: false,
+  },
+  {
+    name: "jsontest",
+    label: "jsontest",
+    type: "JsonSetter",
+    initValue: '',
   },
 ]

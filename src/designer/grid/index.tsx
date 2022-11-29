@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-27 21:52:16
+ * @LastEditTime: 2022-11-29 23:24:37
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -108,6 +108,8 @@ export default defineComponent({
     const setterConfirm = () => {
       const changeIndex = layout.value.findIndex(item => item.i === keepNode.value.i)
       layout.value[changeIndex] = {...layout.value[changeIndex],...setterRef.value.setterValue}
+      console.log(layout.value, 'layout.value');
+      
       setterConfigVisible.value = false
     }
 
