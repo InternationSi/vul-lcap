@@ -1,6 +1,4 @@
 <script lang="ts">
-import { ArrowRight } from "@element-plus/icons-vue";
-
 import { useRoute } from "vue-router";
 import { defineComponent, ref, reactive, onMounted } from "vue";
 export default defineComponent({
@@ -14,8 +12,8 @@ export default defineComponent({
 });
 </script>
 <template>
-  <div>
-    <div style="margin: 20px">
+  <div class="wrap">
+    <div style="padding: 20px 0 0 20px">
       <el-breadcrumb>
         <el-breadcrumb-item :to="{ path: '/admin/moduleNav/moduleList' }"
           >模型列表</el-breadcrumb-item
@@ -29,4 +27,8 @@ export default defineComponent({
   </div>
 </template>
 
-<style></style>
+<style>
+.wrap {
+  background: #ffff;
+}
+</style>

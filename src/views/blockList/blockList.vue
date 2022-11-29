@@ -109,6 +109,7 @@ export default defineComponent({
         label: "select"
       }
     ];
+
     //右侧模块属性框是否展示
     const isShowBtn = ref(false);
     //新增属性弹框是否展示

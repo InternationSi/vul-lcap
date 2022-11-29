@@ -57,7 +57,10 @@ export default defineComponent({
       addForm.field_type = "";
       addForm.is_primary = false;
       addForm.is_unique = false;
+      addForm.module_id = moduleId;
+      console.log(addForm.module_id, "99999");
     };
+
     const formState = reactive<DialogForm>({
       module_key: "",
       namespace_id: "",
@@ -65,8 +68,28 @@ export default defineComponent({
       module_name: "",
       id: ""
     });
+    //弹框所属命名空间类型
+    const typeOptions = [
+      {
+        value: "string",
+        label: "string"
+      },
+      {
+        value: "select",
+        label: "select"
+      }
+    ];
+    const moduleId = (router.currentRoute.value.query.id as any).toString();
     onMounted(async () => {
       console.log(router.currentRoute.value.query.id, "1111");
+      //查询模型属性
+      attributeList.value = await getModuleField();
+      console.log(attributeList.value, "rrrrr");
+      attributeList.value.forEach((item, index) => {
+        if (item.module_id == router.currentRoute.value.query.id) {
+          tableData.value.push(item);
+        }
+      });
     });
     const confirmEvent = async (item: any) => {
       const deleteField = await deleteModuleField(item, item.id);
@@ -79,7 +102,7 @@ export default defineComponent({
       tableData.value = [];
       attributeList.value = await getModuleField();
       attributeList.value.forEach((item) => {
-        if (item.module_id == formState.id) {
+        if (item.module_id == moduleId) {
           tableData.value.push(item);
         }
       });
@@ -89,6 +112,7 @@ export default defineComponent({
     };
     //编辑属性按钮
     const editAttribute = async (item: any) => {
+      console.log(item, "77777");
       addFormVisible.value = true;
       isAddAttribute.value = false;
       addForm.field_key = item.field_key;
@@ -97,6 +121,52 @@ export default defineComponent({
       addForm.is_primary = item.is_primary;
       addForm.is_unique = item.is_unique;
       addForm.id = item.id;
+      addForm.module_id = moduleId;
+    };
+    //确认属性弹框按钮
+    const confirmAttribute = async (item: any) => {
+      //判断是新增属性还是编辑属性
+      if (isAddAttribute.value) {
+        console.log(addForm, "添加传参");
+        //新增
+        const addField = await addModuleField(addForm);
+        if (addField.code) {
+          ElMessage({
+            message: "添加属性失败",
+            type: "error"
+          });
+        } else {
+          ElMessage({
+            message: "添加属性成功",
+            type: "success"
+          });
+          addFormVisible.value = false;
+          //更新页面
+          tableData.value = [];
+          attributeList.value = await getModuleField();
+          attributeList.value.forEach((item) => {
+            if (item.module_id == moduleId) {
+              tableData.value.push(item);
+            }
+          });
+        }
+      } else {
+        //编辑属性
+        const editAttr = await updateModuleField(item, addForm.id);
+        console.log(editAttr, "更新接口");
+        ElMessage({
+          message: "编辑属性成功",
+          type: "success"
+        });
+        addFormVisible.value = false;
+        tableData.value = [];
+        attributeList.value = await getModuleField();
+        attributeList.value.forEach((item) => {
+          if (item.module_id == moduleId) {
+            tableData.value.push(item);
+          }
+        });
+      }
     };
 
     return {
@@ -109,20 +179,60 @@ export default defineComponent({
       confirmEvent,
       cancelEvent,
       editAttribute,
-      router
+      router,
+      typeOptions,
+      confirmAttribute,
+      moduleId
     };
   }
 });
 </script>
 <template>
   <div class="wrap">
-    <el-button type="primary" plain @click="addAttribute">新增</el-button>
-
-    <el-table
-      :data="tableData"
-      style="width: 100%; font-size: 12px; margin-top: 10px"
-      border
+    <el-button
+      type="primary"
+      plain
+      @click="addAttribute"
+      style="margin: 20px 20px 20px 20px"
+      >新增</el-button
     >
+    <el-dialog
+      v-model="addFormVisible"
+      :title="isAddAttribute == true ? '新增' : '编辑'"
+    >
+      <el-form :model="addForm">
+        <el-form-item label="名称:">
+          <el-input v-model="addForm.field_key" />
+        </el-form-item>
+        <el-form-item label="标题:">
+          <el-input v-model="addForm.field_name" />
+        </el-form-item>
+        <el-form-item label="类型:">
+          <el-select v-model="addForm.field_type" placeholder="请选择类型">
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              style="font-size: 12px"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="属性:">
+          <el-checkbox label="主键" v-model="addForm.is_primary" />
+          <el-checkbox label="唯一" v-model="addForm.is_unique" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="addFormVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="confirmAttribute(addForm)">
+            Confirm
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
+    <el-table :data="tableData" style="width: 100%; font-size: 12px" border>
       <el-table-column fixed prop="field_key" label="名称" align="center">
       </el-table-column>
       <el-table-column prop="field_name" label="标题" align="center">
