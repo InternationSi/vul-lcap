@@ -2,12 +2,12 @@
  * @Author: sfy
  * @Date: 2022-10-24 23:01:50
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-16 23:12:28
+ * @LastEditTime: 2022-11-28 22:42:38
  * @FilePath: /vulture/src/designer/grid/effect/useCreateConfig.ts
  * @Description: update here
  */
 import { nanoid } from 'nanoid'
-
+import { metaComponentsSetter } from '@/designer/material'
 
 interface UseCreateConfigPropsType {
   type:string
@@ -27,6 +27,10 @@ interface UseCreateConfigType {
 const useCreateConfig:UseCreateConfigType = ({
   type
 }) => {
+  const targetObj:any = {}
+  metaComponentsSetter[type]?.forEach(item => {
+    targetObj[item.name] = item.initValue
+  })
 
   const config:any = {}
 
@@ -61,7 +65,8 @@ const useCreateConfig:UseCreateConfigType = ({
     h: 6,
     i: nanoid(),
     type, 
-    config
+    config,
+    ...targetObj
   };
 }
 export default useCreateConfig
