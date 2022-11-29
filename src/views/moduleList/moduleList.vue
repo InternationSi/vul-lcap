@@ -47,16 +47,7 @@ export default defineComponent({
       id: ""
     });
     const tableData = ref<ModuleData[]>([]);
-    const options = [
-      {
-        value: "string",
-        label: "string"
-      },
-      {
-        value: "select",
-        label: "select"
-      }
-    ];
+
     //添加或编辑模型数据传参
     const formStateParam = {
       module_key: "",
@@ -75,25 +66,17 @@ export default defineComponent({
         label: "select"
       }
     ];
-
     const temptyModule = ref<ModuleName[]>([]);
     const ruleFormRef = ref<FormInstance>();
     const isShowBtn = ref(false);
     onMounted(async () => {
       //模块信息 命名空间下拉框值
       const res = await getNameSpaces();
-      // console.log(res, "wwwww");
       renameBlockSelectList.value = res;
-      //   console.log(renameBlockSelectList.value, "命名空间");
       //查询所有模型名称
       const moduleList = await getModuleList();
       console.log(moduleList, "模型数据");
       tableData.value = moduleList;
-      //   moduleNameList.value = moduleList;
-
-      //查询所有属性
-      //   attributeList.value = await getModuleField();
-      //   console.log(attributeList.value, "rrrrr");
     });
 
     const confirmEvent = async (index: number) => {
@@ -106,9 +89,6 @@ export default defineComponent({
       isShowBtn.value = false;
       const moduleList = await getModuleList();
       temptyModule.value = moduleList;
-    };
-    const cancelEvent = () => {
-      console.log("cancel!");
     };
 
     //添加模型数据按钮
@@ -125,9 +105,8 @@ export default defineComponent({
       formStateParam.module_key = formState.module_key;
       formStateParam.namespace_id = formState.namespace_id;
       formStateParam.module_name = formState.module_name;
-      console.log(isAddItem.value, "33333");
       if (isAddItem.value) {
-        // const res = await addModule(formStateParam);
+        const res = await addModule(formStateParam);
         ElMessage({
           message: "添加数据成功",
           type: "success"
@@ -183,9 +162,8 @@ export default defineComponent({
     return {
       router,
       tableData,
-      options,
+
       confirmEvent,
-      cancelEvent,
       renameBlockSelectList,
       addItem,
       dialogFormVisible,
@@ -311,7 +289,6 @@ export default defineComponent({
             icon-color="#626AEF"
             title="是否确认删除此行?"
             @confirm="confirmEvent(scope.$index)"
-            @cancel="cancelEvent"
           >
             <template #reference>
               <el-icon style="color: red" size="14px"><Delete /></el-icon>
