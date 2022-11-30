@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 23:03:58
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-22 23:12:28
+ * @LastEditTime: 2022-11-30 23:09:58
  * @FilePath: /vulture/src/designer/setter/components/Number/index.tsx
  * @Description: update here
  */
@@ -30,7 +30,6 @@ export default defineComponent({
     },
     onChange: {
       type: Function,
-      required: true,
     },
   },
   setup(props) {
@@ -49,7 +48,9 @@ export default defineComponent({
                 min={0}
                 max={12}
                 onChange={(value: number) => {
-                  props.onChange(value);
+                  if(props.onChange) {
+                    props.onChange(value);
+                  }
                 }}
               />
             ),

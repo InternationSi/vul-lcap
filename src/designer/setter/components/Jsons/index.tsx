@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-29 23:33:49
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-29 23:38:13
+ * @LastEditTime: 2022-11-30 23:20:34
  * @FilePath: /vulture/src/designer/setter/components/Jsons/index.tsx
  * @Description: update here
  */
@@ -26,12 +26,11 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: String,
+      type: Object,
       required: true,
     },
     onChange: {
       type: Function,
-      required: true,
     },
   },
   components:{
@@ -39,16 +38,23 @@ export default defineComponent({
   },
   setup(props) {
     const classesRef = useStyles();
-    const str = ref('');
+    const str = ref({});
     str.value = props.value;
 
     return () => {
       const classes = classesRef.value;
+      watch(() => str.value,
+        (value) => {
+          if(props.onChange) {
+            props.onChange(value);
+          }
+        }
+      ) 
       return (
         <LabelSlot title={props.label+ ":"}>
           {{
             default: () => (
-              <JsonEditorVue v-model={str.value} />
+              <JsonEditorVue v-model={str.value} mode='text' mainMenuBar={false} statusBar={false}/>
             ),
           }}
         </LabelSlot>

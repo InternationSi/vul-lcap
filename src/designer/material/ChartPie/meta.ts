@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-27 22:26:57
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-29 23:39:39
+ * @LastEditTime: 2022-11-30 22:53:53
  * @FilePath: /vulture/src/designer/material/ChartPie/meta.ts
  * @Description: update here
  */
@@ -25,6 +25,6 @@ export const ChartPieMetaSetter:MetaType[] = [
     name: "jsontest",
     label: "jsontest",
     type: "JsonSetter",
-    initValue: '',
+    initValue: {},
   },
 ]
