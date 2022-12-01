@@ -3,11 +3,7 @@ import { defineComponent, ref, reactive, onMounted } from "vue";
 
 import { useRouter } from "vue-router";
 import {
-  addModule,
   addModuleField,
-  editModuleList,
-  getModuleList,
-  deleteModule,
   getModuleField,
   updateModuleField,
   deleteModuleField
@@ -79,37 +75,44 @@ export default defineComponent({
         label: "select"
       }
     ];
+
     const moduleId = (router.currentRoute.value.query.id as any).toString();
     onMounted(async () => {
       console.log(router.currentRoute.value.query.id, "1111");
-      //查询模型属性
-      attributeList.value = await getModuleField();
-      console.log(attributeList.value, "rrrrr");
-      attributeList.value.forEach((item, index) => {
-        if (item.module_id == router.currentRoute.value.query.id) {
-          tableData.value.push(item);
-        }
-      });
+      try {
+        //查询模型属性
+        attributeList.value = await getModuleField();
+        console.log(attributeList.value, "rrrrr");
+        attributeList.value.forEach((item, index) => {
+          if (item.module_id == router.currentRoute.value.query.id) {
+            tableData.value.push(item);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     });
     const confirmEvent = async (item: any) => {
-      const deleteField = await deleteModuleField(item, item.id);
-      console.log(deleteField, "删除接口");
-      ElMessage({
-        message: "删除属性成功",
-        type: "success"
-      });
-      addFormVisible.value = false;
-      tableData.value = [];
-      attributeList.value = await getModuleField();
-      attributeList.value.forEach((item) => {
-        if (item.module_id == moduleId) {
-          tableData.value.push(item);
-        }
-      });
+      try {
+        const deleteField = await deleteModuleField(item, item.id);
+        console.log(deleteField, "删除接口");
+        ElMessage({
+          message: "删除属性成功",
+          type: "success"
+        });
+        addFormVisible.value = false;
+        tableData.value = [];
+        attributeList.value = await getModuleField();
+        attributeList.value.forEach((item) => {
+          if (item.module_id == moduleId) {
+            tableData.value.push(item);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     };
-    const cancelEvent = () => {
-      console.log("cancel!");
-    };
+
     //编辑属性按钮
     const editAttribute = async (item: any) => {
       console.log(item, "77777");
@@ -127,46 +130,43 @@ export default defineComponent({
     const confirmAttribute = async (item: any) => {
       //判断是新增属性还是编辑属性
       if (isAddAttribute.value) {
-        console.log(addForm, "添加传参");
-        //新增
-        const addField = await addModuleField(addForm);
-        if (addField.code) {
-          ElMessage({
-            message: "添加属性失败",
-            type: "error"
-          });
-        } else {
+        try {
+          //新增
+          const addField = await addModuleField(addForm);
           ElMessage({
             message: "添加属性成功",
             type: "success"
           });
-          addFormVisible.value = false;
-          //更新页面
-          tableData.value = [];
-          attributeList.value = await getModuleField();
-          attributeList.value.forEach((item) => {
-            if (item.module_id == moduleId) {
-              tableData.value.push(item);
-            }
+        } catch (error) {
+          ElMessage({
+            message: "添加属性失败",
+            type: "error"
           });
         }
       } else {
         //编辑属性
-        const editAttr = await updateModuleField(item, addForm.id);
-        console.log(editAttr, "更新接口");
-        ElMessage({
-          message: "编辑属性成功",
-          type: "success"
-        });
-        addFormVisible.value = false;
-        tableData.value = [];
-        attributeList.value = await getModuleField();
-        attributeList.value.forEach((item) => {
-          if (item.module_id == moduleId) {
-            tableData.value.push(item);
-          }
-        });
+        try {
+          const editAttr = await updateModuleField(item, addForm.id);
+          console.log(editAttr, "更新接口");
+          ElMessage({
+            message: "编辑属性成功",
+            type: "success"
+          });
+        } catch (error) {
+          ElMessage({
+            message: "编辑属性失败",
+            type: "error"
+          });
+        }
       }
+      addFormVisible.value = false;
+      tableData.value = [];
+      attributeList.value = await getModuleField();
+      attributeList.value.forEach((item) => {
+        if (item.module_id == moduleId) {
+          tableData.value.push(item);
+        }
+      });
     };
 
     return {
@@ -177,7 +177,6 @@ export default defineComponent({
       addAttribute,
       tableData,
       confirmEvent,
-      cancelEvent,
       editAttribute,
       router,
       typeOptions,
@@ -264,7 +263,6 @@ export default defineComponent({
             icon-color="#626AEF"
             title="是否确认删除此行?"
             @confirm="confirmEvent(scope.row)"
-            @cancel="cancelEvent"
           >
             <template #reference>
               <el-icon style="color: red"><Delete /></el-icon>

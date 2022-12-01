@@ -6,17 +6,13 @@ import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 
 import { useRouter } from "vue-router";
-import type { selectItem, ModuleName } from "./moduleList.type";
-import { ArrowRight } from "@element-plus/icons-vue";
+import type { ModuleName } from "./moduleList.type";
+
 import {
   addModule,
-  addModuleField,
   editModuleList,
   getModuleList,
-  deleteModule,
-  getModuleField,
-  updateModuleField,
-  deleteModuleField
+  deleteModule
 } from "@/request/module";
 interface ModuleData {
   module_key: string;
@@ -80,12 +76,16 @@ export default defineComponent({
     });
 
     const confirmEvent = async (index: number) => {
+      try {
+        const deleteRes = await deleteModule(formState.id);
+        ElMessage({
+          message: "删除数据成功",
+          type: "success"
+        });
+      } catch (error) {
+        console.log(error);
+      }
       //调删除接口
-      const deleteRes = await deleteModule(formState.id);
-      ElMessage({
-        message: "删除数据成功",
-        type: "success"
-      });
       isShowBtn.value = false;
       const moduleList = await getModuleList();
       temptyModule.value = moduleList;
@@ -106,27 +106,38 @@ export default defineComponent({
       formStateParam.namespace_id = formState.namespace_id;
       formStateParam.module_name = formState.module_name;
       if (isAddItem.value) {
-        const res = await addModule(formStateParam);
-        ElMessage({
-          message: "添加数据成功",
-          type: "success"
-        });
-        //更新模型数据名称
+        try {
+          const res = await addModule(formStateParam);
+          ElMessage({
+            message: "添加数据成功",
+            type: "success"
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          const updateModule = await editModuleList(
+            formStateParam,
+            formState.id
+          );
+          console.log(updateModule, "更新接口");
+          dialogFormVisible.value = false;
+          ElMessage({
+            message: "更新数据成功",
+            type: "success"
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      try {
         const moduleList = await getModuleList();
         temptyModule.value = moduleList;
         //弹框关闭
         dialogFormVisible.value = false;
-      } else {
-        const updateModule = await editModuleList(formStateParam, formState.id);
-        console.log(updateModule, "更新接口");
-        dialogFormVisible.value = false;
-        ElMessage({
-          message: "更新数据成功",
-          type: "success"
-        });
-        //更新模型数据
-        const moduleList = await getModuleList();
-        temptyModule.value = moduleList;
+      } catch (error) {
+        console.log(error, "更新失败");
       }
     };
     //校验表单
@@ -162,7 +173,6 @@ export default defineComponent({
     return {
       router,
       tableData,
-
       confirmEvent,
       renameBlockSelectList,
       addItem,
