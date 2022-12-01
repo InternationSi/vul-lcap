@@ -1,9 +1,9 @@
 /*
  * @Author: sfy
- * @Date: 2022-11-20 23:03:58
+ * @Date: 2022-11-29 23:33:49
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-30 23:09:58
- * @FilePath: /vulture/src/designer/setter/components/Number/index.tsx
+ * @LastEditTime: 2022-11-30 23:20:34
+ * @FilePath: /vulture/src/designer/setter/components/Jsons/index.tsx
  * @Description: update here
  */
 import {
@@ -17,6 +17,7 @@ import {
 import { createUseStyles } from "vue-jss";
 import LabelSlot from "../LabelSlot";
 const useStyles = createUseStyles({});
+import JsonEditorVue from 'json-editor-vue'
 
 export default defineComponent({
   props: {
@@ -25,34 +26,35 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: Number,
+      type: Object,
       required: true,
     },
     onChange: {
       type: Function,
     },
   },
+  components:{
+    JsonEditorVue
+  },
   setup(props) {
     const classesRef = useStyles();
-    const num = ref(0);
-    num.value = props.value;
+    const str = ref({});
+    str.value = props.value;
 
     return () => {
       const classes = classesRef.value;
+      watch(() => str.value,
+        (value) => {
+          if(props.onChange) {
+            props.onChange(value);
+          }
+        }
+      ) 
       return (
         <LabelSlot title={props.label+ ":"}>
           {{
             default: () => (
-              <el-input-number  
-                v-model={num.value}
-                min={0}
-                max={12}
-                onChange={(value: number) => {
-                  if(props.onChange) {
-                    props.onChange(value);
-                  }
-                }}
-              />
+              <JsonEditorVue v-model={str.value} mode='text' mainMenuBar={false} statusBar={false}/>
             ),
           }}
         </LabelSlot>

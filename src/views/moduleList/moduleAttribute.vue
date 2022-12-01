@@ -276,7 +276,7 @@ export default defineComponent({
     </el-table>
   </div>
 </template>
-<style scoped lang="less">
+<style scoped lang="scss">
 .wrap {
   background: #ffff;
 }

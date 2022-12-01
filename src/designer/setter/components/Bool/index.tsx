@@ -1,9 +1,9 @@
 /*
  * @Author: sfy
- * @Date: 2022-11-20 23:03:58
+ * @Date: 2022-11-29 23:15:57
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-30 23:09:58
- * @FilePath: /vulture/src/designer/setter/components/Number/index.tsx
+ * @LastEditTime: 2022-11-30 23:13:42
+ * @FilePath: /vulture/src/designer/setter/components/Bool/index.tsx
  * @Description: update here
  */
 import {
@@ -25,7 +25,7 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: Number,
+      type: Boolean,
       required: true,
     },
     onChange: {
@@ -34,8 +34,8 @@ export default defineComponent({
   },
   setup(props) {
     const classesRef = useStyles();
-    const num = ref(0);
-    num.value = props.value;
+    const bl = ref(false);
+    bl.value = props.value;
 
     return () => {
       const classes = classesRef.value;
@@ -43,16 +43,11 @@ export default defineComponent({
         <LabelSlot title={props.label+ ":"}>
           {{
             default: () => (
-              <el-input-number  
-                v-model={num.value}
-                min={0}
-                max={12}
-                onChange={(value: number) => {
-                  if(props.onChange) {
-                    props.onChange(value);
-                  }
-                }}
-              />
+              <el-switch v-model={bl.value} onChange={(value: boolean) => {
+                if(props.onChange) {
+                  props.onChange(value);
+                }
+              }}/>
             ),
           }}
         </LabelSlot>

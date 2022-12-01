@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-23 22:53:47
+ * @LastEditTime: 2022-11-30 23:06:28
  * @FilePath: /vulture/src/router/index.ts
  * @Description: update here
  */
@@ -25,6 +25,7 @@ import blockly from "../views/blockly/index.vue";
 import moduleNav from "../views/moduleList/moduleNav.vue";
 import moduleList from "../views/moduleList/moduleList.vue";
 import moduleAttribute from "../views/moduleList/moduleAttribute.vue";
+import SetterTest from '@/designer/setter/index.vue'
 
 // import { useLoginStore } from '@/store/login';
 const routes = [
@@ -57,6 +58,10 @@ const routes = [
       {
         path: "/design",
         component: grid
+      },
+      {
+        path: "/setter",
+        component: SetterTest
       }
     ]
   },

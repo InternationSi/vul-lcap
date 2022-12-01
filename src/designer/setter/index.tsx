@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-20 22:31:14
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-28 22:59:11
+ * @LastEditTime: 2022-11-29 23:40:24
  * @FilePath: /vulture/src/designer/setter/index.tsx
  * @Description: update here
  */
@@ -23,7 +23,9 @@ import GridItemList from "../grid/components/GridItemList";
 import {metaComponentsSetter} from '../material'
 import  {
   NumberSetter,
-  StringSetter
+  StringSetter,
+  BoolSetter,
+  JsonSetter
 } from './components'
 const useStyles = createUseStyles({
   setterBox: {
@@ -44,7 +46,9 @@ export default defineComponent({
   name: "setter",
   components: {
     NumberSetter,
-    StringSetter
+    StringSetter,
+    BoolSetter,
+    JsonSetter
   },
   props:{
     value:{

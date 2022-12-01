@@ -2,12 +2,12 @@
  * @Author: sfy
  * @Date: 2022-10-31 23:43:41
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-04 23:33:18
+ * @LastEditTime: 2022-12-01 22:25:17
  * @FilePath: /vulture/src/components/Operation/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";
-import Style from "./index.module.less";
+import Style from "./index.module.scss";
 
 export default defineComponent({
   props: {

@@ -59,7 +59,7 @@ export default defineComponent({
     </div>
   </div>
 </template>
-<style scoped lang="less">
+<style scoped lang="scss">
 .register {
   min-width: 1040px;
   min-height: 99.9vh;

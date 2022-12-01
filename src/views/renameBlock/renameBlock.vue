@@ -200,7 +200,7 @@ export default defineComponent({
     </el-dialog>
   </div>
 </template>
-<style scoped lang="less">
+<style scoped lang="scss">
 .warp {
   background: rgba(250, 250, 250, 1);
   margin-bottom: 2px;

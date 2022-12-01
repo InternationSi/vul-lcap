@@ -2,12 +2,12 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-27 22:18:22
+ * @LastEditTime: 2022-12-01 22:27:47
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref, watch } from "vue";
-import styles from "./index.module.less";
+import styles from "./index.module.scss";
 import { nanoid } from "nanoid";
 import { useCommunicationStore } from "@/store/transport";
 import { materialPanelScheme } from "./consts";
