@@ -2,14 +2,14 @@
  * @Author: sfy
  * @Date: 2022-10-22 21:34:52
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-27 22:53:03
+ * @LastEditTime: 2022-12-01 22:28:33
  * @FilePath: /vulture/src/designer/layout/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref } from "vue";
 import Grid from "../grid";
 import leftDash from "./components/leftDash";
-import "./index.less";
+import "./index.scss";
 import { useRouter } from "vue-router";
 import { createUseStyles } from "vue-jss";
 

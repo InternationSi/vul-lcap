@@ -2,8 +2,8 @@
  * @Author: sfy
  * @Date: 2022-11-16 23:04:49
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-16 23:06:41
- * @FilePath: /vulture/src/designer/material/BaseContainer/index..tsx
+ * @LastEditTime: 2022-12-01 22:27:26
+ * @FilePath: /vulture/src/designer/material/BaseContainer/index.tsx
  * @Description: update here
  */
 import {
@@ -16,7 +16,7 @@ import {
 } from "vue";
 import GridOutLine from "../../grid/components/GridOutLine";
 import Render from "@/designer/render";
-import styles from "./index.module.less";
+import styles from "./index.module.scss";
 
 export default defineComponent({
   name: "BaseContainer",

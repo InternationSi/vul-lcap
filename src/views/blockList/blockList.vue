@@ -565,7 +565,7 @@ export default defineComponent({
     </div>
   </div>
 </template>
-<style scoped lang="less">
+<style scoped lang="scss">
 .warp {
   background: rgba(250, 250, 250, 1);
 

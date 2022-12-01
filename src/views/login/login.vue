@@ -1,25 +1,25 @@
 <script lang="ts">
-import { defineComponent, ref, watch, reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { useLoginStore } from '@/store/login';
-import { ElMessage } from 'element-plus';
-import qs from 'qs';
+import { defineComponent, ref, watch, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useLoginStore } from "@/store/login";
+import { ElMessage } from "element-plus";
+import qs from "qs";
 export default defineComponent({
   setup() {
     const store = useLoginStore();
     const router = useRouter();
-    const activeKey = ref('3');
+    const activeKey = ref("3");
     let formUser = reactive({
-      password: 'admin',
-      username: 'superadmin',
+      password: "admin",
+      username: "superadmin"
     });
     let formPhone = reactive({
-      phoneValue: '',
-      codePhone: '',
+      phoneValue: "",
+      codePhone: ""
     });
     let formEmail = reactive({
-      emailValue: '',
-      codeEmail: '',
+      emailValue: "",
+      codeEmail: ""
     });
     let formData = reactive({});
     //判断按钮状态
@@ -27,13 +27,13 @@ export default defineComponent({
     //倒计时
     const count = ref(60);
     //定时器
-    const timer = ref('');
+    const timer = ref("");
     //11位手机号码正则
     const reg_tel =
       /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
     //邮箱正则
     const reg_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-    let checked = ref('');
+    let checked = ref("");
     let codeShow = ref(false);
     //判断密码登录还是扫码登录
     let boxShow = ref(true);
@@ -47,13 +47,13 @@ export default defineComponent({
         .login(qs.stringify(formData))
         .then(() => {
           ElMessage({
-            message: '登录成功',
-            type: 'success',
+            message: "登录成功",
+            type: "success"
           });
-          router.push('/');
+          router.push("/");
         })
         .catch(() => {
-          ElMessage.error('登录失败,请稍后再试')
+          ElMessage.error("登录失败,请稍后再试");
         });
     };
     //倒计时
@@ -71,14 +71,14 @@ export default defineComponent({
     };
     //跳转至注册页
     const toRegister = () => {
-      router.push('/register');
+      router.push("/register");
     };
     watch(
       activeKey,
       (newVal) => {
-        if (newVal == '1') {
+        if (newVal == "1") {
           formData = formPhone;
-        } else if (newVal == '2') {
+        } else if (newVal == "2") {
           formData = formEmail;
         } else {
           formData = formUser;
@@ -106,9 +106,9 @@ export default defineComponent({
       changeBox,
       Login,
       getCode,
-      toRegister,
+      toRegister
     };
-  },
+  }
 });
 </script>
 
@@ -242,7 +242,7 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .login {
   min-width: 1040px;
   min-height: 99.9vh;
@@ -265,7 +265,7 @@ export default defineComponent({
 
       .leftBox {
         width: 50%;
-        background-image: url('../../assets/images/tujiu.jpeg');
+        background-image: url("../../assets/images/tujiu.jpeg");
         // background-repeat: no-repeat;
         // background-size: 170%;
         font-size: 18px;

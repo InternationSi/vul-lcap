@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-31 22:06:00
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-23 23:18:18
+ * @LastEditTime: 2022-12-01 22:28:44
  * @FilePath: /vulture/src/designer/grid/components/GridOutLine/index.tsx
  * @Description: update here
  */
@@ -10,7 +10,7 @@ import { defineComponent, ref, watch, onMounted, PropType } from "vue";
 import useCreateConfig from "../../effect/useCreateConfig";
 import type { TabType } from "../../effect/useTabOptions";
 import GridItemList from "../GridItemList";
-import "../../index.less";
+import "../../index.scss";
 
 export default defineComponent({
   props: {

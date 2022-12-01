@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-30 23:03:28
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-30 23:16:33
+ * @LastEditTime: 2022-12-01 22:30:59
  * @FilePath: /vulture/src/designer/setter/index.vue
  * @Description: update here
 -->
@@ -20,7 +20,9 @@
     <el-row>
       <JsonSetter label="Json选择器" :value="{}" />
     </el-row>
-    <el-row> </el-row>
+    <el-row>
+      <DataMeta label="数据源" :value="[]" />
+    </el-row>
   </div>
 </template>
 
@@ -29,6 +31,7 @@ import {
   NumberSetter,
   StringSetter,
   BoolSetter,
-  JsonSetter
+  JsonSetter,
+  DataMeta
 } from "./components";
 </script>

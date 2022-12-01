@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-30 22:58:04
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-30 23:01:20
+ * @LastEditTime: 2022-12-01 22:31:11
  * @FilePath: /vulture/src/designer/setter/components/DataMeta/index.tsx
  * @Description: update here
  */
@@ -12,31 +12,50 @@ import {
   watch,
   onUnmounted,
   PropType,
-  reactive,
+  reactive
 } from "vue";
 import { createUseStyles } from "vue-jss";
 import LabelSlot from "../LabelSlot";
 const useStyles = createUseStyles({});
-import JsonEditorVue from 'json-editor-vue'
+import { createForm } from "@formily/core";
+import { FormProvider, createSchemaField } from "@formily/vue";
+import {
+  Submit,
+  FormItem,
+  Space,
+  Input,
+  Select,
+  DatePicker,
+  ArrayItems
+} from "@formily/element-plus";
+import { schema } from "./consts";
+
+const { SchemaField } = createSchemaField({
+  components: {
+    FormItem,
+    Space,
+    Input,
+    Select,
+    DatePicker,
+    ArrayItems
+  }
+});
 
 export default defineComponent({
   props: {
     label: {
       type: String,
-      required: true,
+      required: true
     },
     value: {
       type: Array,
-      required: true,
+      required: true
     },
     onChange: {
       type: Function,
-      required: true,
-    },
+    }
   },
-  components:{
-    JsonEditorVue
-  },
+
   setup(props) {
     const classesRef = useStyles();
     const str = ref({});
@@ -44,15 +63,19 @@ export default defineComponent({
 
     return () => {
       const classes = classesRef.value;
+      const form = createForm();
+
       return (
-        <LabelSlot title={props.label+ ":"}>
+        <LabelSlot title={props.label + ":"}>
           {{
             default: () => (
-              <JsonEditorVue v-model={str.value} mode='text' mainMenuBar={false} statusBar={false}/>
-            ),
+              <FormProvider form={form}>
+                <SchemaField schema={schema} />
+              </FormProvider>
+            )
           }}
         </LabelSlot>
       );
     };
-  },
+  }
 });

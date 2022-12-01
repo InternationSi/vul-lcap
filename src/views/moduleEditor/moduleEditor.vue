@@ -260,7 +260,7 @@ export default defineComponent({
     </div>
   </div>
 </template>
-<style scoped lang="less">
+<style scoped lang="scss">
 .block {
   overflow: hidden;
 }
