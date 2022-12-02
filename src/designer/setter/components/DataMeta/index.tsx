@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-30 22:58:04
  * @LastEditors: sfy
- * @LastEditTime: 2022-12-01 22:31:11
+ * @LastEditTime: 2022-12-02 23:34:18
  * @FilePath: /vulture/src/designer/setter/components/DataMeta/index.tsx
  * @Description: update here
  */
@@ -17,7 +17,7 @@ import {
 import { createUseStyles } from "vue-jss";
 import LabelSlot from "../LabelSlot";
 const useStyles = createUseStyles({});
-import { createForm } from "@formily/core";
+import { createForm, onFormValuesChange } from "@formily/core";
 import { FormProvider, createSchemaField } from "@formily/vue";
 import {
   Submit,
@@ -63,7 +63,16 @@ export default defineComponent({
 
     return () => {
       const classes = classesRef.value;
-      const form = createForm();
+      const form = createForm({
+        effects() {
+          onFormValuesChange((form) => {
+            console.log(form.values.dataMeta, '--')
+            props?.onChange && props.onChange(form.values.dataMeta)
+          })
+        },
+      });
+
+
 
       return (
         <LabelSlot title={props.label + ":"}>

@@ -2,18 +2,18 @@
  * @Author: sfy
  * @Date: 2022-12-01 22:07:28
  * @LastEditors: sfy
- * @LastEditTime: 2022-12-01 22:08:34
+ * @LastEditTime: 2022-12-02 23:33:09
  * @FilePath: /vulture/src/designer/setter/components/DataMeta/consts.ts
  * @Description: update here
  */
 export const schema = {
   type: 'object',
   properties: {
-    array: {
+    dataMeta: {
       type: 'array',
       'x-component': 'ArrayItems',
       'x-decorator': 'FormItem',
-      title: '对象数组',
+      title: '',
       items: {
         type: 'object',
         properties: {
@@ -26,38 +26,17 @@ export const schema = {
                 'x-decorator': 'FormItem',
                 'x-component': 'ArrayItems.SortHandle',
               },
-              date: {
+              label: {
                 type: 'string',
-                title: '日期',
-                'x-decorator': 'FormItem',
-                'x-component': 'DatePicker',
-                'x-component-props': {
-                  type: 'daterange',
-                  style: {
-                    width: '250px',
-                  },
-                },
-              },
-              input: {
-                type: 'string',
-                title: '输入框',
+                title: '标签',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
               },
-              select: {
+              value: {
                 type: 'string',
-                title: '下拉框',
-                enum: [
-                  { label: '选项1', value: 1 },
-                  { label: '选项2', value: 2 },
-                ],
+                title: '值',
                 'x-decorator': 'FormItem',
-                'x-component': 'Select',
-                'x-component-props': {
-                  style: {
-                    width: '250px',
-                  },
-                },
+                'x-component': 'Input',
               },
               remove: {
                 type: 'void',
