@@ -2,7 +2,7 @@
 import { defineComponent, ref, reactive, onMounted } from "vue";
 import { getNameSpaces } from "../../request/namespaces";
 import type { NsType } from "../renameBlock/renameBlock.type";
-import { ElMessage } from "element-plus";
+import { ElMessage,ElMessageBox } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 
 import { useRouter } from "vue-router";
@@ -133,7 +133,7 @@ export default defineComponent({
       }
       try {
         const moduleList = await getModuleList();
-        temptyModule.value = moduleList;
+        tableData.value = moduleList;
         //弹框关闭
         dialogFormVisible.value = false;
       } catch (error) {
@@ -162,13 +162,49 @@ export default defineComponent({
       dialogFormVisible.value = true;
       isAddItem.value = false;
     };
-    const toAttribute = async (item: any) => {
-      console.log(item, "ggggg");
+    const handleSelect = (row:any, column:any, event:any) =>{
       router.push({
         path: "/admin/moduleNav/moduleAttribute",
-        query: { id: item.id }
+        query: { id: row.id }
       });
-    };
+
+    }
+    const deleteItem = (item:any) =>{
+      console.log(item,"3333")
+      ElMessageBox.confirm(
+    '是否删除此数据',
+    
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
+    )
+    .then(async() => {
+      try {
+        const deleteRes = await deleteModule(item.id);
+        ElMessage({
+          message: "删除数据成功",
+          type: "success"
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      //调删除接口
+      isShowBtn.value = false;
+      const moduleList = await getModuleList();
+      tableData.value = moduleList;
+     
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Delete canceled',
+      })
+    })
+
+    }
+
 
     return {
       router,
@@ -185,7 +221,8 @@ export default defineComponent({
       ruleFormRef,
       editItem,
       isShowBtn,
-      toAttribute
+      handleSelect,
+      deleteItem
     };
   }
 });
@@ -214,9 +251,15 @@ export default defineComponent({
         >
           <el-input v-model="formState.module_key" :disabled="!isAddItem" />
         </el-form-item>
-        <el-form-item label="模型名称" label-width="110px" prop="module_name">
+        <el-form-item
+          label="模型名称"
+          layout="vertical"
+          label-width="110px"
+          prop="module_name"
+        >
           <el-input v-model="formState.module_name" />
         </el-form-item>
+   
         <el-form-item label-width="110px" label="类型" layout="vertical">
           <el-select
             v-model="formState.category"
@@ -265,6 +308,7 @@ export default defineComponent({
     <el-table
       :data="tableData"
       style="width: 100%; font-size: 12px; padding: 0 20px 20px 20px"
+      @row-click="handleSelect" 
       border
     >
       <el-table-column prop="module_key" label="ModuleName" align="center">
@@ -293,7 +337,7 @@ export default defineComponent({
 
       <el-table-column fixed="right" label="操作" width="120px" align="center">
         <template #default="scope">
-          <el-popconfirm
+          <!-- <el-popconfirm
             confirm-button-text="确定"
             cancel-button-text="取消"
             icon-color="#626AEF"
@@ -301,21 +345,22 @@ export default defineComponent({
             @confirm="confirmEvent(scope.$index)"
           >
             <template #reference>
-              <el-icon style="color: red" size="14px"><Delete /></el-icon>
+              <el-icon style="color: red" size="14px" @click=""><Delete /></el-icon>
             </template>
-          </el-popconfirm>
+          </el-popconfirm> -->
+          <el-icon style="color: red" size="14px" @click.native.stop="deleteItem(scope.row)"><Delete /></el-icon>
           <el-icon
             size="14px"
             style="margin-left: 10px"
-            @click="editItem(scope.row)"
+            @click.native.stop="editItem(scope.row)"
             ><Edit
           /></el-icon>
-          <el-icon
+          <!-- <el-icon
             size="14px"
             style="margin-left: 10px"
             @click="toAttribute(scope.row)"
             ><Link
-          /></el-icon>
+          /></el-icon> -->
         </template>
       </el-table-column>
     </el-table>
