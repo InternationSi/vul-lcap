@@ -1,8 +1,8 @@
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted } from "vue";
+import { defineComponent, ref, reactive, onMounted, inject } from "vue";
 import { getNameSpaces } from "../../request/namespaces";
 import type { NsType } from "../renameBlock/renameBlock.type";
-import { ElMessage,ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 
 import { useRouter } from "vue-router";
@@ -28,6 +28,7 @@ interface DialogForm {
   namespace_id: string;
   id: string;
 }
+
 export default defineComponent({
   setup() {
     const router = useRouter();
@@ -66,6 +67,12 @@ export default defineComponent({
     const ruleFormRef = ref<FormInstance>();
     const isShowBtn = ref(false);
     onMounted(async () => {
+      const update: any = inject("breadDataList");
+      update();
+      // const moduleUrl = () => {
+      //   any();
+      // };
+
       //模块信息 命名空间下拉框值
       const res = await getNameSpaces();
       renameBlockSelectList.value = res;
@@ -117,6 +124,7 @@ export default defineComponent({
         }
       } else {
         try {
+          console.log(formState.id, "66666");
           const updateModule = await editModuleList(
             formStateParam,
             formState.id
@@ -159,52 +167,54 @@ export default defineComponent({
       formState.module_name = item.module_name;
       formState.module_key = item.module_key;
       formState.namespace_id = item.namespace_id;
+      formState.id = item.id;
       dialogFormVisible.value = true;
+
       isAddItem.value = false;
     };
-    const handleSelect = (row:any, column:any, event:any) =>{
-      router.push({
-        path: "/admin/moduleNav/moduleAttribute",
-        query: { id: row.id }
-      });
-
-    }
-    const deleteItem = (item:any) =>{
-      console.log(item,"3333")
+    const handleSelect = (row: any, column: any, event: any) => {
+      // app.provide("breadData", [
+      //   { name: "模型列表", path: "/admin/moduleNav/moduleList" },
+      //   { name: "模型属性", path: "/admin/moduleNav/moduleAttribute" }
+      // ]);
+      // router.push({
+      //   path: "/admin/moduleNav/moduleAttribute",
+      //   query: { id: row.id }
+      // });
+    };
+    const deleteItem = (item: any) => {
+      console.log(item, "3333");
       ElMessageBox.confirm(
-    '是否删除此数据',
-    
-    {
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Cancel',
-      type: 'warning',
-    }
-    )
-    .then(async() => {
-      try {
-        const deleteRes = await deleteModule(item.id);
-        ElMessage({
-          message: "删除数据成功",
-          type: "success"
+        "是否删除此数据",
+
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning"
+        }
+      )
+        .then(async () => {
+          try {
+            const deleteRes = await deleteModule(item.id);
+            ElMessage({
+              message: "删除数据成功",
+              type: "success"
+            });
+          } catch (error) {
+            console.log(error);
+          }
+          //调删除接口
+          isShowBtn.value = false;
+          const moduleList = await getModuleList();
+          tableData.value = moduleList;
+        })
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "Delete canceled"
+          });
         });
-      } catch (error) {
-        console.log(error);
-      }
-      //调删除接口
-      isShowBtn.value = false;
-      const moduleList = await getModuleList();
-      tableData.value = moduleList;
-     
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: 'Delete canceled',
-      })
-    })
-
-    }
-
+    };
 
     return {
       router,
@@ -259,7 +269,7 @@ export default defineComponent({
         >
           <el-input v-model="formState.module_name" />
         </el-form-item>
-   
+
         <el-form-item label-width="110px" label="类型" layout="vertical">
           <el-select
             v-model="formState.category"
@@ -308,7 +318,7 @@ export default defineComponent({
     <el-table
       :data="tableData"
       style="width: 100%; font-size: 12px; padding: 0 20px 20px 20px"
-      @row-click="handleSelect" 
+      @row-click="handleSelect"
       border
     >
       <el-table-column prop="module_key" label="ModuleName" align="center">
@@ -337,22 +347,16 @@ export default defineComponent({
 
       <el-table-column fixed="right" label="操作" width="120px" align="center">
         <template #default="scope">
-          <!-- <el-popconfirm
-            confirm-button-text="确定"
-            cancel-button-text="取消"
-            icon-color="#626AEF"
-            title="是否确认删除此行?"
-            @confirm="confirmEvent(scope.$index)"
-          >
-            <template #reference>
-              <el-icon style="color: red" size="14px" @click=""><Delete /></el-icon>
-            </template>
-          </el-popconfirm> -->
-          <el-icon style="color: red" size="14px" @click.native.stop="deleteItem(scope.row)"><Delete /></el-icon>
+          <el-icon
+            style="color: red"
+            size="14px"
+            @click.stop="deleteItem(scope.row)"
+            ><Delete
+          /></el-icon>
           <el-icon
             size="14px"
             style="margin-left: 10px"
-            @click.native.stop="editItem(scope.row)"
+            @click.stop="editItem(scope.row)"
             ><Edit
           /></el-icon>
           <!-- <el-icon
@@ -370,6 +374,7 @@ export default defineComponent({
 .wrap {
   background: #ffff;
   opacity: 1;
+  height: 100vh;
   .addBtn {
     margin: 20px;
   }

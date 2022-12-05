@@ -1,12 +1,15 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
-
+import type { NsType } from "../renameBlock/renameBlock.type";
 import { useRouter } from "vue-router";
+import { getNameSpaces } from "../../request/namespaces";
 import {
   addModuleField,
   getModuleField,
   updateModuleField,
-  deleteModuleField
+  deleteModuleField,
+  getModuleList,
+  
 } from "@/request/module";
 import { ElMessage } from "element-plus";
 interface AddForm {
@@ -75,10 +78,25 @@ export default defineComponent({
         label: "select"
       }
     ];
-
+    const renameBlockSelectList = ref<NsType[]>([]);
     const moduleId = (router.currentRoute.value.query.id as any).toString();
     onMounted(async () => {
       console.log(router.currentRoute.value.query.id, "1111");
+      const res = await getNameSpaces();
+      renameBlockSelectList.value = res;
+      try{
+        const moduleList = await getModuleList();
+        moduleList.forEach((item:any)=>{
+          if(item.id == router.currentRoute.value.query.id){
+            formState.category = item.category;
+          formState.module_name = item.module_name;
+          formState.module_key = item.module_key;
+          formState.namespace_id = item.namespace_id;
+          }
+        })
+      } catch(error){
+        console.log(error)
+      }
       try {
         //查询模型属性
         attributeList.value = await getModuleField();
@@ -181,18 +199,51 @@ export default defineComponent({
       router,
       typeOptions,
       confirmAttribute,
-      moduleId
+      moduleId,
+      formState,
+      renameBlockSelectList
     };
   }
 });
 </script>
 <template>
   <div class="wrap">
+    <!-- 模型数据描述 -->
+    <el-descriptions
+        title="模型数据详细介绍"
+        :column="4"
+        direction="vertical"
+        style="margin-top: 20px"
+      >
+        <el-descriptions-item label="moduleName">{{
+          formState.module_key
+        }}</el-descriptions-item>
+        <el-descriptions-item label="模型名称">{{
+          formState.module_name
+        }}</el-descriptions-item>
+        <el-descriptions-item label="类型">{{
+          formState.category
+        }}</el-descriptions-item>
+        <el-descriptions-item label="所属命名空间">
+          <el-select
+            v-model="formState.namespace_id"
+            placeholder="请选择所属命名空间"
+            disabled
+          >
+            <el-option
+              v-for="item in renameBlockSelectList"
+              :key="item.id"
+              :label="item.namespace_label"
+              :value="item.id"
+            />
+          </el-select>
+        </el-descriptions-item>
+      </el-descriptions>
     <el-button
       type="primary"
       plain
       @click="addAttribute"
-      style="margin: 20px 20px 20px 20px"
+      style="margin: 0px 20px 20px 0px"
       >新增</el-button
     >
     <el-dialog
@@ -279,5 +330,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .wrap {
   background: #ffff;
+  margin:20px;
+  height:100vh;
 }
 </style>
