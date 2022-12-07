@@ -41,16 +41,7 @@ export default defineComponent({
             @click="$router.push({ path: '/admin/renameBlock' })"
             >命名空间</el-menu-item
           >
-          <el-menu-item
-            index="moduleEditor"
-            @click="$router.push({ path: '/admin/moduleEditor' })"
-            >编辑模块</el-menu-item
-          >
-          <el-menu-item
-            index="blockList"
-            @click="$router.push({ path: '/admin/blockList' })"
-            >测试</el-menu-item
-          >
+
           <el-menu-item
             index="blockList"
             @click="$router.push({ path: '/admin/moduleNav/moduleList' })"

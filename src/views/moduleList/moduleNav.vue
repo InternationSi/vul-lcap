@@ -1,33 +1,16 @@
 <script lang="ts">
-import { useRoute } from "vue-router";
-import { defineComponent, ref, provide, onMounted } from "vue";
+import { defineComponent, ref, provide } from "vue";
 import { useRouter } from "vue-router";
 
-import { inject } from "vue";
 interface breadList {
   name: string;
   path: string;
 }
 export default defineComponent({
   setup() {
-    const route = useRoute();
     const breadcrumbList = ref<breadList[]>([]);
-    onMounted(async () => {
-      // provide("breadDataList", {
-      //   name: "模型列表",
-      //   path: "/admin/moduleNav/moduleList"
-      // });
-      // const breadDataList = inject("breadData");
-      // if (!breadDataList) {
-      //   breadcrumbList.value.push({
-      //     name: "模型列表",
-      //     path: "/admin/moduleNav/moduleList"
-      //   });
-      // }
-    });
     const router = useRouter();
     const url = router.currentRoute;
-    console.log(url.value, "000000");
     const breadFn = () => {
       console.log("hhhhh");
       if (url.value.path == "/admin/moduleNav/moduleList") {
@@ -42,12 +25,15 @@ export default defineComponent({
       }
     };
     provide("breadDataList", breadFn);
+    const breadClick = (item: any) => {
+      router.push({ path: item.path });
+    };
     return {
-      route,
       breadcrumbList,
       router,
       url,
-      breadFn
+      breadFn,
+      breadClick
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -63,14 +49,9 @@ export default defineComponent({
         <el-breadcrumb-item
           v-for="(item, index) in breadcrumbList"
           :key="index"
+          @click="breadClick(item)"
           >{{ item.name }}</el-breadcrumb-item
         >
-        <!-- <el-breadcrumb-item :to="{ path: '/admin/moduleNav/moduleList' }"
-          >模型列表</el-breadcrumb-item
-        > -->
-        <!-- <el-breadcrumb-item :to="{ path: '/admin/moduleNav/moduleAttribute' }"
-          >模型属性</el-breadcrumb-item
-        > -->
       </el-breadcrumb>
     </div>
     <router-view></router-view>

@@ -12,7 +12,7 @@ import { API_URL } from "@/api/env";
 import type {
   ModuleType,
   ModuleField
-} from "../views/moduleEditor/moduleEdit.type";
+} from "../views/moduleList/moduleList.type";
 
 /**
  * @name: 查询单个模型的信息

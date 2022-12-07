@@ -13,9 +13,7 @@ import adminLayout from "../views/layout/admin.vue";
 import login from "../views/login/login.vue";
 import register from "../views/register/register.vue";
 import email from "../views/email/email.vue";
-import moduleEditor from "../views/moduleEditor/moduleEditor.vue";
 import renameBlock from "../views/renameBlock/renameBlock.vue";
-import blockList from "../views/blockList/blockList.vue";
 import grid from "../designer/layout";
 import gridRender from "@/designer/render";
 import { tokenService } from "@/utils/tokenService";
@@ -25,7 +23,7 @@ import blockly from "../views/blockly/index.vue";
 import moduleNav from "../views/moduleList/moduleNav.vue";
 import moduleList from "../views/moduleList/moduleList.vue";
 import moduleAttribute from "../views/moduleList/moduleAttribute.vue";
-import SetterTest from '@/designer/setter/index.vue'
+import SetterTest from "@/designer/setter/index.vue";
 
 // import { useLoginStore } from '@/store/login';
 const routes = [
@@ -38,8 +36,6 @@ const routes = [
         component: adminLayout,
         children: [
           { path: "/admin/renameBlock", component: renameBlock },
-          { path: "/admin/moduleEditor", component: moduleEditor },
-          { path: "/admin/blockList", component: blockList },
           { path: "/admin/comsCreate", component: comsCreate },
           { path: "/admin/blockly", component: blockly },
           {

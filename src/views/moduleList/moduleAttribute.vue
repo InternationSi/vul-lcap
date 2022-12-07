@@ -1,15 +1,15 @@
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted } from "vue";
+import { defineComponent, ref, reactive, onMounted, inject } from "vue";
 import type { NsType } from "../renameBlock/renameBlock.type";
 import { useRouter } from "vue-router";
 import { getNameSpaces } from "../../request/namespaces";
+import type { FormInstance, FormRules } from "element-plus";
 import {
   addModuleField,
   getModuleField,
   updateModuleField,
   deleteModuleField,
-  getModuleList,
-  
+  getModuleList
 } from "@/request/module";
 import { ElMessage } from "element-plus";
 interface AddForm {
@@ -33,6 +33,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const attributeList = ref<AddForm[]>([]);
+    const addFormRef = ref<FormInstance>();
     //判断是新增还是编辑模块属性
     const isAddAttribute = ref(false);
     const addFormVisible = ref(false);
@@ -81,21 +82,23 @@ export default defineComponent({
     const renameBlockSelectList = ref<NsType[]>([]);
     const moduleId = (router.currentRoute.value.query.id as any).toString();
     onMounted(async () => {
+      const update: any = inject("breadDataList");
+      update();
       console.log(router.currentRoute.value.query.id, "1111");
       const res = await getNameSpaces();
       renameBlockSelectList.value = res;
-      try{
+      try {
         const moduleList = await getModuleList();
-        moduleList.forEach((item:any)=>{
-          if(item.id == router.currentRoute.value.query.id){
+        moduleList.forEach((item: any) => {
+          if (item.id == router.currentRoute.value.query.id) {
             formState.category = item.category;
-          formState.module_name = item.module_name;
-          formState.module_key = item.module_key;
-          formState.namespace_id = item.namespace_id;
+            formState.module_name = item.module_name;
+            formState.module_key = item.module_key;
+            formState.namespace_id = item.namespace_id;
           }
-        })
-      } catch(error){
-        console.log(error)
+        });
+      } catch (error) {
+        console.log(error);
       }
       try {
         //查询模型属性
@@ -145,47 +148,83 @@ export default defineComponent({
       addForm.module_id = moduleId;
     };
     //确认属性弹框按钮
-    const confirmAttribute = async (item: any) => {
-      //判断是新增属性还是编辑属性
-      if (isAddAttribute.value) {
-        try {
-          //新增
-          const addField = await addModuleField(addForm);
-          ElMessage({
-            message: "添加属性成功",
-            type: "success"
+    const confirmAttribute = async (
+      formEl: FormInstance | undefined,
+      item: any
+    ) => {
+      if (!formEl) return;
+      await formEl.validate(async (valid, fields) => {
+        if (valid) {
+          console.log("submit!");
+          if (isAddAttribute.value) {
+            try {
+              //新增
+              const addField = await addModuleField(addForm);
+              ElMessage({
+                message: "添加属性成功",
+                type: "success"
+              });
+            } catch (error) {
+              ElMessage({
+                message: "添加属性失败",
+                type: "error"
+              });
+            }
+          } else {
+            //编辑属性
+            try {
+              const editAttr = await updateModuleField(item, addForm.id);
+              console.log(editAttr, "更新接口");
+              ElMessage({
+                message: "编辑属性成功",
+                type: "success"
+              });
+            } catch (error) {
+              ElMessage({
+                message: "编辑属性失败",
+                type: "error"
+              });
+            }
+          }
+          addFormVisible.value = false;
+          tableData.value = [];
+          attributeList.value = await getModuleField();
+          attributeList.value.forEach((item) => {
+            if (item.module_id == moduleId) {
+              tableData.value.push(item);
+            }
           });
-        } catch (error) {
-          ElMessage({
-            message: "添加属性失败",
-            type: "error"
-          });
-        }
-      } else {
-        //编辑属性
-        try {
-          const editAttr = await updateModuleField(item, addForm.id);
-          console.log(editAttr, "更新接口");
-          ElMessage({
-            message: "编辑属性成功",
-            type: "success"
-          });
-        } catch (error) {
-          ElMessage({
-            message: "编辑属性失败",
-            type: "error"
-          });
-        }
-      }
-      addFormVisible.value = false;
-      tableData.value = [];
-      attributeList.value = await getModuleField();
-      attributeList.value.forEach((item) => {
-        if (item.module_id == moduleId) {
-          tableData.value.push(item);
+        } else {
+          console.log("error submit!");
+          return false;
         }
       });
+      //判断是新增属性还是编辑属
     };
+    //校验
+    const rules = reactive<FormRules>({
+      field_key: [
+        {
+          required: true,
+          message: "请输入名称",
+          trigger: "blur"
+        }
+      ],
+      field_name: [
+        {
+          required: true,
+          message: "请输入标题",
+          trigger: "blur"
+        }
+      ],
+      field_type: [
+        {
+          required: true,
+          message: "请选择类型",
+          trigger: "blur"
+        }
+      ]
+    });
 
     return {
       attributeList,
@@ -201,7 +240,9 @@ export default defineComponent({
       confirmAttribute,
       moduleId,
       formState,
-      renameBlockSelectList
+      renameBlockSelectList,
+      rules,
+      addFormRef
     };
   }
 });
@@ -210,35 +251,36 @@ export default defineComponent({
   <div class="wrap">
     <!-- 模型数据描述 -->
     <el-descriptions
-        title="模型数据详细介绍"
-        :column="4"
-        direction="vertical"
-        style="margin-top: 20px"
-      >
-        <el-descriptions-item label="moduleName">{{
-          formState.module_key
-        }}</el-descriptions-item>
-        <el-descriptions-item label="模型名称">{{
-          formState.module_name
-        }}</el-descriptions-item>
-        <el-descriptions-item label="类型">{{
-          formState.category
-        }}</el-descriptions-item>
-        <el-descriptions-item label="所属命名空间">
-          <el-select
-            v-model="formState.namespace_id"
-            placeholder="请选择所属命名空间"
-            disabled
-          >
-            <el-option
-              v-for="item in renameBlockSelectList"
-              :key="item.id"
-              :label="item.namespace_label"
-              :value="item.id"
-            />
-          </el-select>
-        </el-descriptions-item>
-      </el-descriptions>
+      title="模型数据详细介绍"
+      border
+      :column="4"
+      direction="vertical"
+      style="margin-top: 20px"
+    >
+      <el-descriptions-item label="moduleName" align="center">{{
+        formState.module_key
+      }}</el-descriptions-item>
+      <el-descriptions-item label="模型名称" width="250px" align="center">{{
+        formState.module_name
+      }}</el-descriptions-item>
+      <el-descriptions-item label="类型" align="center">{{
+        formState.category
+      }}</el-descriptions-item>
+      <el-descriptions-item label="所属命名空间" width="150px" align="center">
+        <el-select
+          v-model="formState.namespace_id"
+          placeholder="请选择所属命名空间"
+          disabled
+        >
+          <el-option
+            v-for="item in renameBlockSelectList"
+            :key="item.id"
+            :label="item.namespace_label"
+            :value="item.id"
+          />
+        </el-select>
+      </el-descriptions-item>
+    </el-descriptions>
     <el-button
       type="primary"
       plain
@@ -250,14 +292,14 @@ export default defineComponent({
       v-model="addFormVisible"
       :title="isAddAttribute == true ? '新增' : '编辑'"
     >
-      <el-form :model="addForm">
-        <el-form-item label="名称:">
+      <el-form :model="addForm" ref="addFormRef" :rules="rules">
+        <el-form-item label="名称:" prop="field_key">
           <el-input v-model="addForm.field_key" />
         </el-form-item>
-        <el-form-item label="标题:">
+        <el-form-item label="标题:" prop="field_name">
           <el-input v-model="addForm.field_name" />
         </el-form-item>
-        <el-form-item label="类型:">
+        <el-form-item label="类型:" prop="field_type">
           <el-select v-model="addForm.field_type" placeholder="请选择类型">
             <el-option
               v-for="item in typeOptions"
@@ -276,7 +318,10 @@ export default defineComponent({
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="addFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="confirmAttribute(addForm)">
+          <el-button
+            type="primary"
+            @click="confirmAttribute(addFormRef, addForm)"
+          >
             Confirm
           </el-button>
         </span>
@@ -330,7 +375,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .wrap {
   background: #ffff;
-  margin:20px;
-  height:100vh;
+  margin: 20px;
+  height: 100vh;
 }
 </style>

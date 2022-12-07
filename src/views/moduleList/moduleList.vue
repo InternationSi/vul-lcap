@@ -7,7 +7,6 @@ import type { FormInstance, FormRules } from "element-plus";
 
 import { useRouter } from "vue-router";
 import type { ModuleName } from "./moduleList.type";
-
 import {
   addModule,
   editModuleList,
@@ -69,10 +68,6 @@ export default defineComponent({
     onMounted(async () => {
       const update: any = inject("breadDataList");
       update();
-      // const moduleUrl = () => {
-      //   any();
-      // };
-
       //模块信息 命名空间下拉框值
       const res = await getNameSpaces();
       renameBlockSelectList.value = res;
@@ -107,57 +102,77 @@ export default defineComponent({
       formState.module_name = "";
       formState.namespace_id = "";
     };
-    const dialogConfirm = async () => {
+    const dialogConfirm = async (formEl: FormInstance | undefined) => {
       formStateParam.category = formState.category;
       formStateParam.module_key = formState.module_key;
       formStateParam.namespace_id = formState.namespace_id;
       formStateParam.module_name = formState.module_name;
-      if (isAddItem.value) {
-        try {
-          const res = await addModule(formStateParam);
-          ElMessage({
-            message: "添加数据成功",
-            type: "success"
-          });
-        } catch (error) {
-          console.log(error);
+      if (!formEl) return;
+      await formEl.validate(async (valid, fields) => {
+        if (valid) {
+          console.log("submit!");
+          if (isAddItem.value) {
+            try {
+              const res = addModule(formStateParam);
+              ElMessage({
+                message: "添加数据成功",
+                type: "success"
+              });
+            } catch (error) {
+              console.log(error);
+            }
+          } else {
+            try {
+              const updateModule = editModuleList(formStateParam, formState.id);
+              console.log(updateModule, "更新接口");
+              dialogFormVisible.value = false;
+              ElMessage({
+                message: "更新数据成功",
+                type: "success"
+              });
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          try {
+            const moduleList = await getModuleList();
+            tableData.value = moduleList;
+            //弹框关闭
+            dialogFormVisible.value = false;
+          } catch (error) {
+            console.log(error, "更新失败");
+          }
+        } else {
+          console.log("error submit!");
+          return false;
         }
-      } else {
-        try {
-          console.log(formState.id, "66666");
-          const updateModule = await editModuleList(
-            formStateParam,
-            formState.id
-          );
-          console.log(updateModule, "更新接口");
-          dialogFormVisible.value = false;
-          ElMessage({
-            message: "更新数据成功",
-            type: "success"
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      try {
-        const moduleList = await getModuleList();
-        tableData.value = moduleList;
-        //弹框关闭
-        dialogFormVisible.value = false;
-      } catch (error) {
-        console.log(error, "更新失败");
-      }
+      });
     };
+
     //校验表单
     const rules = reactive<FormRules>({
       module_key: [
-        { required: true, message: "请输入模块英文名称", trigger: "blur" }
+        {
+          required: true,
+          message: "请输入模块英文名称",
+          trigger: "blur"
+        }
       ],
       module_name: [
-        { required: true, message: "请选择模块类型", trigger: "blur" }
+        {
+          required: true,
+          message: "请选择模块类型",
+          trigger: "blur"
+          // validator: vailId
+        }
       ],
       namespace_id: [
-        { required: true, message: "请选择命名空间", trigger: "blur" }
+        {
+          required: true,
+          message: "请选择命名空间",
+          trigger: "blur"
+          // validator: vailIdName
+        }
       ]
     });
     //编辑模块数据
@@ -169,18 +184,13 @@ export default defineComponent({
       formState.namespace_id = item.namespace_id;
       formState.id = item.id;
       dialogFormVisible.value = true;
-
       isAddItem.value = false;
     };
     const handleSelect = (row: any, column: any, event: any) => {
-      // app.provide("breadData", [
-      //   { name: "模型列表", path: "/admin/moduleNav/moduleList" },
-      //   { name: "模型属性", path: "/admin/moduleNav/moduleAttribute" }
-      // ]);
-      // router.push({
-      //   path: "/admin/moduleNav/moduleAttribute",
-      //   query: { id: row.id }
-      // });
+      router.push({
+        path: "/admin/moduleNav/moduleAttribute",
+        query: { id: row.id }
+      });
     };
     const deleteItem = (item: any) => {
       console.log(item, "3333");
@@ -273,7 +283,6 @@ export default defineComponent({
         <el-form-item label-width="110px" label="类型" layout="vertical">
           <el-select
             v-model="formState.category"
-            class="m-2"
             placeholder="请选择类型"
             style="width: 100%"
           >
@@ -309,7 +318,7 @@ export default defineComponent({
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogConfirm()">
+          <el-button type="primary" @click="dialogConfirm(ruleFormRef)">
             Confirm
           </el-button>
         </span>
@@ -359,12 +368,6 @@ export default defineComponent({
             @click.stop="editItem(scope.row)"
             ><Edit
           /></el-icon>
-          <!-- <el-icon
-            size="14px"
-            style="margin-left: 10px"
-            @click="toAttribute(scope.row)"
-            ><Link
-          /></el-icon> -->
         </template>
       </el-table-column>
     </el-table>
