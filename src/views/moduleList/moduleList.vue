@@ -332,7 +332,17 @@ export default defineComponent({
     >
       <el-table-column prop="module_key" label="ModuleName" align="center">
       </el-table-column>
-      <el-table-column prop="module_name" label="模型名称" align="center">
+      <el-table-column
+        prop="module_name"
+        label="模型名称"
+        align="center"
+        style="font-size: 10px; font-weight: 100"
+      >
+        <template #default="scope">
+          <el-link type="primary" :underline="false">{{
+            scope.row.module_name
+          }}</el-link>
+        </template>
       </el-table-column>
       <el-table-column prop="category" label="类型" align="center">
       </el-table-column>

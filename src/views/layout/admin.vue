@@ -37,6 +37,11 @@ export default defineComponent({
             <span>模块管理</span>
           </template>
           <el-menu-item
+            index="cockpitBlock"
+            @click="$router.push({ path: '/admin/cockpitBlock' })"
+            >驾驶舱</el-menu-item
+          >
+          <el-menu-item
             index="renameBlock"
             @click="$router.push({ path: '/admin/renameBlock' })"
             >命名空间</el-menu-item

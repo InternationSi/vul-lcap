@@ -285,7 +285,7 @@ export default defineComponent({
       type="primary"
       plain
       @click="addAttribute"
-      style="margin: 0px 20px 20px 0px"
+      style="margin: 20px 20px 20px 0px"
       >新增</el-button
     >
     <el-dialog

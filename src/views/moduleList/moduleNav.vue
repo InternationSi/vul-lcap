@@ -44,12 +44,13 @@ export default defineComponent({
 </script>
 <template>
   <div class="wrap">
-    <div style="padding: 20px 0 0 20px">
+    <div style="padding: 20px 0 0 20px; color: #3f9eff">
       <el-breadcrumb>
         <el-breadcrumb-item
           v-for="(item, index) in breadcrumbList"
           :key="index"
           @click="breadClick(item)"
+          style=""
           >{{ item.name }}</el-breadcrumb-item
         >
       </el-breadcrumb>

@@ -24,6 +24,7 @@ import moduleNav from "../views/moduleList/moduleNav.vue";
 import moduleList from "../views/moduleList/moduleList.vue";
 import moduleAttribute from "../views/moduleList/moduleAttribute.vue";
 import SetterTest from "@/designer/setter/index.vue";
+import cockpitBlock from "../views/cockpitBlock/cockpitBlock.vue";
 
 // import { useLoginStore } from '@/store/login';
 const routes = [
@@ -35,6 +36,7 @@ const routes = [
         path: "/admin",
         component: adminLayout,
         children: [
+          { path: "/admin/cockpitBlock", component: cockpitBlock },
           { path: "/admin/renameBlock", component: renameBlock },
           { path: "/admin/comsCreate", component: comsCreate },
           { path: "/admin/blockly", component: blockly },
