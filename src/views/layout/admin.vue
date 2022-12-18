@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-11-07 22:22:36
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-23 22:56:43
+ * @LastEditTime: 2022-12-18 13:46:54
  * @FilePath: /vulture/src/views/layout/admin.vue
  * @Description: update here
 -->
@@ -62,11 +62,6 @@ export default defineComponent({
             index="comsCreate"
             @click="$router.push({ path: '/admin/comsCreate' })"
             >组件配置</el-menu-item
-          >
-          <el-menu-item
-            index="blockly"
-            @click="$router.push({ path: '/admin/blockly' })"
-            >事件配置</el-menu-item
           >
         </el-sub-menu>
       </el-menu>

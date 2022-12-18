@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-25 22:32:47
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-28 22:15:02
+ * @LastEditTime: 2022-12-18 21:51:59
  * @FilePath: /vulture/src/designer/grid/components/GridItemList/index.tsx
  * @Description: update here
  */
@@ -41,11 +41,11 @@ export default defineComponent({
       if (config?.type === "container-tab") {
         return <TabContainer gItem={config} />;
       } else if (config?.type === "chart-pie") {
-        return <ChartPie layout={config}/>;
+        return <ChartPie layout={config} isDesign={props.isDesign} />;
       } else if (config?.type === "container-base") {
         return <BaseContainer gItem={config} />;
       } else {
-        return <Spacing />;
+        return <Spacing isDesign={props.isDesign} />;
       }
     };
     const deleteItem = (value: number) => {

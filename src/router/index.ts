@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-04 17:15:33
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-30 23:06:28
+ * @LastEditTime: 2022-12-18 22:18:27
  * @FilePath: /vulture/src/router/index.ts
  * @Description: update here
  */
@@ -15,11 +15,10 @@ import register from "../views/register/register.vue";
 import email from "../views/email/email.vue";
 import renameBlock from "../views/renameBlock/renameBlock.vue";
 import grid from "../designer/layout";
-import gridRender from "@/designer/render";
+import PageView from "../views/PageView/PageView.vue";
 import { tokenService } from "@/utils/tokenService";
 import comsCreate from "../views/comsCreate/comsCreate.vue";
 import personalCenter from "../views/personalCenter";
-import blockly from "../views/blockly/index.vue";
 import moduleNav from "../views/moduleList/moduleNav.vue";
 import moduleList from "../views/moduleList/moduleList.vue";
 import moduleAttribute from "../views/moduleList/moduleAttribute.vue";
@@ -39,7 +38,6 @@ const routes = [
           { path: "/admin/cockpitBlock", component: cockpitBlock },
           { path: "/admin/renameBlock", component: renameBlock },
           { path: "/admin/comsCreate", component: comsCreate },
-          { path: "/admin/blockly", component: blockly },
           {
             path: "/admin/moduleNav",
             component: moduleNav,
@@ -66,7 +64,7 @@ const routes = [
   { path: "/login", component: login },
   { path: "/register", component: register },
   { path: "/email", component: email },
-  { path: "/render", component: gridRender },
+  { path: "/render", component: PageView },
   { path: "/personalCenter", component: personalCenter },
   { path: "", redirect: "/admin/renameBlock" }
 ];

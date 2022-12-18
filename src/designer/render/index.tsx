@@ -2,13 +2,13 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-11-20 16:20:59
+ * @LastEditTime: 2022-12-18 22:19:40
  * @FilePath: /vulture/src/designer/render/index.tsx
  * @Description: update here
  */
 import { defineComponent, ref, watch, onUnmounted, PropType } from "vue";
 import GridItemList from "../grid/components/GridItemList";
-
+import './index.scss'
 export default defineComponent({
   props: {
     modelValue: {
@@ -20,23 +20,11 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const layout = ref<any[]>([{ x: 0, y: 0, w: 2, h: 3, i: "0" }]);
-
-    watch(
-      () => props.modelValue,
-      (newValue) => {
-        if (newValue) {
-          layout.value = newValue;
-        }
-      },
-      {
-        deep: true
-      }
-    );
 
     return () => (
       <grid-layout
-        layout={layout.value}
+        class="renderGrid"
+        layout={props.modelValue}
         col-num={12}
         row-height={30}
         is-draggable={false}
@@ -44,7 +32,7 @@ export default defineComponent({
         vertical-compact={true}
         use-css-transforms={true}
       >
-        {layout.value.map((item: any, index: number) => {
+        {props.modelValue?.map((item: any, index: number) => {
           return (
             <grid-item
               key={index}

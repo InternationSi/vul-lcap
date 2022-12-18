@@ -1,6 +1,6 @@
 .drawerBox {
   width: 250px;
-  height: e("calc(100vh - 75px)");
+  height: calc(100vh - 75px);
   border: 1px solid var(--el-menu-border-color);
   position: absolute;
   top: 60px;

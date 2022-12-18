@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-13 14:50:59
  * @LastEditors: sfy
- * @LastEditTime: 2022-12-01 22:28:54
+ * @LastEditTime: 2022-12-18 21:25:01
  * @FilePath: /vulture/src/designer/grid/index.tsx
  * @Description: update here
  */
@@ -20,7 +20,7 @@ import Setter from "../setter";
 
 export default defineComponent({
   components: { GridOutLine },
-  setup() {
+  setup(props, { expose }) {
     const layout = ref<any[]>([
       {
         x: 0,
@@ -30,6 +30,10 @@ export default defineComponent({
         i: "jRq-eA8hLx6-vW5e1rJ8M"
       }
     ]);
+
+    expose({
+      layout
+    })
 
     const setterConfigVisible = ref(false);
     // 缓存节点
@@ -107,15 +111,15 @@ export default defineComponent({
     // 弹开setter，确定
     const setterConfirm = () => {
       const changeIndex = layout.value.findIndex(item => item.i === keepNode.value.i)
-      layout.value[changeIndex] = {...layout.value[changeIndex],...setterRef.value.setterValue}
+      layout.value[changeIndex] = { ...layout.value[changeIndex], ...setterRef.value.setterValue }
       console.log(layout.value, 'layout.value');
-      
+
       setterConfigVisible.value = false
     }
 
     return () => (
       <>
-        <el-tabs v-model={editableTabsValue.value} type="card" onTabChange={(name:string) => schemaStore.changeClickTab(name)}>
+        <el-tabs v-model={editableTabsValue.value} type="card" onTabChange={(name: string) => schemaStore.changeClickTab(name)}>
           <el-tab-pane label="工作台" name="main">
             <grid-layout
               layout={layout.value}

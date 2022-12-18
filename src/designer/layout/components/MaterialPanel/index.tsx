@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-23 10:39:23
  * @LastEditors: sfy
- * @LastEditTime: 2022-12-01 22:27:47
+ * @LastEditTime: 2022-12-18 22:24:45
  * @FilePath: /vulture/src/designer/layout/components/MaterialPanel/index.tsx
  * @Description: update here
  */
@@ -24,13 +24,12 @@ export default defineComponent({
 
     watch(() => schemaStore.clickNowTab,
       (name) => {
-        console.log(materialPanelScheme, '99value');
-        if(name !== 'main') {
-          const delIndex = materialPanelScheme.findIndex(item => item.collapseName == 'container-components')
-          collapseList.value.splice(delIndex, 1)
+        if (name !== 'main') {
+          const resultList = materialPanelScheme.filter(item => item.collapseName !== 'container-components')
+          collapseList.value = resultList
         } else {
           collapseList.value = materialPanelScheme
-        } 
+        }
       }
     )
 

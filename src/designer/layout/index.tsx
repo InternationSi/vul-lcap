@@ -2,7 +2,7 @@
  * @Author: sfy
  * @Date: 2022-10-22 21:34:52
  * @LastEditors: sfy
- * @LastEditTime: 2022-12-01 22:28:33
+ * @LastEditTime: 2022-12-18 21:45:10
  * @FilePath: /vulture/src/designer/layout/index.tsx
  * @Description: update here
  */
@@ -26,8 +26,11 @@ export default defineComponent({
 
   setup() {
     const router = useRouter();
+    const layoutVal = ref()
     const classesRef = useStyles();
     const setRender = () => {
+      const result = JSON.stringify(layoutVal.value.layout)
+      localStorage.setItem('pageSchema', result)
       router.push("/render");
     };
     return () => (
@@ -43,7 +46,7 @@ export default defineComponent({
                   <video-play onClick={setRender} />
                 </el-icon>
               </div>
-              <Grid />
+              <Grid ref={layoutVal} />
             </el-main>
           </el-container>
         </el-container>
