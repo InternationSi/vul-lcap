@@ -2,7 +2,6 @@
 import { defineComponent, ref, reactive, watch } from "vue";
 import { useRouter } from "vue-router";
 import { handleRegister } from "@/request/index";
-import { message } from "ant-design-vue";
 export default defineComponent({
   setup() {
     const router = useRouter();
@@ -15,10 +14,10 @@ export default defineComponent({
     const register = async () => {
       const res = await handleRegister(formData);
       if (res.code == 200) {
-        message.success(res.msg);
+        // message.success(res.msg);
         router.push("/login");
       } else {
-        message.error(res.msg);
+        // message.error(res.msg);
       }
     };
     return {

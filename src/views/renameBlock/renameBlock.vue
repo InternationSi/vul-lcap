@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
-import type { FormInstance } from "ant-design-vue";
 import {
   getNameSpaces,
   addNameSpaces,
@@ -18,7 +17,7 @@ export default defineComponent({
       const res = await getNameSpaces();
       dataList.value = res;
     });
-    const formRef = ref<FormInstance>();
+    const formRef = ref<any>();
     const formState = reactive<NsType>({
       namespace_name: "",
       namespace_label: "",
